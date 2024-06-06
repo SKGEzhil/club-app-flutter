@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:club_app/controllers/post_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ import '../models/club_model.dart';
 class ClubsController extends GetxController {
 
   var clubList = <Club>[].obs;
+
+  final postController = Get.put(PostController());
 
   // final clubs = <Club>[
   //   Club(name: 'Electronics & Robotics_IITBombay', imageUrl: "https://via.placeholder.com/50x50" ),
@@ -38,7 +41,7 @@ class ClubsController extends GetxController {
 
   void fetchClubs() async {
     print("Fetching clubs...");
-    const url = 'http://10.0.2.2:4000';
+    const url = 'http://10.0.2.2:4000/graphql';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -84,3 +87,4 @@ class ClubsController extends GetxController {
     }
   }
 }
+

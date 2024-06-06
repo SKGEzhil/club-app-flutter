@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../controllers/clubs_controller.dart';
+import '../models/club_model.dart';
+import '../models/post_model.dart';
 import 'club_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,6 +15,20 @@ class HomePage extends StatelessWidget {
 
   final clubsController = Get.put(ClubsController());
   final postController = Get.put(PostController());
+
+  List<Post> get sortedPostList{
+    return postController.postList.toList()..sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+  }
+
+  List<Club> get sortedClubList {
+    var sortedPosts = sortedPostList;
+    var clubIdsWithPosts = sortedPosts.map((post) => post.clubId).toSet().toList();
+
+    var clubsWithPosts = clubIdsWithPosts.map((id) => clubsController.clubList.firstWhere((club) => club.id == id)).toList();
+    var clubsWithoutPosts = clubsController.clubList.where((club) => !clubIdsWithPosts.contains(club.id)).toList();
+
+    return clubsWithPosts + clubsWithoutPosts;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +53,7 @@ class HomePage extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: CarouselSlider(
-                    items: postController.postList.where((post) =>
+                    items: sortedPostList.where((post) =>
                     post.imageUrl != '').toList().take(5).map((post) =>
                         Center(
                           child: ClipRRect(
@@ -68,7 +84,7 @@ class HomePage extends StatelessWidget {
             }),
             Expanded(
               child: Column(
-                  children: clubsController.clubList.map((club) =>
+                  children: sortedClubList.map((club) =>
                       Column(
                         children: [
                           InkWell(
@@ -98,26 +114,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            // child: Obx(
-            //   () => ListView.builder(
-            //     itemCount: clubsController.clubList.length,
-            //     itemBuilder: (context, index) {
-            //       final club = clubsController.clubList[index];
-            //       return InkWell(
-            //         onTap: () {
-            //           Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClubPage(clubName: club.name, clubId: club.id,)));
-            //         },
-            //         child: ListTile(
-            //           leading: ClipRRect(
-            //             borderRadius: BorderRadius.circular(25.0),
-            //               child: CachedNetworkImage(imageUrl: club.imageUrl, width: 47, height: 47,)),
-            //           title: Text(club.name, style: TextStyle(color: Colors.black)),
-            //           subtitle: Text('IIT Bombay', style: TextStyle(color: Colors.black.withOpacity(0.5))),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
           ],
         )
     );

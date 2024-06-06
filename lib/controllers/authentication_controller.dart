@@ -60,7 +60,7 @@ class AuthenticationController extends GetxController {
 
   Future<bool> isUserExist(email) async {
     print("Authenticating...");
-    const url = 'http://10.0.2.2:4000';
+    const url = 'http://10.0.2.2:4000/graphql';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ class AuthenticationController extends GetxController {
 
   Future<UserModel> getUserDetails(email) async {
     print("Fetching User...");
-    const url = 'http://10.0.2.2:4000';
+    const url = 'http://10.0.2.2:4000/graphql';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ class AuthenticationController extends GetxController {
 
   Future<UserModel> createUser(name, email) async {
     print("Fetching User...");
-    const url = 'http://10.0.2.2:4000';
+    const url = 'http://10.0.2.2:4000/graphql';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',

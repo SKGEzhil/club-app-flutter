@@ -22,7 +22,7 @@ class PostController extends GetxController{
 
   void fetchPosts() async {
     print("Fetching posts...");
-    const url = 'http://10.0.2.2:4000';
+    const url = 'http://10.0.2.2:4000/graphql';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ class PostController extends GetxController{
       Map<String, dynamic> data = jsonDecode(response.body);
       final posts = (data['data'])['getPosts'];
       postList.value = posts.map<Post>((post) => Post.fromJson(post)).toList();
-      sortPostsByDate();
+      // sortPostsByDate();
       update();
     } else {
       print("POST request failed");
@@ -76,7 +76,7 @@ class PostController extends GetxController{
 
   Future<void> createPost(content, imageUrl, createdBy, dateCreated, club) async {
     print("Creating posts...");
-    const url = 'http://10.0.2.2:4000';
+    const url = 'http://10.0.2.2:4000/graphql';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ class PostController extends GetxController{
       Map<String, dynamic> data = jsonDecode(response.body);
       final post = (data['data'])['createPost'];
       postList.add(Post.fromJson(post));
-      sortPostsByDate();
+      // sortPostsByDate();
       update();
     } else {
       print("POST request failed");

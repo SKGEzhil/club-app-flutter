@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:club_app/models/user_model.dart';
 import 'package:club_app/screens/home_page.dart';
+import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,32 +33,28 @@ class AuthenticationController extends GetxController {
       print('Sign in failed');
     } else {
       print("token: ${googleAuth?.accessToken}");
-      final userExist = await isUserExist(googleUser.email);
+      final userExist = await ServerUtils.isUserExist(googleUser.email);
       if (userExist) {
-        final user = await getUserDetails(googleUser.email);
-        await SharedPrefs.saveUserDetails(user);
-        await SharedPrefs.saveToken(googleAuth?.accessToken);
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
+        final user = await ServerUtils.getUserDetails(googleUser.email);
+        login(context, user, googleAuth);
       } else {
         print('User does not exist');
-        final user = await createUser(googleUser.displayName, googleUser.email);
-        await SharedPrefs.saveUserDetails(user);
-        await SharedPrefs.saveToken(googleAuth?.accessToken);
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
+        final user = await ServerUtils.createUser(googleUser.displayName, googleUser.email);
+        login(context, user, googleAuth);
       }
     }
+  }
+
+  Future<void> login(context, user, googleAuth) async {
+    await SharedPrefs.saveUserDetails(user);
+    await SharedPrefs.saveToken(googleAuth?.accessToken);
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),
+    );
   }
 
   Future<void> logout()async {
@@ -65,134 +62,6 @@ class AuthenticationController extends GetxController {
     await SharedPrefs.clearAll();
   }
 
-  Future<bool> isUserExist(email) async {
-    print("Authenticating...");
-    const url = 'http://10.0.2.2:4000/graphql';
 
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    final query = '''
-      query {
-        getUser(email: "$email") {
-          id
-          name
-          email
-        }
-      }
-    ''';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode({
-        'query': query,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
-
-      Map<String, dynamic> data = jsonDecode(response.body);
-      if(data['data']['getUser'] != null) {
-        return true;
-      } else {
-        return false;
-      }
-
-
-    } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
-      throw Exception('Failed to authenticate user');
-    }
-  }
-
-  Future<UserModel> getUserDetails(email) async {
-    print("Fetching User...");
-    const url = 'http://10.0.2.2:4000/graphql';
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    final query = '''
-      query {
-        getUser(email: "$email") {
-          id
-          name
-          email
-          role
-        }
-      }
-    ''';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode({
-        'query': query,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
-
-      Map<String, dynamic> data = jsonDecode(response.body);
-      final user = UserModel.fromJson(data['data']['getUser']);
-      return user;
-
-
-    } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
-      throw Exception('Failed to authenticate user');
-    }
-  }
-
-  Future<UserModel> createUser(name, email) async {
-    print("Fetching User...");
-    const url = 'http://10.0.2.2:4000/graphql';
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    final query = '''
-      mutation {
-        createUser(name: "$name", email: "$email") {
-         id
-         name
-         email
-      }
-    }
-    ''';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode({
-        'query': query,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
-
-      Map<String, dynamic> data = jsonDecode(response.body);
-      final user = UserModel.fromJson(data['data']['createUser']);
-      return user;
-
-
-    } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
-      throw Exception('Failed to authenticate user');
-    }
-  }
 
 }

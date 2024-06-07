@@ -13,6 +13,7 @@ class ProfileController extends GetxController {
 
   void fetchProfile() async {
     currentUser.value = await SharedPrefs.getUserDetails();
+    print("USER ROLE: ${currentUser.value.role}");
     update();
   }
 }

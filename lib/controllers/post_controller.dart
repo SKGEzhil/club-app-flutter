@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
+import 'package:club_app/utils/server_utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import '../models/post_model.dart';
 import 'package:aws_client/s3_2006_03_01.dart';
+
+import 'image_picker_controller.dart';
+import 'package:intl/intl.dart';
 
 class PostController extends GetxController{
 
@@ -16,113 +20,24 @@ class PostController extends GetxController{
     fetchPosts();
   }
 
+  final imagePickerController = Get.put(ImagePickerController());
   var postList = <Post>[].obs;
 
-
-
   void fetchPosts() async {
-    print("Fetching posts...");
-    const url = 'http://10.0.2.2:4000/graphql';
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    const query = '''
-      query {
-        getPosts {
-          id
-          content
-          createdBy {
-            id
-            name
-            email
-            role
-          }
-          dateCreated
-          imageUrl
-          club {
-            id
-            name
-          }
-        }
-      }
-    ''';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode({
-        'query': query,
-      }),
-    );
-    if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
-      Map<String, dynamic> data = jsonDecode(response.body);
-      final posts = (data['data'])['getPosts'];
-      postList.value = posts.map<Post>((post) => Post.fromJson(post)).toList();
-      // sortPostsByDate();
-      update();
-    } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
-    }
-  }
-
-  void sortPostsByDate() {
-    postList.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+    postList.value = await ServerUtils.fetchPosts();
     update();
   }
 
-  Future<void> createPost(content, imageUrl, createdBy, dateCreated, club) async {
-    print("Creating posts...");
-    const url = 'http://10.0.2.2:4000/graphql';
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    final query = '''
-      mutation {
-        createPost(content: "$content", imageUrl: "$imageUrl", createdBy: "$createdBy", dateCreated: "$dateCreated", club: "$club") {
-          id
-          content
-          imageUrl
-          dateCreated
-          createdBy {
-            id
-            name
-            email
-            role
-          }
-          club {
-            id
-            name
-          }
-        }
-      }
-    ''';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode({
-        'query': query,
-      }),
-    );
-    if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
-      Map<String, dynamic> data = jsonDecode(response.body);
-      final post = (data['data'])['createPost'];
-      postList.add(Post.fromJson(post));
-      // sortPostsByDate();
-      update();
-    } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+  Future<void> createPost(content, createdBy, club) async {
+    final dateTime = DateTime.now();
+    final formattedDateTime = DateFormat('yyyy-MM-ddThh:mm').format(dateTime);
+    print(formattedDateTime);
+    var imageUrl = '';
+    if (imagePickerController.image != null) {
+      imageUrl = await uploadImage(imagePickerController.image!);
     }
+    postList.add(await ServerUtils.createPost(content, imageUrl, createdBy, formattedDateTime, club));
+    update();
   }
 
   Future<String> uploadImage(XFile image) async {

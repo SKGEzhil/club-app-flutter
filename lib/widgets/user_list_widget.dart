@@ -2,28 +2,38 @@ import 'package:club_app/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/admin_controller.dart';
-import 'add_admin_dialogue.dart';
+import '../controllers/clubs_controller.dart';
+import 'add_user_dialogue.dart';
 
-class AdminListWidget extends StatelessWidget {
-  AdminListWidget({
-    super.key,
+class UserListWidget extends StatelessWidget {
+  UserListWidget({
+    super.key, required this.type, this.clubId,
   });
 
   final adminController = Get.put(AdminController());
+  final clubsController = Get.put(ClubsController());
 
-  void removeUser(context, index){
+  final clubId;
+  final String type;
+
+  void removeAdminUser(context, index){
     adminController.updateUserRole(context,
         adminController.adminUsers[index]
             .email, "user");
   }
 
+  void removeClubUser(context, index){
+    clubsController.removeUserFromClub(context, clubId,
+        clubsController.clubList.where((club) => club.id == clubId).first.members[index].email);
+  }
+
   void showAddUserDialogue(context){
     showGeneralDialog(
         barrierDismissible: true,
-        barrierLabel: "Add admin",
+        barrierLabel: type == 'admin' ? 'Add Admin User' : 'Add Club User',
         context: context,
         pageBuilder: (context, _, __) =>
-            AddAdminDialogue()
+            AddUserDialogue(type: type, clubId: clubId,)
     );
   }
 
@@ -45,8 +55,7 @@ class AdminListWidget extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      child: Text(
-                        'All Admin Users',
+                      child: Text(type == 'admin' ? 'All Admin Users' : 'All Club Members',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -58,7 +67,7 @@ class AdminListWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ButtonWidget(
                       onPressed: () => showAddUserDialogue(context),
-                      buttonText: 'Add Admin',
+                      buttonText: type == 'admin' ? 'Add Admin' : 'Add Member',
                       textColor: Colors.blueAccent,
                       buttonColor: Colors.blue.withOpacity(0.1),
                     ),
@@ -76,8 +85,13 @@ class AdminListWidget extends StatelessWidget {
                     thickness: 5,
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: adminController.adminUsers.length,
+                      itemCount: type == 'admin' ? adminController.adminUsers.length :
+                      clubsController.clubList.where((club) => club.id == clubId).first.members.length,
                       itemBuilder: (context, index) {
+
+                        final user = type == 'admin' ? adminController.adminUsers[index] :
+                        clubsController.clubList.where((club) => club.id == clubId).first.members[index];
+
                         return Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Container(
@@ -94,15 +108,13 @@ class AdminListWidget extends StatelessWidget {
                                           .start,
                                       children: [
                                         Text(
-                                          adminController.adminUsers[index]
-                                              .name,
+                                          user.name,
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          adminController.adminUsers[index]
-                                              .email,
+                                          user.email,
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.black.withOpacity(
@@ -112,7 +124,7 @@ class AdminListWidget extends StatelessWidget {
                                     ),
                                   ),
                                   ButtonWidget(
-                                    onPressed: () => removeUser(context, index),
+                                    onPressed: () => type == 'admin' ? removeAdminUser(context, index) : removeClubUser(context, index),
                                     buttonText: 'Remove',
                                     textColor: Colors.redAccent,
                                     buttonColor: Colors.redAccent.withOpacity(0.1),

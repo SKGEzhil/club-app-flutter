@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../controllers/admin_controller.dart';
 import 'package:get/get.dart';
 
-import '../widgets/admin_list_widget.dart';
+import '../widgets/user_list_widget.dart';
 
 class AdminPage extends StatelessWidget {
   AdminPage({super.key});
@@ -14,7 +14,7 @@ class AdminPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Admin Page'),
       ),
-      body: AdminListWidget()
+      body: UserListWidget(type: 'admin',)
     );
   }
 }

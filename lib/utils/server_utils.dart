@@ -446,4 +446,105 @@ class ServerUtils {
     }
   }
 
+  static Future<List<Club>> addMembersToClub(context, clubId, userEmail) async {
+    print("Adding to club...");
+    print("clubId: $clubId, userEmail: $userEmail");
+    const url = 'http://10.0.2.2:4000/graphql';
+
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    final query = '''
+      mutation {
+        addToClub(clubId: "$clubId", userEmail: "$userEmail") {
+          id
+          name
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+      }
+
+      return fetchClubs();
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      throw Exception('Failed to update role');
+    }
+  }
+
+  static Future<List<Club>> removeMembersFromClub(context, clubId, userEmail) async {
+    print("Removing from club...");
+    print("clubId: $clubId, userEmail: $userEmail");
+    const url = 'http://10.0.2.2:4000/graphql';
+
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    final query = '''
+      mutation {
+        removeFromClub(clubId: "$clubId", userEmail: "$userEmail") {
+          id
+          name
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+      }
+
+      return fetchClubs();
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      throw Exception('Failed to update role');
+    }
+  }
+
+
+
+
 }

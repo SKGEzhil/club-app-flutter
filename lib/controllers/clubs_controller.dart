@@ -27,6 +27,15 @@ class ClubsController extends GetxController {
     update();
   }
 
+  void addUserToClub(context, clubId, userEmail) async {
+    clubList.value = await ServerUtils.addMembersToClub(context, clubId, userEmail);
+    update();
+  }
+
+  void removeUserFromClub(context, clubId, userEmail) async {
+    clubList.value = await ServerUtils.removeMembersFromClub(context, clubId, userEmail);
+    update();
+  }
 
 }
 

@@ -33,7 +33,11 @@ class ClubListTile extends StatelessWidget {
           ),
           title: Text(club.name,
               style: TextStyle(color: Colors.black)),
-          subtitle: Text(club.description, style: TextStyle(
+          subtitle: Text(
+              club.description,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
               color: Colors.black.withOpacity(0.5))),
         ),
       ),

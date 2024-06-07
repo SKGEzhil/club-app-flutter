@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:http/http.dart' as http;
 import 'package:club_app/screens/home_page.dart';
@@ -124,15 +125,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializations();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
   final Widget landingPage;
   final token = await SharedPrefs.getToken();
-  token == '' ? landingPage = LoginPage() : landingPage = HomePage();
-  print("TPKEN $token");
+  print("TOKEN $token");
+  if(token != ''){
+    final user = await SharedPrefs.getUserDetails();
+    final updatedUser = await ServerUtils.getUserDetails(user.email);
+    await SharedPrefs.saveUserDetails(updatedUser);
+    landingPage = HomePage();
+  } else {
+    landingPage = LoginPage();
+  }
   HttpOverrides.global = MyHttpOverrides();
-
   runApp(MyApp(landingPage: landingPage,));
 }
 

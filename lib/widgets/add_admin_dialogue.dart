@@ -12,7 +12,7 @@ class AddAdminDialogue extends StatelessWidget {
   final emailController = TextEditingController();
 
   void addUser(context){
-    adminController.updateUserRole(
+    adminController.updateUserRole(context,
         emailController.text, "admin");
     Navigator.pop(context);
   }

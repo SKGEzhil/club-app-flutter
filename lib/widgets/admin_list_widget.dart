@@ -11,8 +11,8 @@ class AdminListWidget extends StatelessWidget {
 
   final adminController = Get.put(AdminController());
 
-  void removeUser(index){
-    adminController.updateUserRole(
+  void removeUser(context, index){
+    adminController.updateUserRole(context,
         adminController.adminUsers[index]
             .email, "user");
   }
@@ -112,7 +112,7 @@ class AdminListWidget extends StatelessWidget {
                                     ),
                                   ),
                                   ButtonWidget(
-                                    onPressed: () => removeUser(index),
+                                    onPressed: () => removeUser(context, index),
                                     buttonText: 'Remove',
                                     textColor: Colors.redAccent,
                                     buttonColor: Colors.redAccent.withOpacity(0.1),

@@ -1,17 +1,55 @@
 import 'dart:convert';
 import 'package:club_app/models/club_model.dart';
 import 'package:club_app/models/post_model.dart';
+import 'package:club_app/utils/shared_prefs.dart';
+import 'package:club_app/widgets/custom_snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/user_model.dart';
 
 class ServerUtils {
 
+  static Future<bool> verifyGoogleUser(email, token) async {
+    print("Verifying google user...");
+    const url = 'http://10.0.2.2:4000/googleVerification';
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+      SharedPrefs.saveToken(data['token']);
+
+      return await isUserExist(email);
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      throw Exception('Failed to verify google user');
+    }
+  }
+
   static Future<bool> isUserExist(email) async {
     print("Authenticating...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     final query = '''
@@ -53,8 +91,13 @@ class ServerUtils {
     print("Fetching User...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     final query = '''
@@ -94,8 +137,13 @@ class ServerUtils {
     print("Fetching User...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     final query = '''
@@ -134,8 +182,13 @@ class ServerUtils {
     print("Fetching clubs...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     const query = '''
@@ -186,8 +239,13 @@ class ServerUtils {
     print("Fetching posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     const query = '''
@@ -232,12 +290,17 @@ class ServerUtils {
     }
   }
 
-  static Future<Post> createPost(content, imageUrl, createdBy, dateCreated, club) async {
+  static Future<Post> createPost(context, content, imageUrl, createdBy, dateCreated, club) async {
     print("Creating posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     final query = '''
@@ -271,7 +334,14 @@ class ServerUtils {
     if (response.statusCode == 200) {
       print("POST request successful");
       print('Response: ${response.body}');
+
       Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+      }
+
       final post = (data['data'])['createPost'];
       return Post.fromJson(post);
     } else {
@@ -281,12 +351,17 @@ class ServerUtils {
     }
   }
 
-  static Future<List<UserModel>> updateUserRole(email, role) async {
+  static Future<List<UserModel>> updateUserRole(context, email, role) async {
     print("Updating role...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     final query = '''
@@ -309,6 +384,14 @@ class ServerUtils {
     if (response.statusCode == 200) {
       print("POST request successful");
       print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+      }
+
       return fetchAdminUsers();
     } else {
       print("POST request failed");
@@ -321,8 +404,13 @@ class ServerUtils {
     print("Fetching admins...");
     const url = 'http://10.0.2.2:4000/graphql';
 
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
     };
 
     const query = '''

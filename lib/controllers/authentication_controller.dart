@@ -33,7 +33,7 @@ class AuthenticationController extends GetxController {
       print('Sign in failed');
     } else {
       print("token: ${googleAuth?.accessToken}");
-      final userExist = await ServerUtils.isUserExist(googleUser.email);
+      final userExist = await ServerUtils.verifyGoogleUser(googleUser.email, googleAuth?.accessToken);
       if (userExist) {
         final user = await ServerUtils.getUserDetails(googleUser.email);
         login(context, user, googleAuth);
@@ -47,7 +47,7 @@ class AuthenticationController extends GetxController {
 
   Future<void> login(context, user, googleAuth) async {
     await SharedPrefs.saveUserDetails(user);
-    await SharedPrefs.saveToken(googleAuth?.accessToken);
+    // await SharedPrefs.saveToken(googleAuth?.accessToken);
     Navigator.pop(context);
     Navigator.push(
       context,

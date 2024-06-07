@@ -20,8 +20,8 @@ class BottomMessageBar extends StatelessWidget {
 
   final contentText = TextEditingController();
 
-  Future<void> createPost() async {
-    await postController.createPost(
+  Future<void> createPost(context) async {
+    await postController.createPost(context,
         contentText.text, profileController.currentUser.value.id, clubId);
     contentText.text = '';
     imagePickerController.resetImage();
@@ -130,7 +130,7 @@ class BottomMessageBar extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: createPost,
+                          onPressed: () => createPost(context),
                           icon: const Icon(
                             Icons.send,
                             color: Color.fromRGBO(0, 0, 0, 1),

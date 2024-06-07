@@ -21,9 +21,9 @@ class ClubPage extends StatelessWidget {
 
   final contentText = TextEditingController();
 
-  Future<void> createPost() async {
-    await postController.createPost(
-        contentText.text, profileController.currentUser.value.id, clubId);
+  Future<void> createPost(context) async {
+    await postController.createPost(context, contentText.text,
+        profileController.currentUser.value.id, clubId);
     contentText.text = '';
     imagePickerController.resetImage();
   }
@@ -62,13 +62,14 @@ class ClubPage extends StatelessWidget {
                 ),
               ),
             ),
-
             clubsController.clubList
-                    .where((club) => club.id == clubId)
-                    .first
-                    .members
-                    .any((member) =>
-                        member.id == profileController.currentUser.value.id)
+                        .where((club) => club.id == clubId)
+                        .first
+                        .members
+                        .any((member) =>
+                            member.id ==
+                            profileController.currentUser.value.id) ||
+                    profileController.currentUser.value.role == 'admin'
                 ? BottomMessageBar(clubId: clubId)
                 : const SizedBox()
           ],
@@ -77,4 +78,3 @@ class ClubPage extends StatelessWidget {
     );
   }
 }
-

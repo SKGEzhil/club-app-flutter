@@ -21,8 +21,8 @@ class AdminController extends GetxController {
     update();
   }
 
-  Future<void> updateUserRole(email, role) async {
-    adminUsers.value = await ServerUtils.updateUserRole(email, role);
+  Future<void> updateUserRole(context ,email, role) async {
+    adminUsers.value = await ServerUtils.updateUserRole(context, email, role);
     update();
   }
 

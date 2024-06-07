@@ -28,7 +28,7 @@ class PostController extends GetxController{
     update();
   }
 
-  Future<void> createPost(content, createdBy, club) async {
+  Future<void> createPost(context, content, createdBy, club) async {
     final dateTime = DateTime.now();
     final formattedDateTime = DateFormat('yyyy-MM-ddThh:mm').format(dateTime);
     print(formattedDateTime);
@@ -36,7 +36,7 @@ class PostController extends GetxController{
     if (imagePickerController.image != null) {
       imageUrl = await uploadImage(imagePickerController.image!);
     }
-    postList.add(await ServerUtils.createPost(content, imageUrl, createdBy, formattedDateTime, club));
+    postList.add(await ServerUtils.createPost(context, content, imageUrl, createdBy, formattedDateTime, club));
     update();
   }
 

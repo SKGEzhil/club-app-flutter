@@ -20,4 +20,22 @@ class SharedPrefs {
 
     return userDetails;
   }
+
+  static saveToken(String? token) async {
+    final prefs = await SharedPreferences.getInstance();
+    print('SAVED TOKEN: $token');
+    prefs.setString("token", token!);
+  }
+
+  static Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("token") == null) return '';
+    return prefs.getString("token")!;
+  }
+
+  static clearAll() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
 }

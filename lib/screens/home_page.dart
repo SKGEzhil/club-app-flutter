@@ -2,10 +2,14 @@ import 'dart:ffi';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/controllers/post_controller.dart';
+import 'package:club_app/screens/admin_page.dart';
+import 'package:club_app/screens/login_page.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../controllers/authentication_controller.dart';
 import '../controllers/clubs_controller.dart';
+import '../controllers/profile_controller.dart';
 import '../models/club_model.dart';
 import '../models/post_model.dart';
 import 'club_page.dart';
@@ -15,17 +19,24 @@ class HomePage extends StatelessWidget {
 
   final clubsController = Get.put(ClubsController());
   final postController = Get.put(PostController());
+  final profileController = Get.put(ProfileController());
+  final authenticationController = Get.put(AuthenticationController());
 
-  List<Post> get sortedPostList{
-    return postController.postList.toList()..sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+  List<Post> get sortedPostList {
+    return postController.postList.toList()
+      ..sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
   }
 
   List<Club> get sortedClubList {
     var sortedPosts = sortedPostList;
-    var clubIdsWithPosts = sortedPosts.map((post) => post.clubId).toSet().toList();
+    var clubIdsWithPosts = sortedPosts.map((post) => post.clubId)
+        .toSet()
+        .toList();
 
-    var clubsWithPosts = clubIdsWithPosts.map((id) => clubsController.clubList.firstWhere((club) => club.id == id)).toList();
-    var clubsWithoutPosts = clubsController.clubList.where((club) => !clubIdsWithPosts.contains(club.id)).toList();
+    var clubsWithPosts = clubIdsWithPosts.map((id) =>
+        clubsController.clubList.firstWhere((club) => club.id == id)).toList();
+    var clubsWithoutPosts = clubsController.clubList.where((
+        club) => !clubIdsWithPosts.contains(club.id)).toList();
 
     return clubsWithPosts + clubsWithoutPosts;
   }
@@ -37,6 +48,51 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('The Clubs'),
           backgroundColor: Colors.white,
+          actions: [
+            Obx(() {
+              return Container(
+                child:
+
+                profileController.currentUser.value.role == 'admin' ?
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (
+                          context) => AdminPage()));
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 6, 15, 6),
+                          child: Text('Admin',
+                            style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                    ),
+                  ),
+                ) :
+
+                SizedBox(),
+              );
+            }),
+            IconButton(
+                onPressed: () {
+                  authenticationController.logout();
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                }, icon: Icon(Icons.logout))
+          ],
         ),
         body: ListView(
           children: [
@@ -82,17 +138,18 @@ class HomePage extends StatelessWidget {
                 ),
               );
             }),
-            Expanded(
-              child: Column(
+            Obx(() {
+              return Column(
                   children: sortedClubList.map((club) =>
                       Column(
                         children: [
                           InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ClubPage(
-                                    clubName: club.name,
-                                    clubId: club.id,)));
+                                  builder: (context) =>
+                                      ClubPage(
+                                        clubName: club.name,
+                                        clubId: club.id,)));
                             },
                             child: ListTile(
                               leading: ClipRRect(
@@ -104,15 +161,15 @@ class HomePage extends StatelessWidget {
                               ),
                               title: Text(club.name,
                                   style: TextStyle(color: Colors.black)),
-                              subtitle: Text('IIT Bombay', style: TextStyle(
+                              subtitle: Text(club.description, style: TextStyle(
                                   color: Colors.black.withOpacity(0.5))),
                             ),
                           ),
                           Divider()
                         ],
                       )).toList()
-              ),
-            ),
+              );
+            }),
 
           ],
         )

@@ -36,6 +36,7 @@ class AuthenticationController extends GetxController {
       if (userExist) {
         final user = await getUserDetails(googleUser.email);
         await SharedPrefs.saveUserDetails(user);
+        await SharedPrefs.saveToken(googleAuth?.accessToken);
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -47,6 +48,7 @@ class AuthenticationController extends GetxController {
         print('User does not exist');
         final user = await createUser(googleUser.displayName, googleUser.email);
         await SharedPrefs.saveUserDetails(user);
+        await SharedPrefs.saveToken(googleAuth?.accessToken);
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -56,6 +58,11 @@ class AuthenticationController extends GetxController {
         );
       }
     }
+  }
+
+  Future<void> logout()async {
+    await GoogleSignIn().signOut();
+    await SharedPrefs.clearAll();
   }
 
   Future<bool> isUserExist(email) async {
@@ -117,6 +124,7 @@ class AuthenticationController extends GetxController {
           id
           name
           email
+          role
         }
       }
     ''';
@@ -187,11 +195,4 @@ class AuthenticationController extends GetxController {
     }
   }
 
-
-
-
-  Future<void> logout() async {
-    await GoogleSignIn().signOut();
-    isUserLoggedIn.value = false;
-  }
 }

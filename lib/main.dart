@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:club_app/utils/shared_prefs.dart';
 import 'package:http/http.dart' as http;
 import 'package:club_app/screens/home_page.dart';
 import 'package:club_app/screens/login_page.dart';
@@ -20,6 +21,51 @@ Future<String> _downloadAndSaveFile(String url) async {
   return filePath;
 }
 
+/// Show local notification
+Future<void> showLocalNotification(RemoteMessage message) async {
+  final Map<String, dynamic>? data = message.data;
+
+  if (data != null) {
+    print("largeIcon ${data['largeIcon']}");
+    print("image ${data['image']}");
+    print("title ${data['title']}");
+    print("body ${data['body']}");
+    final String largeIcon = await _downloadAndSaveFile(data['largeIcon']);
+    final String image = await _downloadAndSaveFile(data['image']);
+
+    flutterLocalNotificationsPlugin.show(
+        data.hashCode,
+        data['title'],
+        data['body'],
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: 'launch_background',
+              largeIcon: FilePathAndroidBitmap(largeIcon),
+              color: Colors.deepPurple,
+              colorized: true,
+              styleInformation: BigPictureStyleInformation(
+                FilePathAndroidBitmap(image),
+              )
+          ),
+        ));
+  }
+}
+
+/// Local Notifications Initialization
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description: 'This channel is used for important notifications.', // description
+  importance: Importance.max,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+
 /// Getting Firebase Messaging Instance
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -35,15 +81,6 @@ Future<void> initializations() async {
 
   print("HELLO WORLD");
 
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.', // description
-    importance: Importance.max,
-  );
-
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
@@ -52,53 +89,12 @@ Future<void> initializations() async {
   // onMessage: When the app is open and it receives a push notification
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     // TODO: Handle foreground messages
-
     print("onMessage");
-
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    final Map<String, dynamic>? data = message.data;
-
-    print("title ${notification?.title}");
-    print("body ${notification?.body}");
-
-    // If `onMessage` is triggered with a notification, construct our own
-    // local notification to show to users using the created channel.
-    if (notification != null && android != null && data != null) {
-
-      print("title ${notification.title}");
-      print("body ${notification.body}");
-      print("largeIcon ${data['largeIcon']}");
-
-      final String url = await _downloadAndSaveFile(data['largeIcon']);
-
-
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: 'launch_background',
-              largeIcon: FilePathAndroidBitmap(url),
-              // styleInformation: BigTextStyleInformation(
-              //     notification.body!,
-              //     htmlFormatBigText: true,
-              //     contentTitle: notification.title,
-              //     summaryText: notification.body),
-              // other properties...
-            ),
-          ));
-    }
-
+    showLocalNotification(message);
   });
 
   // replacement for onResume: When the app is in the background and opened directly from the push notification.
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-    // await onNotificationClick(message, 'omoa');
   });
 
   // Firebase message handler
@@ -117,13 +113,13 @@ Future<void> initializations() async {
 
 }
 
-
-
 /// Callback for handling background messages
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Notification");
+  showLocalNotification(message);
 }
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -131,13 +127,19 @@ Future<void> main() async {
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
+  final Widget landingPage;
+  final token = await SharedPrefs.getToken();
+  token == '' ? landingPage = LoginPage() : landingPage = HomePage();
+  print("TPKEN $token");
   HttpOverrides.global = MyHttpOverrides();
 
-  runApp(const MyApp());
+  runApp(MyApp(landingPage: landingPage,));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key, required this.landingPage});
+
+  final Widget landingPage;
 
   // This widget is the root of your application.
   @override
@@ -145,10 +147,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white
+        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: landingPage,
     );
   }
 }

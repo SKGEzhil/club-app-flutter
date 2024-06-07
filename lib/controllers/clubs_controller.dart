@@ -14,24 +14,6 @@ class ClubsController extends GetxController {
 
   final postController = Get.put(PostController());
 
-  // final clubs = <Club>[
-  //   Club(name: 'Electronics & Robotics_IITBombay', imageUrl: "https://via.placeholder.com/50x50" ),
-  //   Club(name: 'WNCC_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Rakshak_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Tinkerers Lab_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Racing_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'BioX_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Techfest_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Sustainability Cell_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Electronics & Robotics_IITBombay', imageUrl: "https://via.placeholder.com/50x50" ),
-  //   Club(name: 'WNCC_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Rakshak_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Tinkerers Lab_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Racing_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'BioX_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Techfest_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  //   Club(name: 'Sustainability Cell_IITBombay', imageUrl: "https://via.placeholder.com/50x50"),
-  // ].obs;
 
   @override
   void onInit() {
@@ -58,11 +40,13 @@ class ClubsController extends GetxController {
             id
             name
             email
+            role
           }
           members {
             id
             name
             email
+            role
           }
         }
       }

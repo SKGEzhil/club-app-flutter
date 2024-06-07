@@ -3,7 +3,7 @@ import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  var currentUser = UserModel(id: '', email: '', name: '').obs;
+  var currentUser = UserModel(id: '', email: '', name: '', role: '').obs;
 
   @override
   void onInit() {

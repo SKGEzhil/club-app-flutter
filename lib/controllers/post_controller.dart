@@ -37,6 +37,7 @@ class PostController extends GetxController{
             id
             name
             email
+            role
           }
           dateCreated
           imageUrl
@@ -93,6 +94,7 @@ class PostController extends GetxController{
             id
             name
             email
+            role
           }
           club {
             id

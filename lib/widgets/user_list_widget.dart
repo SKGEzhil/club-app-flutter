@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:club_app/models/user_model.dart';
 import 'package:club_app/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/admin_controller.dart';
 import '../controllers/clubs_controller.dart';
+import '../controllers/profile_controller.dart';
 import 'add_user_dialogue.dart';
 
 class UserListWidget extends StatelessWidget {
@@ -12,6 +15,19 @@ class UserListWidget extends StatelessWidget {
 
   final adminController = Get.put(AdminController());
   final clubsController = Get.put(ClubsController());
+  final profileController = Get.put(ProfileController());
+
+  UserModel get currentUser => profileController.currentUser.value;
+
+  bool get isAuthorized {
+    if(clubId != null){
+      print("current user: ${currentUser.role}");
+      return currentUser.role == 'admin' || clubsController.clubList.where((club) => club.id == clubId).first.members.any((member) => member.id == currentUser.id);
+    } else {
+      print("current user: ${currentUser.role}");
+      return currentUser.role == 'admin';
+    }
+  }
 
   final clubId;
   final String type;
@@ -65,7 +81,11 @@ class UserListWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ButtonWidget(
+                    child:
+                    !isAuthorized ? SizedBox(
+                      height: 40,
+                    ) :
+                    ButtonWidget(
                       onPressed: () => showAddUserDialogue(context),
                       buttonText: type == 'admin' ? 'Add Admin' : 'Add Member',
                       textColor: Colors.blueAccent,
@@ -102,6 +122,15 @@ class UserListWidget extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: CachedNetworkImage(
+                                      width: 40,
+                                      height: 40,
+                                        fit: BoxFit.cover,
+                                        imageUrl: user.photoUrl),
+                                  ),
+                                  SizedBox(width: 10,),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment
@@ -123,6 +152,12 @@ class UserListWidget extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+
+
+                                  !isAuthorized
+
+                              ? SizedBox() :
+
                                   ButtonWidget(
                                     onPressed: () => type == 'admin' ? removeAdminUser(context, index) : removeClubUser(context, index),
                                     buttonText: 'Remove',

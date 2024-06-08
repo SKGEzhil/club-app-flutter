@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:aws_client/s3_2006_03_01.dart';
 import 'package:club_app/models/club_model.dart';
 import 'package:club_app/models/post_model.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
+import '../secrets.dart';
 
 class ServerUtils {
 
@@ -58,6 +62,8 @@ class ServerUtils {
           id
           name
           email
+          role
+          photoUrl
         }
       }
     ''';
@@ -107,6 +113,7 @@ class ServerUtils {
           name
           email
           role
+          photoUrl
         }
       }
     ''';
@@ -133,7 +140,7 @@ class ServerUtils {
     }
   }
 
-  static Future<UserModel> createUser(name, email) async {
+  static Future<UserModel> createUser(name, email, photoUrl) async {
     print("Fetching User...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -148,10 +155,12 @@ class ServerUtils {
 
     final query = '''
       mutation {
-        createUser(name: "$name", email: "$email") {
+        createUser(name: "$name", email: "$email", photoUrl: "$photoUrl") {
          id
          name
          email
+         role
+         photoUrl
       }
     }
     ''';
@@ -203,12 +212,14 @@ class ServerUtils {
             name
             email
             role
+            photoUrl
           }
           members {
             id
             name
             email
             role
+            photoUrl
           }
         }
       }
@@ -258,6 +269,7 @@ class ServerUtils {
             name
             email
             role
+            photoUrl
           }
           dateCreated
           imageUrl
@@ -315,6 +327,7 @@ class ServerUtils {
             name
             email
             role
+            photoUrl
           }
           club {
             id
@@ -420,7 +433,7 @@ class ServerUtils {
           name
           email
           role
-          fcmToken
+          photoUrl
         }
       }
     ''';
@@ -541,6 +554,70 @@ class ServerUtils {
       print("POST request failed");
       print('Response: ${response.body}');
       throw Exception('Failed to update role');
+    }
+  }
+
+  static Future<String> uploadImage(XFile image) async {
+    String filename = '${DateTime.now().millisecondsSinceEpoch}.png';
+    final credentials = AwsClientCredentials(accessKey: AWS_ACCESS_KEY, secretKey: AWS_SECRET_KEY);
+    final api = S3(region: 'ap-south-1', credentials: credentials);
+    await api.putObject(
+      bucket: 'clubs-app-bucket',
+      key: filename,
+      body: File(image.path).readAsBytesSync(),
+    );
+    api.close();
+    print("https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/$filename");
+    return "https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/$filename";
+  }
+
+  static Future<List<Club>> updateClubInfo(context, id, name, description, imageUrl) async {
+    print("Creating posts...");
+    const url = 'http://10.0.2.2:4000/graphql';
+
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    final query = '''
+      mutation {
+        updateClub(id: "$id", name: "$name", description: "$description", imageUrl: "$imageUrl") {
+          id
+          name
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+        throw Exception('Failed to update club');
+      }
+
+      return fetchClubs();
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      throw Exception('Failed to update club');
     }
   }
 

@@ -77,20 +77,24 @@ class ClubPage extends StatelessWidget {
               ),
             ),
             clubsController.clubList
-                        .where((club) => club.id == clubId)
-                        .first
-                        .members
-                        .any((member) =>
-                            member.id ==
-                            profileController.currentUser.value.id) ||
-                    profileController.currentUser.value.role == 'admin'
+                .where((club) => club.id == clubId)
+                .first
+                .members
+                .any((member) =>
+            member.id ==
+                profileController.currentUser.value.id) ||
+                profileController.currentUser.value.role == 'admin'
                 ? Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: BottomMessageBar(clubId: clubId),
-                  )
-                : const SizedBox()
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: BottomMessageBar(clubId: clubId),
+            )
+                :  Positioned(
+                bottom: 0,
+                  right: 0,
+                  child: SizedBox())
+
           ],
         );
       }),

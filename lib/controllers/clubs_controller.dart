@@ -37,5 +37,10 @@ class ClubsController extends GetxController {
     update();
   }
 
+  Future<void> updateClub(context, id, name, description, imageUrl) async {
+    clubList.value = await ServerUtils.updateClubInfo(context, id, name, description, imageUrl);
+    update();
+  }
+
 }
 

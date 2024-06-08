@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
+import 'package:club_app/secrets.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +26,7 @@ class PostController extends GetxController{
 
   void fetchPosts() async {
     postList.value = await ServerUtils.fetchPosts();
+    print("LENGTH: ${postList.length}");
     update();
   }
 
@@ -34,28 +36,15 @@ class PostController extends GetxController{
     print(formattedDateTime);
     var imageUrl = '';
     if (imagePickerController.image != null) {
-      imageUrl = await uploadImage(imagePickerController.image!);
+      imageUrl = await ServerUtils.uploadImage(imagePickerController.image!);
     }
     postList.add(await ServerUtils.createPost(context, content, imageUrl, createdBy, formattedDateTime, club));
     update();
   }
 
-  Future<String> uploadImage(XFile image) async {
-      String filename = '${DateTime.now().millisecondsSinceEpoch}.png';
-    final credentials = AwsClientCredentials(accessKey: 'AKIA4YVVFSBGWG4OQVDT', secretKey: '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');
-    final api = S3(region: 'ap-south-1', credentials: credentials);
-    await api.putObject(
-        bucket: 'clubs-app-bucket',
-        key: filename,
-        body: File(image.path).readAsBytesSync(),
-    );
-    api.close();
-    print("https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/$filename");
-    return "https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/$filename";
-  }
 
   Future<void> checkAwsCredentials() async {
-    final credentials = AwsClientCredentials(accessKey: 'AKIA4YVVFSBGWG4OQVDT', secretKey: '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');
+    final credentials = AwsClientCredentials(accessKey: AWS_ACCESS_KEY, secretKey: AWS_SECRET_KEY);
     final s3 = S3(region: 'ap-south-1', credentials: credentials); // e.g., 'us-west-2'
 
     try {

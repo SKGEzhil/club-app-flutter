@@ -33,13 +33,14 @@ class AuthenticationController extends GetxController {
       print('Sign in failed');
     } else {
       print("token: ${googleAuth?.accessToken}");
+      print("photo: ${googleUser.photoUrl}");
       final userExist = await ServerUtils.verifyGoogleUser(googleUser.email, googleAuth?.accessToken);
       if (userExist) {
         final user = await ServerUtils.getUserDetails(googleUser.email);
         login(context, user, googleAuth);
       } else {
         print('User does not exist');
-        final user = await ServerUtils.createUser(googleUser.displayName, googleUser.email);
+        final user = await ServerUtils.createUser(googleUser.displayName, googleUser.email, googleUser.photoUrl);
         login(context, user, googleAuth);
       }
     }

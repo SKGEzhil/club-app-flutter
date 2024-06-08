@@ -28,6 +28,7 @@ class ClubListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(25.0),
               child: CachedNetworkImage(
                 imageUrl: club.imageUrl,
+                fit: BoxFit.cover,
                 width: 47,
                 height: 47,)
           ),

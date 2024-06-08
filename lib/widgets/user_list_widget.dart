@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/models/user_model.dart';
 import 'package:club_app/widgets/button_widget.dart';
+import 'package:club_app/widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/admin_controller.dart';
@@ -36,11 +37,13 @@ class UserListWidget extends StatelessWidget {
     adminController.updateUserRole(context,
         adminController.adminUsers[index]
             .email, "user");
+    Navigator.pop(context);
   }
 
   void removeClubUser(context, index){
     clubsController.removeUserFromClub(context, clubId,
         clubsController.clubList.where((club) => club.id == clubId).first.members[index].email);
+    Navigator.pop(context);
   }
 
   void showAddUserDialogue(context){
@@ -159,7 +162,14 @@ class UserListWidget extends StatelessWidget {
                               ? SizedBox() :
 
                                   ButtonWidget(
-                                    onPressed: () => type == 'admin' ? removeAdminUser(context, index) : removeClubUser(context, index),
+                                    onPressed: (){
+                                      showDialog(context: context, builder: (context){
+                                        return CustomAlertDialogue(context: context,
+                                            onPressed: () => type == 'admin' ? removeAdminUser(context, index) : removeClubUser(context, index),
+                                            title: 'Remove User',
+                                            content: 'Are you sure you want to remove ${user.name} from ${type == 'admin' ? 'Admin' : 'the Club'}?');
+                                      });
+                                    },
                                     buttonText: 'Remove',
                                     textColor: Colors.redAccent,
                                     buttonColor: Colors.redAccent.withOpacity(0.1),

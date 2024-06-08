@@ -1,3 +1,4 @@
+import 'package:club_app/widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/admin_controller.dart';
@@ -17,10 +18,12 @@ class AddUserDialogue extends StatelessWidget {
   void addAdminUser(context) {
     adminController.updateUserRole(context, emailController.text, "admin");
     Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   void addClubUser(context) {
     clubsController.addUserToClub(context, clubId, emailController.text);
+    Navigator.pop(context);
     Navigator.pop(context);
   }
 
@@ -55,9 +58,16 @@ class AddUserDialogue extends StatelessWidget {
                   ),
                 ),
                 ButtonWidget(
-                  onPressed: () => type == 'admin'
-                      ? addAdminUser(context)
-                      : addClubUser(context),
+                  onPressed: (){
+                    showDialog(context: context, builder: (context){
+                      return CustomAlertDialogue(context: context,
+                          onPressed: () => type == 'admin'
+                              ? addAdminUser(context)
+                              : addClubUser(context),
+                          title: 'Add User',
+                          content: 'Are you sure you want to add this user ${type == 'admin' ? 'as Admin' : 'to this Club'}?',);
+                    });
+                  },
                   buttonText: 'Add user',
                   textColor: Colors.green,
                   buttonColor: Colors.green.withOpacity(0.1),

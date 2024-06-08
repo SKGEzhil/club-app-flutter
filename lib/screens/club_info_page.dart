@@ -58,12 +58,15 @@ class ClubInfoPage extends StatelessWidget {
           !isAuthorized
               ? const SizedBox()
               :
-          ButtonWidget(
-              onPressed: () => showEditClubDialogue(context),
-              buttonText: 'Edit info',
-              preceedingIcon: Icons.edit,
-              textColor: Colors.blue,
-              buttonColor: Colors.blue.withOpacity(0.1))
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ButtonWidget(
+                onPressed: () => showEditClubDialogue(context),
+                buttonText: 'Edit info',
+                preceedingIcon: Icons.edit,
+                textColor: Colors.blue,
+                buttonColor: Colors.blue.withOpacity(0.1)),
+          )
         ],
       ),
       body: Column(

@@ -621,6 +621,118 @@ class ServerUtils {
     }
   }
 
+  static Future<List<Post>> updatePost(context, id, content) async {
+    print("Creating posts...");
+    const url = 'http://10.0.2.2:4000/graphql';
+
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    final query = '''
+      mutation {
+        updatePost(id: "$id", content: "$content") {
+          id
+          content
+          imageUrl
+          dateCreated
+          createdBy {
+            id
+            name
+            email
+            role
+            photoUrl
+          }
+          club {
+            id
+            name
+          }
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+        throw Exception('Failed to update post');
+      }
+
+      return fetchPosts();
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      throw Exception('Failed to update post');
+    }
+  }
+
+  static Future<List<Post>> deletePost(context, id) async {
+    print("Creating posts...");
+    const url = 'http://10.0.2.2:4000/graphql';
+
+    final token = await SharedPrefs.getToken();
+
+    print('token: $token');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    print('Postid: $id');
+
+    final query = '''
+      mutation {
+        deletePost(id: "$id")
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if(data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
+        throw Exception('Failed to update post');
+      }
+
+      return fetchPosts();
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      throw Exception('Failed to update post');
+    }
+  }
+
+
+
 
 
 

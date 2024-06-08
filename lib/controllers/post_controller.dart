@@ -42,6 +42,16 @@ class PostController extends GetxController{
     update();
   }
 
+  Future<void> updatePost(context, postId, content) async {
+    postList.value = await ServerUtils.updatePost(context, postId, content);
+    update();
+  }
+
+  Future<void> deletePost(context, postId) async {
+    postList.value = await ServerUtils.deletePost(context, postId);
+    update();
+  }
+
 
   Future<void> checkAwsCredentials() async {
     final credentials = AwsClientCredentials(accessKey: AWS_ACCESS_KEY, secretKey: AWS_SECRET_KEY);

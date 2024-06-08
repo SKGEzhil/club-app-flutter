@@ -56,7 +56,7 @@ class ClubPage extends StatelessWidget {
             .map((post) => Column(
           children: [
             const Divider(),
-            PostWidget(post: post),
+            PostWidget(post: post)
           ],
         ))
             .toList();

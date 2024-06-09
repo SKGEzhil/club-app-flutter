@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:club_app/controllers/post_controller.dart';
+import 'package:club_app/theme.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
@@ -11,13 +12,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'controllers/global_bindings.dart';
+import 'controllers/theme_controller.dart';
 import 'controllers/unread_post_controller.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 /// Save Notification large icon
 Future<String> _downloadAndSaveFile(String url) async {
-  String filename = '${DateTime.now().millisecondsSinceEpoch}.png';
+  String filename = '${DateTime
+      .now()
+      .millisecondsSinceEpoch}.png';
   final Directory directory = await getApplicationDocumentsDirectory();
   final String filePath = '${directory.path}/$filename';
   final http.Response response = await http.get(Uri.parse(url));
@@ -66,18 +70,16 @@ Future<void> showLocalNotification(RemoteMessage message) async {
           data['body'],
           NotificationDetails(
             android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channelDescription: channel.description,
-                icon: 'launch_background',
-                largeIcon: FilePathAndroidBitmap(largeIcon),
-                color: Colors.deepPurple,
-                colorized: true,
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: 'launch_background',
+              largeIcon: FilePathAndroidBitmap(largeIcon),
+              color: Colors.deepPurple,
+              colorized: true,
             ),
           ));
     }
-
-
   }
 }
 
@@ -85,7 +87,8 @@ Future<void> showLocalNotification(RemoteMessage message) async {
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  description: 'This channel is used for important notifications.', // description
+  description: 'This channel is used for important notifications.',
+  // description
   importance: Importance.max,
 );
 
@@ -98,7 +101,6 @@ FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
 /// Firebase initialization
 Future<void> initializations() async {
-
   // Firebase initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -110,7 +112,8 @@ Future<void> initializations() async {
 
 
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   // onMessage: When the app is open and it receives a push notification
@@ -128,12 +131,10 @@ Future<void> initializations() async {
     // SharedPrefs.setUnreadPosts(postId);
     final postController = Get.put(PostController());
     postController.fetchPosts();
-
   });
 
   // replacement for onResume: When the app is in the background and opened directly from the push notification.
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {});
 
   // Firebase message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -147,8 +148,6 @@ Future<void> initializations() async {
   // Getting the FCM token
   final token = await FirebaseMessaging.instance.getToken();
   print("FCMToken: $token");
-
-
 }
 
 /// Callback for handling background messages
@@ -164,7 +163,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await unreadPostController.getUnreadPosts();
   final postController = Get.put(PostController());
   postController.fetchPosts();
-
 }
 
 
@@ -174,7 +172,7 @@ Future<void> main() async {
   final Widget landingPage;
   final token = await SharedPrefs.getToken();
   print("TOKEN $token");
-  if(token != ''){
+  if (token != '') {
     final user = await SharedPrefs.getUserDetails();
     final updatedUser = await ServerUtils.getUserDetails(user.email);
     await SharedPrefs.saveUserDetails(updatedUser);
@@ -190,31 +188,31 @@ class MyApp extends StatelessWidget {
   MyApp({super.key, required this.landingPage});
 
   final Widget landingPage;
+  final themeController = Get.put(ThemeController());
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      initialBinding: GlobalBindings(),
+    return GetBuilder<ThemeController>(builder: (logic) {
+      return GetMaterialApp(
+        title: 'Flutter Demo',
+        initialBinding: GlobalBindings(),
 
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white
-        ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: landingPage,
-    );
+        // theme: AppTheme.darkTheme,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeController.themeMode.value,
+        home: landingPage,
+      );
+    });
   }
 }
 
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback = (X509Certificate cert, String host,
+          int port) => true;
   }
 }

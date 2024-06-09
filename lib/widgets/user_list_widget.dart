@@ -4,6 +4,7 @@ import 'package:club_app/widgets/button_widget.dart';
 import 'package:club_app/widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../colors.dart';
 import '../controllers/admin_controller.dart';
 import '../controllers/clubs_controller.dart';
 import '../controllers/profile_controller.dart';
@@ -58,12 +59,19 @@ class UserListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Determine if the current theme is light or dark
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    // Choose the color based on the theme
+    ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
+
     return Obx(() {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.05),
+            color: Colors.blue.withOpacity(0.1),
             borderRadius: BorderRadius.circular(18),
           ),
           child: Wrap(
@@ -76,7 +84,7 @@ class UserListWidget extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       child: Text(type == 'admin' ? 'All Admin Users' : 'All Club Members',
                         style: TextStyle(
-                            color: Colors.black,
+                            // color: Colors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
@@ -149,8 +157,8 @@ class UserListWidget extends StatelessWidget {
                                           user.email,
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: Colors.black.withOpacity(
-                                                  0.8)),
+                                              color: currentColors.secondaryTextColor
+                                          ),
                                         ),
                                       ],
                                     ),

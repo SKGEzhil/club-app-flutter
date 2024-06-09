@@ -3,6 +3,7 @@ import 'package:club_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import '../colors.dart';
 import '../controllers/post_controller.dart';
 import '../controllers/unread_post_controller.dart';
 import '../models/club_model.dart';
@@ -81,6 +82,12 @@ class _ClubListTileState extends State<ClubListTile>
 
   @override
   Widget build(BuildContext context) {
+
+    // Determine if the current theme is light or dark
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    // Choose the color based on the theme
+    ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
     // getUnreadPosts();
 
     return InkWell(
@@ -110,7 +117,10 @@ class _ClubListTileState extends State<ClubListTile>
               Expanded(
                   child:
                   Text(
-                      widget.club.name, style: TextStyle(color: Colors.black))),
+                      widget.club.name,
+                      // style: TextStyle(color: Colors.black)
+                  )
+              ),
 
               Obx(() {
                 return SizedBox(
@@ -150,7 +160,9 @@ class _ClubListTileState extends State<ClubListTile>
           subtitle: Text(lastPost.content,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.black.withOpacity(0.5))),
+              style: TextStyle(
+                  color: currentColors.tertiaryTextColor
+              )),
         ),
       ),
     );

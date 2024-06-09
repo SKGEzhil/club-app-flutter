@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:club_app/colors.dart';
 import 'package:club_app/widgets/button_widget.dart';
 import 'package:club_app/widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,14 @@ class PostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Determine if the current theme is light or dark
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    // Choose the color based on the theme
+    ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
+    // MyColors currentColors = isDarkTheme ? darkColors : lightColors;
+
     editPostController.text = post.content;
 
     return InkWell(
@@ -69,7 +78,7 @@ class PostWidget extends StatelessWidget {
         await showMenu(
           context: context,
           elevation: 5,
-          color: Colors.white,
+          // color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(13.0),
           ),
@@ -209,7 +218,8 @@ class PostWidget extends StatelessWidget {
                         )
                             : Text(post.content,
                             style: const TextStyle(
-                                color: Colors.black, fontSize: 16.0)),
+                                // color: Colors.black,
+                                fontSize: 16.0)),
                       );
                     }),
                     const SizedBox(height: 8.0),
@@ -261,7 +271,8 @@ class PostWidget extends StatelessWidget {
                           child: Text(post.formattedDateTime,
                               style: TextStyle(
                                   fontSize: 12.0,
-                                  color: Colors.black.withOpacity(0.5))),
+                                  color: currentColors.tertiaryTextColor
+                              )),
                         ),
 
                         Obx(() {
@@ -279,7 +290,7 @@ class PostWidget extends StatelessWidget {
                               ),
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: currentColors.oppositeColor.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(1.0),
@@ -289,14 +300,14 @@ class PostWidget extends StatelessWidget {
                                       SizedBox(width: 4.0),
                                       Icon(
                                           size: 12.0,
-                                          color: Colors.black.withOpacity(0.5),
+                                          color: currentColors.oppositeColor.withOpacity(0.5),
                                           Icons.edit_outlined),
                                       const SizedBox(width: 3.0),
                                       Text('Edit',
                                           style: TextStyle(
                                               fontSize: 12.0,
                                               color:
-                                              Colors.black.withOpacity(0.5))),
+                                              currentColors.tertiaryTextColor)),
                                       SizedBox(width: 4.0),
                                     ],
                                   ),

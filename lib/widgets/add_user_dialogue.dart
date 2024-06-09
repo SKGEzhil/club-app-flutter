@@ -32,13 +32,9 @@ class AddUserDialogue extends StatelessWidget {
     return Center(
         child: Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(20),
-          ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Material(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

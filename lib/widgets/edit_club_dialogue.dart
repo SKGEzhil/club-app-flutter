@@ -70,13 +70,9 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
       child: Center(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Material(
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(
@@ -123,7 +119,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                // color: Colors.white,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Padding(
@@ -138,7 +134,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                                     child: Icon(
                                       size: 18,
                                       Icons.edit,
-                                      color: Colors.white,
+                                      // color: Colors.white,
                                     ),
                                   ),
                                 ),

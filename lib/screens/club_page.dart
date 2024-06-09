@@ -32,10 +32,10 @@ class ClubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(clubName),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {
@@ -44,7 +44,8 @@ class ClubPage extends StatelessWidget {
                         clubId: clubId,
                       )));
             },
-            icon: const Icon(Icons.info),
+            icon: Icon(
+                Icons.info),
           )
         ],
       ),

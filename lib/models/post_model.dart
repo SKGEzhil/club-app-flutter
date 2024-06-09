@@ -15,7 +15,7 @@ class Post {
   String get formattedDateTime {
     final timestamp = int.parse(dateCreated);
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return DateFormat('dd MMM | hh:mm').format(dateTime);
+    return DateFormat('dd MMM |').add_jm().format(dateTime);
   }
 
   Post({

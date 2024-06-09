@@ -32,7 +32,7 @@ class PostController extends GetxController{
 
   Future<void> createPost(context, content, createdBy, club) async {
     final dateTime = DateTime.now();
-    final formattedDateTime = DateFormat('yyyy-MM-ddThh:mm').format(dateTime);
+    final formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm').format(dateTime);
     print(formattedDateTime);
     var imageUrl = '';
     if (imagePickerController.image != null) {

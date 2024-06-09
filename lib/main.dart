@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:club_app/screens/home_page.dart';
 import 'package:club_app/screens/login_page.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'controllers/global_bindings.dart';
+import 'controllers/unread_post_controller.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -31,27 +35,49 @@ Future<void> showLocalNotification(RemoteMessage message) async {
     print("image ${data['image']}");
     print("title ${data['title']}");
     print("body ${data['body']}");
+    print("postId ${data['postId']}");
+    print("clubId ${data['clubId']}");
     final String largeIcon = await _downloadAndSaveFile(data['largeIcon']);
-    final String image = await _downloadAndSaveFile(data['image']);
+    var image;
+    if (data['image'] != '') {
+      image = await _downloadAndSaveFile(data['image']);
+      flutterLocalNotificationsPlugin.show(
+          data.hashCode,
+          data['title'],
+          data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                icon: 'launch_background',
+                largeIcon: FilePathAndroidBitmap(largeIcon),
+                color: Colors.deepPurple,
+                colorized: true,
+                styleInformation: BigPictureStyleInformation(
+                  FilePathAndroidBitmap(image),
+                )
+            ),
+          ));
+    } else {
+      flutterLocalNotificationsPlugin.show(
+          data.hashCode,
+          data['title'],
+          data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                icon: 'launch_background',
+                largeIcon: FilePathAndroidBitmap(largeIcon),
+                color: Colors.deepPurple,
+                colorized: true,
+            ),
+          ));
+    }
 
-    flutterLocalNotificationsPlugin.show(
-        data.hashCode,
-        data['title'],
-        data['body'],
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: 'launch_background',
-              largeIcon: FilePathAndroidBitmap(largeIcon),
-              color: Colors.deepPurple,
-              colorized: true,
-              styleInformation: BigPictureStyleInformation(
-                FilePathAndroidBitmap(image),
-              )
-          ),
-        ));
+
   }
 }
 
@@ -92,6 +118,17 @@ Future<void> initializations() async {
     // TODO: Handle foreground messages
     print("onMessage");
     showLocalNotification(message);
+
+    final Map<String, dynamic> data = message.data;
+    final unreadPostController = Get.put(UnreadPostController());
+    await unreadPostController.getUnreadPosts();
+    await unreadPostController.addUnreadPost(data['postId'], data['clubId']);
+    await unreadPostController.getUnreadPosts();
+    // final postId = data['postId'];
+    // SharedPrefs.setUnreadPosts(postId);
+    final postController = Get.put(PostController());
+    postController.fetchPosts();
+
   });
 
   // replacement for onResume: When the app is in the background and opened directly from the push notification.
@@ -119,6 +156,15 @@ Future<void> initializations() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Notification");
   showLocalNotification(message);
+
+  final Map<String, dynamic> data = message.data;
+  final unreadPostController = Get.put(UnreadPostController());
+  await unreadPostController.getUnreadPosts();
+  await unreadPostController.addUnreadPost(data['postId'], data['clubId']);
+  await unreadPostController.getUnreadPosts();
+  final postController = Get.put(PostController());
+  postController.fetchPosts();
+
 }
 
 
@@ -148,8 +194,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
+      initialBinding: GlobalBindings(),
+
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(

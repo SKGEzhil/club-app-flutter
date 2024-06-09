@@ -1,3 +1,5 @@
+import 'package:aws_client/dynamo_document.dart';
+import 'package:club_app/models/unread_post_list_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user_model.dart';
@@ -15,7 +17,8 @@ class SharedPrefs {
   static Future<UserModel> getUserDetails() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final userDetails = UserModel.fromJson(jsonDecode(prefs.getString("user_details")!));
+    final userDetails =
+        UserModel.fromJson(jsonDecode(prefs.getString("user_details")!));
     print("USER NaMe: ${userDetails.name}");
 
     return userDetails;
@@ -29,13 +32,33 @@ class SharedPrefs {
 
   static Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
-    if(prefs.getString("token") == null) return '';
+    if (prefs.getString("token") == null) return '';
     return prefs.getString("token")!;
+  }
+
+  static setUnreadPosts(List<UnreadPosts> unreadPosts) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> unreadPostListString = unreadPosts
+        .map((unreadPost) => json.encode(unreadPost.toJson()))
+        .toList();
+    unreadPostListString.forEach((element) async {
+      print('element: $element');
+    });
+    await prefs.setStringList('unread_posts', unreadPostListString);
+    print('Saved!!');
+  }
+
+  static Future<List<UnreadPosts>> getUnreadPosts() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> unreadPostListString = prefs.getStringList('unread_posts') ?? [];
+    List<UnreadPosts> unreadPosts = unreadPostListString
+        .map((unreadPost) => UnreadPosts.fromJson(json.decode(unreadPost)))
+        .toList();
+    return unreadPosts;
   }
 
   static clearAll() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }
-
 }

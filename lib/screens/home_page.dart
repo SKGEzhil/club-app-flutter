@@ -21,8 +21,9 @@ class HomePage extends StatelessWidget {
   final authenticationController = Get.put(AuthenticationController());
 
   List<Post> get sortedPostList {
-    return postController.postList.toList()
+    final sortedList = postController.postList.toList()
       ..sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+    return sortedList;
   }
 
   List<Club> get sortedClubList {

@@ -1,7 +1,9 @@
 import 'package:aws_client/dynamo_document.dart';
+import 'package:club_app/models/club_model.dart';
 import 'package:club_app/models/unread_post_list_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../models/post_model.dart';
 import '../models/user_model.dart';
 
 class SharedPrefs {
@@ -55,6 +57,38 @@ class SharedPrefs {
         .map((unreadPost) => UnreadPosts.fromJson(json.decode(unreadPost)))
         .toList();
     return unreadPosts;
+  }
+
+  static Future<void> savePost(List<Post> post) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> postListString =
+        post.map((post) => json.encode(post.toJson())).toList();
+    await prefs.setStringList('posts', postListString);
+    print('Saved posts');
+  }
+
+  static Future<List<Post>> getPost() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> postListString = prefs.getStringList('posts') ?? [];
+    List<Post> posts =
+        postListString.map((post) => Post.fromJson(json.decode(post))).toList();
+    return posts;
+  }
+
+  static Future<void> saveClubs(List<Club> clubs) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> clubListString =
+        clubs.map((club) => json.encode(club.toJson())).toList();
+    await prefs.setStringList('clubs', clubListString);
+    print('Saved clubs');
+  }
+
+  static Future<List<Club>> getClubs() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> clubListString = prefs.getStringList('clubs') ?? [];
+    List<Club> clubs =
+        clubListString.map((club) => Club.fromJson(json.decode(club))).toList();
+    return clubs;
   }
 
   static clearAll() async {

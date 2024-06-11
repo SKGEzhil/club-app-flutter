@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:club_app/secrets.dart';
 import 'package:club_app/utils/server_utils.dart';
+import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -13,12 +14,16 @@ import 'package:aws_client/s3_2006_03_01.dart';
 import 'image_picker_controller.dart';
 import 'package:intl/intl.dart';
 
+import 'network_controller.dart';
+
 class PostController extends GetxController{
 
   @override
   void onInit() {
     super.onInit();
-    fetchPosts();
+    final networkController = Get.find<NetworkController>();
+    networkController.isOnline.value ?
+    fetchPosts() : fetchPostsFromSharedPrefs();
   }
 
   final imagePickerController = Get.put(ImagePickerController());
@@ -26,6 +31,13 @@ class PostController extends GetxController{
 
   void fetchPosts() async {
     postList.value = await ServerUtils.fetchPosts();
+    await SharedPrefs.savePost(postList);
+    print("LENGTH: ${postList.length}");
+    update();
+  }
+
+  void fetchPostsFromSharedPrefs() async {
+    postList.value = await SharedPrefs.getPost();
     print("LENGTH: ${postList.length}");
     update();
   }

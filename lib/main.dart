@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:club_app/controllers/post_controller.dart';
+import 'package:club_app/screens/page_scroll_viewer.dart';
 import 'package:club_app/theme.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
@@ -12,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'controllers/global_bindings.dart';
+import 'controllers/network_controller.dart';
 import 'controllers/theme_controller.dart';
 import 'controllers/unread_post_controller.dart';
 import 'firebase_options.dart';
@@ -100,7 +102,7 @@ FlutterLocalNotificationsPlugin();
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
 /// Firebase initialization
-Future<void> initializations() async {
+Future<void> firebaseInitializations() async {
   // Firebase initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -165,27 +167,46 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   postController.fetchPosts();
 }
 
+/// App Initialization
+void appInitialization() async {
+  final networkController = Get.put(NetworkController());
+  final isOnline = networkController.isOnline.value;
+
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializations();
+
+  final networkController = Get.put(NetworkController());
+  await networkController.onInit();
+  print(networkController.isOnline.value);
+
+  await firebaseInitializations();
+
   final Widget landingPage;
+
+  // Login check
   final token = await SharedPrefs.getToken();
   print("TOKEN $token");
   if (token != '') {
     final user = await SharedPrefs.getUserDetails();
-    final updatedUser = await ServerUtils.getUserDetails(user.email);
-    await SharedPrefs.saveUserDetails(updatedUser);
+    if(networkController.isOnline.value) {
+      final updatedUser = await ServerUtils.getUserDetails(user.email);
+      await SharedPrefs.saveUserDetails(updatedUser);
+    }
     landingPage = HomePage();
   } else {
     landingPage = LoginPage();
   }
+
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp(landingPage: landingPage,));
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key, required this.landingPage});
+
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final Widget landingPage;
   final themeController = Get.put(ThemeController());

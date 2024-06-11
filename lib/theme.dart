@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
+      popupMenuTheme: const PopupMenuThemeData(
+
+      ),
       dividerTheme: DividerThemeData(
         color: Colors.white.withOpacity(0.15),
         thickness: 1,

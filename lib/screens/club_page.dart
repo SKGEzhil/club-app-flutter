@@ -1,9 +1,11 @@
 import 'package:club_app/controllers/clubs_controller.dart';
 import 'package:club_app/screens/club_info_page.dart';
 import 'package:club_app/widgets/bottom_message_bar.dart';
+import 'package:club_app/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/image_picker_controller.dart';
+import '../controllers/loading_controller.dart';
 import '../controllers/post_controller.dart';
 import '../controllers/profile_controller.dart';
 
@@ -16,6 +18,8 @@ class ClubPage extends StatelessWidget {
   final clubsController = Get.put(ClubsController());
   final profileController = Get.put(ProfileController());
   final imagePickerController = Get.put(ImagePickerController());
+  final loadingController = Get.put(LoadingController());
+
 
   final String clubName;
   final String clubId;
@@ -39,8 +43,11 @@ class ClubPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
+              // loadingController.toggleLoading();
+
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ClubInfoPage(
+                  builder: (context) =>
+                      ClubInfoPage(
                         clubId: clubId,
                       )));
             },
@@ -49,56 +56,68 @@ class ClubPage extends StatelessWidget {
           )
         ],
       ),
-      body: Obx(() {
+      body: Stack(
+        children: [
+          Obx(() {
+            List<Widget> postWidgets = postController.postList
+                .where((post) => post.clubId == clubId)
+                .toList()
+                .map((post) =>
+                Column(
+                  children: [
+                    const Divider(),
+                    PostWidget(post: post)
+                  ],
+                ))
+                .toList();
+            postWidgets.add(Column(
+              children: [
+                const SizedBox(height: 100),
+              ],
+            ));
 
-        List<Widget> postWidgets = postController.postList
-            .where((post) => post.clubId == clubId)
-            .toList()
-            .map((post) => Column(
-          children: [
-            const Divider(),
-            PostWidget(post: post)
-          ],
-        ))
-            .toList();
-        postWidgets.add(Column(
-          children: [
-            const SizedBox(height: 100),
-          ],
-        ));
-
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: SingleChildScrollView(
-                reverse: true,
-                child: Column(
-                  children: postWidgets
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    child: Column(
+                        children: postWidgets
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            clubsController.clubList
-                .where((club) => club.id == clubId)
-                .first
-                .members
-                .any((member) =>
-            member.id ==
-                profileController.currentUser.value.id) ||
-                profileController.currentUser.value.role == 'admin'
-                ? Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomMessageBar(clubId: clubId),
-            )
-                :  Positioned(
-                bottom: 0,
+                clubsController.clubList
+                    .where((club) => club.id == clubId)
+                    .first
+                    .members
+                    .any((member) =>
+                member.id ==
+                    profileController.currentUser.value.id) ||
+                    profileController.currentUser.value.role == 'admin'
+                    ? Positioned(
+                  bottom: 0,
+                  left: 0,
                   right: 0,
-                  child: SizedBox())
+                  child: BottomMessageBar(clubId: clubId),
+                )
+                    : Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: SizedBox())
 
-          ],
-        );
-      }),
+              ],
+            );
+          }),
+          Obx(() {
+            return Container(
+              child:
+              loadingController.isLoading.value
+                  ?
+              LoadingWidget() : null,
+            );
+          }),
+        ],
+      ),
     );
   }
 }

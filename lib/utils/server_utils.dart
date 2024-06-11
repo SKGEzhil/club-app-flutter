@@ -8,12 +8,27 @@ import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import '../controllers/network_controller.dart';
+import '../main.dart';
 import '../models/user_model.dart';
 import '../secrets.dart';
+import 'package:get/get.dart';
 
 class ServerUtils {
 
+  static bool isInternetConnectionAvailable() {
+    // Check internet connection
+    final networkController = Get.find<NetworkController>();
+    return networkController.isOnline.value;
+  }
+
   static Future<bool> verifyGoogleUser(email, token) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Verifying google user...");
     const url = 'http://10.0.2.2:4000/googleVerification';
 
@@ -44,6 +59,12 @@ class ServerUtils {
   }
 
   static Future<bool> isUserExist(email) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Authenticating...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -94,6 +115,12 @@ class ServerUtils {
   }
 
   static Future<UserModel> getUserDetails(email) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Fetching User...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -141,6 +168,12 @@ class ServerUtils {
   }
 
   static Future<UserModel> createUser(name, email, photoUrl) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Fetching User...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -188,6 +221,12 @@ class ServerUtils {
   }
 
   static Future<List<Club>> fetchClubs() async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Fetching clubs...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -247,6 +286,12 @@ class ServerUtils {
   }
 
   static Future<List<Post>> fetchPosts() async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Fetching posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -303,6 +348,12 @@ class ServerUtils {
   }
 
   static Future<Post> createPost(context, content, imageUrl, createdBy, dateCreated, club) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Creating posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -365,6 +416,12 @@ class ServerUtils {
   }
 
   static Future<List<UserModel>> updateUserRole(context, email, role) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Updating role...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -414,6 +471,12 @@ class ServerUtils {
   }
 
   static Future<List<UserModel>> fetchAdminUsers() async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Fetching admins...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -460,6 +523,12 @@ class ServerUtils {
   }
 
   static Future<List<Club>> addMembersToClub(context, clubId, userEmail) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Adding to club...");
     print("clubId: $clubId, userEmail: $userEmail");
     const url = 'http://10.0.2.2:4000/graphql';
@@ -509,6 +578,12 @@ class ServerUtils {
   }
 
   static Future<List<Club>> removeMembersFromClub(context, clubId, userEmail) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Removing from club...");
     print("clubId: $clubId, userEmail: $userEmail");
     const url = 'http://10.0.2.2:4000/graphql';
@@ -558,6 +633,12 @@ class ServerUtils {
   }
 
   static Future<String> uploadImage(XFile image) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     String filename = '${DateTime.now().millisecondsSinceEpoch}.png';
     final credentials = AwsClientCredentials(accessKey: AWS_ACCESS_KEY, secretKey: AWS_SECRET_KEY);
     final api = S3(region: 'ap-south-1', credentials: credentials);
@@ -572,6 +653,12 @@ class ServerUtils {
   }
 
   static Future<List<Club>> updateClubInfo(context, id, name, description, imageUrl) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Creating posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -622,6 +709,12 @@ class ServerUtils {
   }
 
   static Future<List<Post>> updatePost(context, id, content) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Creating posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 
@@ -684,6 +777,12 @@ class ServerUtils {
   }
 
   static Future<List<Post>> deletePost(context, id) async {
+
+    if(!isInternetConnectionAvailable()) {
+      CustomGetSnackBar.show(message: "No Internet connection", color: Colors.red.withOpacity(0.5));
+      throw Exception('No internet connection');
+    }
+
     print("Creating posts...");
     const url = 'http://10.0.2.2:4000/graphql';
 

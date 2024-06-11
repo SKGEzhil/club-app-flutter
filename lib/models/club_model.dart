@@ -29,4 +29,15 @@ class Club{
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'createdBy': createdBy.toJson(),
+      'imageUrl': imageUrl,
+      'members': members.map((member) => member.toJson()).toList(),
+    };
+  }
+
 }

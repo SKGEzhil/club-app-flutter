@@ -40,6 +40,20 @@ class Post {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'content': content,
+      'dateCreated': dateCreated,
+      'imageUrl': imageUrl,
+      'club': {
+        'id': clubId,
+        'name': clubName,
+      },
+      'createdBy': createdBy.toJson(),
+    };
+  }
+
 }
 
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:club_app/controllers/post_controller.dart';
+import 'package:club_app/utils/repositories/club_repository.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,7 @@ class ClubsController extends GetxController {
   }
 
   void fetchClubs() async {
-    clubList.value = await ServerUtils.fetchClubs();
+    clubList.value = await ClubRepository().fetchClubs();
     await SharedPrefs.saveClubs(clubList);
     update();
   }
@@ -37,19 +38,38 @@ class ClubsController extends GetxController {
     update();
   }
 
-  void addUserToClub(context, clubId, userEmail) async {
-    clubList.value = await ServerUtils.addMembersToClub(context, clubId, userEmail);
-    update();
+  Future<Map<String, dynamic>> addUserToClub(context, clubId, userEmail) async {
+    try{
+      clubList.value = await ClubRepository().addMembersToClub(clubId, userEmail);
+      update();
+      return {'status': 'ok', 'message': 'User added to club successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
   }
 
-  void removeUserFromClub(context, clubId, userEmail) async {
-    clubList.value = await ServerUtils.removeMembersFromClub(context, clubId, userEmail);
-    update();
+  Future<Map<String, dynamic>> removeUserFromClub(context, clubId, userEmail) async {
+    try{
+      clubList.value = await ClubRepository().removeMembersFromClub(clubId, userEmail);
+      update();
+      return {'status': 'ok', 'message': 'User removed from club successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
   }
 
-  Future<void> updateClub(context, id, name, description, imageUrl) async {
-    clubList.value = await ServerUtils.updateClubInfo(context, id, name, description, imageUrl);
-    update();
+  Future<Map<String, dynamic>> updateClub(context, id, name, description, imageUrl) async {
+    try{
+      clubList.value = await ClubRepository().updateClubInfo(id, name, description, imageUrl);
+      update();
+      return {'status': 'ok', 'message': 'Club updated successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
+
   }
 
 }

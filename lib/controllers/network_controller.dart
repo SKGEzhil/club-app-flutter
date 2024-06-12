@@ -2,6 +2,7 @@ import 'package:club_app/controllers/post_controller.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 
+import '../utils/shared_prefs.dart';
 import 'clubs_controller.dart';
 
 class NetworkController extends GetxController {
@@ -31,9 +32,14 @@ class NetworkController extends GetxController {
     }
   }
 
-  void fetchData() {
-    final postController = Get.put(PostController());
-    final clubController = Get.put(ClubsController());
+  Future<void> fetchData() async {
+    final token = await SharedPrefs.getToken();
+    print("TOKEN $token");
+    if (token != ''){
+      final postController = Get.put(PostController());
+      final clubController = Get.put(ClubsController());
+    }
+
   }
 
 }

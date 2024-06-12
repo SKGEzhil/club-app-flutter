@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:club_app/utils/repositories/image_repository.dart';
 import 'package:club_app/widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import '../controllers/image_picker_controller.dart';
 import '../models/club_model.dart';
 import '../utils/server_utils.dart';
 import 'button_widget.dart';
+import 'custom_snackbar.dart';
 
 class EditClubDialogue extends StatefulWidget {
   EditClubDialogue({super.key, required this.clubId});
@@ -44,7 +46,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
     var imageUrl = club.imageUrl;
 
     if (imagePickerController.image != null) {
-      imageUrl = await ServerUtils.uploadImage(imagePickerController.image!);
+      imageUrl = await ImageRepository().uploadImage(imagePickerController.image!);
     }
 
     print('Club Name: ${clubNameController.text}');
@@ -52,8 +54,12 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
     print('Club Image: $imageUrl');
     print('Club ID: ${widget.clubId}');
 
-    clubsController.updateClub(context, widget.clubId, clubNameController.text,
+    final result = await clubsController.updateClub(context, widget.clubId, clubNameController.text,
         clubDescriptionController.text, imageUrl);
+
+    if (result['status'] == 'error') {
+      CustomSnackBar.show(context, message: result['message'], color: Colors.red);
+    }
 
     Navigator.pop(context);
     Navigator.pop(context);

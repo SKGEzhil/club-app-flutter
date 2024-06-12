@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:club_app/models/user_model.dart';
 import 'package:club_app/screens/home_page.dart';
+import 'package:club_app/utils/repositories/auth_repository.dart';
+import 'package:club_app/utils/repositories/user_repository.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,13 +36,13 @@ class AuthenticationController extends GetxController {
     } else {
       print("token: ${googleAuth?.accessToken}");
       print("photo: ${googleUser.photoUrl}");
-      final userExist = await ServerUtils.verifyGoogleUser(googleUser.email, googleAuth?.accessToken);
+      final userExist = await AuthRepository().verifyGoogleUser(googleUser.email, googleAuth?.accessToken);
       if (userExist) {
-        final user = await ServerUtils.getUserDetails(googleUser.email);
+        final user = await UserRepository().getUserDetails(googleUser.email);
         login(context, user, googleAuth);
       } else {
         print('User does not exist');
-        final user = await ServerUtils.createUser(googleUser.displayName, googleUser.email, googleUser.photoUrl);
+        final user = await UserRepository().createUser(googleUser.displayName, googleUser.email, googleUser.photoUrl);
         login(context, user, googleAuth);
       }
     }

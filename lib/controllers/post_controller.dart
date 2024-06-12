@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:club_app/secrets.dart';
+import 'package:club_app/utils/repositories/image_repository.dart';
+import 'package:club_app/utils/repositories/post_repository.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
@@ -30,7 +32,7 @@ class PostController extends GetxController{
   var postList = <Post>[].obs;
 
   void fetchPosts() async {
-    postList.value = await ServerUtils.fetchPosts();
+    postList.value = await PostRepository().fetchPosts();
     await SharedPrefs.savePost(postList);
     print("LENGTH: ${postList.length}");
     update();
@@ -42,26 +44,47 @@ class PostController extends GetxController{
     update();
   }
 
-  Future<void> createPost(context, content, createdBy, club) async {
+  Future<Map<String, dynamic>> createPost(context, content, createdBy, club) async {
     final dateTime = DateTime.now();
     final formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm').format(dateTime);
     print(formattedDateTime);
     var imageUrl = '';
     if (imagePickerController.image != null) {
-      imageUrl = await ServerUtils.uploadImage(imagePickerController.image!);
+      imageUrl = await ImageRepository().uploadImage(imagePickerController.image!);
     }
-    postList.add(await ServerUtils.createPost(context, content, imageUrl, createdBy, formattedDateTime, club));
+    try{
+      postList.add(await PostRepository().createPost(content, imageUrl, createdBy, formattedDateTime, club));
+      return {'status': 'ok', 'message': 'Post created successfully'};
+    } catch(e) {
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
     update();
   }
 
-  Future<void> updatePost(context, postId, content) async {
-    postList.value = await ServerUtils.updatePost(context, postId, content);
-    update();
+  Future<Map<String, dynamic>> updatePost(context, postId, content) async {
+
+    try{
+      postList.value = await await PostRepository().updatePost(postId, content);
+      update();
+      return {'status': 'ok', 'message': 'Post created successfully'};
+    } catch(e) {
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
+
   }
 
-  Future<void> deletePost(context, postId) async {
-    postList.value = await ServerUtils.deletePost(context, postId);
-    update();
+  Future<Map<String, dynamic>> deletePost(context, postId) async {
+    try{
+      postList.value = await await PostRepository().deletePost( postId);
+      update();
+      return {'status': 'ok', 'message': 'Post created successfully'};
+    } catch(e) {
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
+
   }
 
 

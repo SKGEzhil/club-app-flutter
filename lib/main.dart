@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/screens/page_scroll_viewer.dart';
 import 'package:club_app/theme.dart';
+import 'package:club_app/utils/repositories/user_repository.dart';
 import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
@@ -191,7 +192,7 @@ Future<void> main() async {
   if (token != '') {
     final user = await SharedPrefs.getUserDetails();
     if(networkController.isOnline.value) {
-      final updatedUser = await ServerUtils.getUserDetails(user.email);
+      final updatedUser = await UserRepository().getUserDetails(user.email);
       await SharedPrefs.saveUserDetails(updatedUser);
     }
     landingPage = HomePage();
@@ -206,7 +207,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key, required this.landingPage});
 
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final Widget landingPage;
   final themeController = Get.put(ThemeController());

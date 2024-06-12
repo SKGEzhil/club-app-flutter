@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,9 +23,12 @@ class BottomMessageBar extends StatelessWidget {
   final contentText = TextEditingController();
 
   Future<void> createPost(context) async {
-    await postController.createPost(context,
+    final result = await postController.createPost(context,
         contentText.text, profileController.currentUser.value.id, clubId);
     contentText.text = '';
+    if (result['status'] == 'error') {
+      CustomSnackBar.show(context, message: result['message'], color: Colors.red);
+    }
     imagePickerController.resetImage();
   }
 

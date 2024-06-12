@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:club_app/widgets/custom_popup_menu_item.dart';
+import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/colors.dart';
@@ -45,12 +46,21 @@ class PostWidget extends StatelessWidget {
   }
 
   Future<void> updatePost(context) async {
-    await postController.updatePost(context, post.id, editPostController.text);
+    final result = await postController.updatePost(
+        context, post.id, editPostController.text);
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+            message: result['message'], color: Colors.red)
+        : null;
     Navigator.pop(context);
   }
 
   Future<void> deletePost(context) async {
-    await postController.deletePost(context, post.id);
+    final result = await postController.deletePost(context, post.id);
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : null;
     Navigator.pop(context);
   }
 
@@ -283,54 +293,54 @@ class PostWidget extends StatelessWidget {
 
   Future<dynamic> buildShowMenu(BuildContext context, RenderBox overlay) {
     return showMenu(
-        context: context,
-        elevation: 5,
-        // color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(13.0),
-        ),
-        position: RelativeRect.fromLTRB(
-          _tapPosition!.dx,
-          _tapPosition!.dy,
-          overlay.size.width - _tapPosition!.dx,
-          overlay.size.height - _tapPosition!.dy,
-        ),
-        items: <PopupMenuEntry>[
-          CustomPopupMenuItem(
-              title: 'Share',
-              icon: Icons.share,
-              color: Colors.blue,
-              onTap: () {
-                sharePost(post.imageUrl, post.content);
-              }),
-          PopupMenuDivider(),
-          CustomPopupMenuItem(
-              title: 'Edit Post',
-              icon: Icons.edit,
-              color: Colors.blue,
-              onTap: () {
-                isEditMode.value = true;
-              }),
-          PopupMenuDivider(),
-          CustomPopupMenuItem(
-              title: 'Delete Post',
-              icon: Icons.delete_outline,
-              color: Colors.red,
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CustomAlertDialogue(
-                        context: context,
-                        title: 'Conformation',
-                        content:
-                            'You are about to delete this post. Do you wish to proceed?',
-                        onPressed: () => deletePost(context),
-                      );
-                    });
-                // delete post
-              }),
-        ],
-      );
+      context: context,
+      elevation: 5,
+      // color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(13.0),
+      ),
+      position: RelativeRect.fromLTRB(
+        _tapPosition!.dx,
+        _tapPosition!.dy,
+        overlay.size.width - _tapPosition!.dx,
+        overlay.size.height - _tapPosition!.dy,
+      ),
+      items: <PopupMenuEntry>[
+        CustomPopupMenuItem(
+            title: 'Share',
+            icon: Icons.share,
+            color: Colors.blue,
+            onTap: () {
+              sharePost(post.imageUrl, post.content);
+            }),
+        PopupMenuDivider(),
+        CustomPopupMenuItem(
+            title: 'Edit Post',
+            icon: Icons.edit,
+            color: Colors.blue,
+            onTap: () {
+              isEditMode.value = true;
+            }),
+        PopupMenuDivider(),
+        CustomPopupMenuItem(
+            title: 'Delete Post',
+            icon: Icons.delete_outline,
+            color: Colors.red,
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomAlertDialogue(
+                      context: context,
+                      title: 'Conformation',
+                      content:
+                          'You are about to delete this post. Do you wish to proceed?',
+                      onPressed: () => deletePost(context),
+                    );
+                  });
+              // delete post
+            }),
+      ],
+    );
   }
 }

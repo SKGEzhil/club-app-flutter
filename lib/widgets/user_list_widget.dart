@@ -9,6 +9,7 @@ import '../controllers/admin_controller.dart';
 import '../controllers/clubs_controller.dart';
 import '../controllers/profile_controller.dart';
 import 'add_user_dialogue.dart';
+import 'custom_snackbar.dart';
 
 class UserListWidget extends StatelessWidget {
   UserListWidget({
@@ -34,16 +35,24 @@ class UserListWidget extends StatelessWidget {
   final clubId;
   final String type;
 
-  void removeAdminUser(context, index){
-    adminController.updateUserRole(context,
+  Future<void> removeAdminUser(context, index) async {
+    final result = await adminController.updateUserRole(context,
         adminController.adminUsers[index]
             .email, "user");
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : null;
     Navigator.pop(context);
   }
 
-  void removeClubUser(context, index){
-    clubsController.removeUserFromClub(context, clubId,
+  Future<void> removeClubUser(context, index) async {
+    final result = await clubsController.removeUserFromClub(context, clubId,
         clubsController.clubList.where((club) => club.id == clubId).first.members[index].email);
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : null;
     Navigator.pop(context);
   }
 

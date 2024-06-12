@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/admin_controller.dart';
 import '../controllers/clubs_controller.dart';
 import 'button_widget.dart';
+import 'custom_snackbar.dart';
 
 class AddUserDialogue extends StatelessWidget {
   AddUserDialogue({super.key, this.clubId, required this.type});
@@ -21,8 +22,12 @@ class AddUserDialogue extends StatelessWidget {
     Navigator.pop(context);
   }
 
-  void addClubUser(context) {
-    clubsController.addUserToClub(context, clubId, emailController.text);
+  Future<void> addClubUser(context) async {
+    final result =  await clubsController.addUserToClub(context, clubId, emailController.text);
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : null;
     Navigator.pop(context);
     Navigator.pop(context);
   }

@@ -1,6 +1,7 @@
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/screens/admin_page.dart';
 import 'package:club_app/screens/login_page.dart';
+import 'package:club_app/widgets/button_widget.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../controllers/authentication_controller.dart';
@@ -55,29 +56,10 @@ class HomePage extends StatelessWidget {
                 profileController.currentUser.value.role == 'admin' ?
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (
-                          context) => AdminPage()));
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(15, 6, 15, 6),
-                          child: Text('Admin',
-                            style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                    ),
-                  ),
+                  child: ButtonWidget(onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (
+                        context) => AdminPage()));
+                  }, buttonText: 'Admin', textColor: Colors.blue, buttonColor: Colors.blue.withOpacity(0.1))
                 ) :
 
                 const SizedBox(),

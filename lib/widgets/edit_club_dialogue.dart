@@ -47,6 +47,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
 
     if (imagePickerController.image != null) {
       imageUrl = await ImageRepository().uploadImage(imagePickerController.image!);
+      imagePickerController.resetImage();
     }
 
     print('Club Name: ${clubNameController.text}');
@@ -125,7 +126,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                // color: Colors.white,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Padding(

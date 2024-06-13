@@ -84,5 +84,28 @@ class ClubsController extends GetxController {
 
   }
 
+  Future<Map<String, dynamic>> createClub(name, description, imageUrl, createdBy) async {
+    try{
+      clubList.value = await ClubRepository().createNewClub(name, description, imageUrl, createdBy);
+      update();
+      return {'status': 'ok', 'message': 'Club created successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteClub(clubId) async {
+    try{
+      clubList.value = await ClubRepository().deleteClub(clubId);
+      await postController.fetchPosts();
+      update();
+      return {'status': 'ok', 'message': 'Club deleted successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
+  }
+
 }
 

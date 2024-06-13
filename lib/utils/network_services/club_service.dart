@@ -206,5 +206,69 @@ class ClubService{
     }
   }
 
+  Future<Map<String, dynamic>> createNewClub(name, description, imageUrl, createdBy) async {
+
+    print("Creating posts...");
+    const url = '$endPoint/graphql';
+
+    final query = '''
+      mutation {
+        createClub(name: "$name", description: "$description", imageUrl: "$imageUrl", createdBy: "$createdBy") {
+          id
+          name
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: await headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+      return jsonDecode(response.body);
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      return Future.error('Failed to update club');
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteClub(id) async {
+
+    print("Creating posts...");
+    const url = '$endPoint/graphql';
+
+    final query = '''
+      mutation {
+        deleteClub(id: "$id")
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: await headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+      return jsonDecode(response.body);
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      return Future.error('Failed to update club');
+    }
+  }
+
+
 
 }

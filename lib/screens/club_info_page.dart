@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import '../controllers/image_picker_controller.dart';
 import '../controllers/profile_controller.dart';
 import '../models/user_model.dart';
+import '../widgets/custom_alert_dialogue.dart';
+import '../widgets/custom_snackbar.dart';
 
 class ClubInfoPage extends StatelessWidget {
   ClubInfoPage({super.key, required this.clubId});
@@ -49,6 +51,18 @@ class ClubInfoPage extends StatelessWidget {
             )));
   }
 
+  Future<void> deleteClub(context) async {
+    // Delete club
+    final result = await clubsController.deleteClub(clubId);
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+            message: result['message'], color: Colors.red)
+        : null;
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,16 +71,15 @@ class ClubInfoPage extends StatelessWidget {
         actions: [
           !isAuthorized
               ? const SizedBox()
-              :
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ButtonWidget(
-                onPressed: () => showEditClubDialogue(context),
-                buttonText: 'Edit info',
-                preceedingIcon: Icons.edit,
-                textColor: Colors.blue,
-                buttonColor: Colors.blue.withOpacity(0.1)),
-          )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ButtonWidget(
+                      onPressed: () => showEditClubDialogue(context),
+                      buttonText: 'Edit info',
+                      preceedingIcon: Icons.edit,
+                      textColor: Colors.blue,
+                      buttonColor: Colors.blue.withOpacity(0.1)),
+                )
         ],
       ),
       body: Column(
@@ -79,6 +92,10 @@ class ClubInfoPage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(65),
                 child: Obx(() {
+                  var club = clubsController.clubList.where((club) => club.id == clubId);
+                  if(club.isEmpty) {
+                    return const SizedBox();
+                  }
                   return CachedNetworkImage(
                       width: 130,
                       height: 130,
@@ -95,6 +112,10 @@ class ClubInfoPage extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: GetBuilder<ClubsController>(builder: (logic) {
+              var club = clubsController.clubList.where((club) => club.id == clubId);
+              if(club.isEmpty) {
+                return const SizedBox();
+              }
               return Text(
                 clubsController.clubList
                     .where((club) => club.id == clubId)
@@ -109,6 +130,10 @@ class ClubInfoPage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Obx(() {
+            var club = clubsController.clubList.where((club) => club.id == clubId);
+            if(club.isEmpty) {
+              return const SizedBox();
+            }
             return InkWell(
               onTap: () {
                 isDescriptionExpanded.value = !isDescriptionExpanded.value;
@@ -149,7 +174,35 @@ class ClubInfoPage extends StatelessWidget {
           UserListWidget(
             type: 'club',
             clubId: clubId,
-          )
+          ),
+          profileController.currentUser.value.role == 'user'
+              ? const SizedBox()
+              :
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ButtonWidget(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomAlertDialogue(
+                                  context: context,
+                                  onPressed: () => {
+                                    deleteClub(context),
+                                  },
+                                  title: 'Conformation',
+                                  content:
+                                      'Are you sure you want to delete ${clubsController.clubList.where((club) => club.id == clubId).first.name} and all its post ? This action cannot be undone.',
+                                );
+                              });
+                        },
+                        buttonText: 'Delete Club',
+                        textColor: Colors.red,
+                        buttonColor: Colors.red.withOpacity(0.1)),
+                  )))
         ],
       ),
     );

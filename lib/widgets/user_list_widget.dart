@@ -76,6 +76,13 @@ class UserListWidget extends StatelessWidget {
     ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
 
     return Obx(() {
+      if(type != 'admin'){
+        var club = clubsController.clubList.where((club) => club.id == clubId);
+        if(club.isEmpty) {
+          return const SizedBox();
+        }
+      }
+
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(

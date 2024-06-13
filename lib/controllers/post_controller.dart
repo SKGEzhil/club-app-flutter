@@ -31,7 +31,7 @@ class PostController extends GetxController{
   final imagePickerController = Get.put(ImagePickerController());
   var postList = <Post>[].obs;
 
-  void fetchPosts() async {
+  Future<void> fetchPosts() async {
     postList.value = await PostRepository().fetchPosts();
     await SharedPrefs.savePost(postList);
     print("LENGTH: ${postList.length}");

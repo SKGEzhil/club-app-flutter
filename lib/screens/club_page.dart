@@ -76,6 +76,11 @@ class ClubPage extends StatelessWidget {
               ],
             ));
 
+              var club = clubsController.clubList.where((club) => club.id == clubId);
+              if(club.isEmpty) {
+                return const SizedBox();
+              }
+
             return Stack(
               children: [
                 Positioned.fill(

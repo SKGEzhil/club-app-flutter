@@ -18,6 +18,7 @@ class UserRepository{
       return Future.error('No internet connection');
     }
 
+    print('EMAIL: $email');
     try{
       final Map<String, dynamic> data = await UserService().getUserDetails(email);
       final user = UserModel.fromJson(data['data']['getUser']);
@@ -28,7 +29,7 @@ class UserRepository{
 
   }
 
-  Future<UserModel> createUser(email, name, photoUrl) async {
+  Future<UserModel> createUser(name, email, photoUrl) async {
     if (!isInternetConnectionAvailable()) {
       return Future.error('No internet connection');
     }

@@ -27,15 +27,27 @@ class ClubsController extends GetxController {
     fetchClubs() : fetchClubsFromSharedPrefs();
   }
 
-  void fetchClubs() async {
-    clubList.value = await ClubRepository().fetchClubs();
-    await SharedPrefs.saveClubs(clubList);
-    update();
+  Future<Map<String, dynamic>> fetchClubs() async {
+    try{
+      clubList.value = await ClubRepository().fetchClubs();
+      await SharedPrefs.saveClubs(clubList);
+      update();
+      return {'status': 'ok', 'message': 'Clubs fetched successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
   }
 
-  void fetchClubsFromSharedPrefs() async {
-    clubList.value = await SharedPrefs.getClubs();
-    update();
+  Future<Map<String, dynamic>> fetchClubsFromSharedPrefs() async {
+    try{
+      clubList.value = await SharedPrefs.getClubs();
+      update();
+      return {'status': 'ok', 'message': 'Clubs fetched from shared preferences'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
+    }
   }
 
   Future<Map<String, dynamic>> addUserToClub(context, clubId, userEmail) async {

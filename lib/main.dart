@@ -182,7 +182,8 @@ Future<void> main() async {
   await networkController.onInit();
   print(networkController.isOnline.value);
 
-  await firebaseInitializations();
+  networkController.isOnline.value ?
+  await firebaseInitializations() : null;
 
   final Widget landingPage;
 

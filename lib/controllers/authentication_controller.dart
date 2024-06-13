@@ -16,35 +16,45 @@ import 'dart:io' show Platform;
 class AuthenticationController extends GetxController {
   var isUserLoggedIn = false.obs;
 
-  Future<void> authenticate(BuildContext context) async {
-    if (Platform.isIOS) {
-      // TODO: Implement iOS authentication
+  Future<Map<String, dynamic>> authenticate(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('iOS not implemented')));
-      return;
-    }
+      print(googleUser?.displayName);
+      print(googleUser?.email);
 
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final googleAuth = await googleUser?.authentication;
-
-    print(googleUser?.displayName);
-    print(googleUser?.email);
-
-    if (googleUser == null) {
-      print('Sign in failed');
-    } else {
-      print("token: ${googleAuth?.accessToken}");
-      print("photo: ${googleUser.photoUrl}");
-      final userExist = await AuthRepository().verifyGoogleUser(googleUser.email, googleAuth?.accessToken);
-      if (userExist) {
-        final user = await UserRepository().getUserDetails(googleUser.email);
-        login(context, user, googleAuth);
+      if (googleUser == null) {
+        print('Sign in failed');
+        return {'status': 'error', 'message': 'Sign in failed'};
       } else {
-        print('User does not exist');
-        final user = await UserRepository().createUser(googleUser.displayName, googleUser.email, googleUser.photoUrl);
-        login(context, user, googleAuth);
+        print("token: ${googleAuth?.accessToken}");
+        print("photo: ${googleUser.photoUrl}");
+
+        try{
+          final userExist = await AuthRepository()
+              .verifyGoogleUser(googleUser.email, googleAuth?.accessToken);
+          if (userExist) {
+            final user = await UserRepository().getUserDetails(googleUser.email);
+            login(context, user, googleAuth);
+            return {'status': 'ok', 'message': 'User exists'};
+          } else {
+            print('User does not exist');
+            final user = await UserRepository().createUser(
+                googleUser.displayName, googleUser.email, googleUser.photoUrl);
+            login(context, user, googleAuth);
+            return {'status': 'ok', 'message': 'User created'};
+          }
+        } catch(e) {
+          print(e);
+          return {'status': 'error', 'message': e.toString()};
+        }
+
+
       }
+    } catch (e) {
+      print(e);
+      return {'status': 'error', 'message': e.toString()};
     }
   }
 
@@ -60,11 +70,8 @@ class AuthenticationController extends GetxController {
     );
   }
 
-  Future<void> logout()async {
+  Future<void> logout() async {
     await GoogleSignIn().signOut();
     await SharedPrefs.clearAll();
   }
-
-
-
 }

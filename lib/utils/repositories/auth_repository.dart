@@ -45,11 +45,15 @@ class AuthRepository{
       return Future.error('No internet connection');
     }
     // Check if user exists
+    print('EMAIL: $email');
+
     try{
       Map<String, dynamic> data = await AuthService().isUserExist(email);
       if(data['data']['getUser'] != null){
+        print('IS USER EXIST: ${data['data']['getUser']}');
         return true;
       } else {
+        print('IS USER EXIST: false');
         return false;
       }
     } catch (e) {

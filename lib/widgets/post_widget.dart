@@ -9,7 +9,9 @@ import 'package:club_app/widgets/button_widget.dart';
 import 'package:club_app/widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linkfy_text/linkfy_text.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/clubs_controller.dart';
 import '../controllers/loading_controller.dart';
 import '../controllers/post_controller.dart';
@@ -175,8 +177,32 @@ class PostWidget extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : Text(post.content,
-                                style: const TextStyle(
+                            : LinkifyText(post.content,
+                            onTap: (link) async {
+                              if(link.type == LinkType.url){
+                                print('URL: ${link.value}');
+                                final Uri url = Uri.parse('${link.value}');
+                                if (!await launchUrl(url)) {
+                                  CustomSnackBar.show(context,
+                                      message: 'Could not launch ${link.value}',
+                                      color: Colors.red);
+                              throw Exception('Could not launch ${link.value}');
+                              }
+                            }
+                              if(link.type == LinkType.email){
+                                print('EMAIL: ${link.value}');
+                                final Uri url = Uri.parse('mailto:${link.value}');
+                                if (!await launchUrl(url)) {
+                                  CustomSnackBar.show(context,
+                                      message: 'Could not launch ${link.value}',
+                                      color: Colors.red);
+                                  throw Exception('Could not launch ${link.value}');
+                                }
+                              }
+                              },
+                            linkStyle: TextStyle(color: Colors.blue),
+                            linkTypes: [LinkType.url, LinkType.userTag, LinkType.hashTag, LinkType.email],
+                                textStyle: const TextStyle(
                                     // color: Colors.black,
                                     fontSize: 16.0)),
                       );

@@ -54,12 +54,12 @@ class PostController extends GetxController{
     }
     try{
       postList.add(await PostRepository().createPost(content, imageUrl, createdBy, formattedDateTime, club));
+      update();
       return {'status': 'ok', 'message': 'Post created successfully'};
     } catch(e) {
       print(e);
       return {'status': 'error', 'message': e.toString()};
     }
-    update();
   }
 
   Future<Map<String, dynamic>> updatePost(context, postId, content) async {

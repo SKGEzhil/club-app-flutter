@@ -50,20 +50,6 @@ class BottomMessageBar extends StatelessWidget {
     return Container(
       decoration:  BoxDecoration(
         color: currentColors.mainColor,
-        // gradient: LinearGradient(
-        //   begin: Alignment.bottomCenter,
-        //   end: Alignment.topCenter,
-        //   colors: [
-        //     currentColors.mainColor,
-        //     currentColors.mainColor,
-        //     currentColors.mainColor,
-        //     currentColors.mainColor,
-        //     currentColors.mainColor,
-        //     currentColors.mainColor,
-        //     Colors.transparent,
-        //   ],
-        // ),
-        // borderRadius: BorderRadius.circular(25),
       ),
       child: Column(
         children: [

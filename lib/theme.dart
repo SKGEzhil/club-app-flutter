@@ -25,13 +25,13 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: Colors.black,
       hintColor: Colors.white,
-      scaffoldBackgroundColor: Colors.black,
+      // scaffoldBackgroundColor: Colors.black,
       colorScheme: ColorScheme.fromSeed(
         brightness: Brightness.dark,
           seedColor: Colors.blue
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 20,
@@ -44,6 +44,12 @@ class AppTheme {
 
   static ThemeData get lightTheme{
     return ThemeData(
+      cardTheme: CardTheme(
+        color: Colors.white,
+        elevation: 5,
+        shadowColor: Colors.black.withOpacity(0.5),
+      ),
+      cardColor: Colors.white,
       dividerTheme: DividerThemeData(
         space: 0,
         color: Colors.black.withOpacity(0.15),

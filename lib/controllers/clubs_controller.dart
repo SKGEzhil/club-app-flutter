@@ -87,6 +87,7 @@ class ClubsController extends GetxController {
   Future<Map<String, dynamic>> createClub(name, description, imageUrl, createdBy) async {
     try{
       clubList.value = await ClubRepository().createNewClub(name, description, imageUrl, createdBy);
+      await postController.fetchPosts();
       update();
       return {'status': 'ok', 'message': 'Club created successfully'};
     } catch(e){

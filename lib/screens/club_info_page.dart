@@ -5,6 +5,8 @@ import 'package:club_app/widgets/edit_club_dialogue.dart';
 import 'package:club_app/widgets/user_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:linkfy_text/linkfy_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/image_picker_controller.dart';
 import '../controllers/profile_controller.dart';
@@ -153,7 +155,7 @@ class ClubInfoPage extends StatelessWidget {
                         ),
                       );
                     }),
-                    Text(
+                    LinkifyText(
                       clubsController.clubList
                           .where((club) => club.id == clubId)
                           .first
@@ -162,7 +164,41 @@ class ClubInfoPage extends StatelessWidget {
                       overflow: isDescriptionExpanded.value
                           ? TextOverflow.visible
                           : TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      onTap: (link) async {
+                        if (link.type == LinkType.url) {
+                          print('URL: ${link.value}');
+                          final Uri url = Uri.parse('${link.value}');
+                          if (!await launchUrl(url)) {
+                            CustomSnackBar.show(context,
+                                message:
+                                'Could not launch ${link.value}',
+                                color: Colors.red);
+                            throw Exception(
+                                'Could not launch ${link.value}');
+                          }
+                        }
+                        if (link.type == LinkType.email) {
+                          print('EMAIL: ${link.value}');
+                          final Uri url =
+                          Uri.parse('mailto:${link.value}');
+                          if (!await launchUrl(url)) {
+                            CustomSnackBar.show(context,
+                                message:
+                                'Could not launch ${link.value}',
+                                color: Colors.red);
+                            throw Exception(
+                                'Could not launch ${link.value}');
+                          }
+                        }
+                      },
+                      linkStyle: TextStyle(color: Colors.blue),
+                      linkTypes: [
+                        LinkType.url,
+                        LinkType.userTag,
+                        LinkType.hashTag,
+                        LinkType.email
+                      ],
+                      textStyle: const TextStyle(
                         fontSize: 16,
                       ),
                     ),

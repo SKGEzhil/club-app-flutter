@@ -22,9 +22,15 @@ class BottomMessageBar extends StatelessWidget {
 
   final contentText = TextEditingController();
 
+  String escapeGraphQLSpecialChars(String input) {
+    return input.split('').map((char) {
+      return '\\u${char.codeUnitAt(0).toRadixString(16).padLeft(4, '0')}';
+    }).join('');
+  }
+
   Future<void> createPost(context) async {
     final result = await postController.createPost(context,
-        contentText.text, profileController.currentUser.value.id, clubId);
+        escapeGraphQLSpecialChars(contentText.text), profileController.currentUser.value.id, clubId);
     contentText.text = '';
     if (result['status'] == 'error') {
       CustomSnackBar.show(context, message: result['message'], color: Colors.red);

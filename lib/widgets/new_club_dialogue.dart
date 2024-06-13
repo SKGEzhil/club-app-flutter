@@ -149,6 +149,12 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
   final clubsController = Get.put(ClubsController());
   final profileController = Get.put(ProfileController());
 
+  String escapeGraphQLSpecialChars(String input) {
+    return input.split('').map((char) {
+      return '\\u${char.codeUnitAt(0).toRadixString(16).padLeft(4, '0')}';
+    }).join('');
+  }
+
   Future<void> createClub(context) async {
     var imageUrl = 'https://via.placeholder.com/150x150';
     if(imagePickerController.image != null){
@@ -157,7 +163,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
     }
     final result = await clubsController.createClub(
       clubNameController.text,
-      clubDescriptionController.text,
+      escapeGraphQLSpecialChars(clubDescriptionController.text),
       imageUrl,
       profileController.currentUser.value.id,
     );

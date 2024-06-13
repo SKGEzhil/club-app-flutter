@@ -61,7 +61,7 @@ class PostWidget extends StatelessWidget {
     final result = await postController.deletePost(context, post.id);
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
-        message: result['message'], color: Colors.red)
+            message: result['message'], color: Colors.red)
         : null;
     Navigator.pop(context);
   }
@@ -126,7 +126,16 @@ class PostWidget extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: CachedNetworkImage(
-                        imageUrl: 'https://via.placeholder.com/50x50',
+                        imageUrl: clubsController.clubList
+                                    .where((club) => club.id == post.clubId)
+                                    .first
+                                    .imageUrl ==
+                                ''
+                            ? 'https://via.placeholder.com/50x50'
+                            : clubsController.clubList
+                                .where((club) => club.id == post.clubId)
+                                .first
+                                .imageUrl,
                         width: 40.0,
                         height: 40.0)),
               ),
@@ -177,31 +186,40 @@ class PostWidget extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : LinkifyText(post.content,
-                            onTap: (link) async {
-                              if(link.type == LinkType.url){
-                                print('URL: ${link.value}');
-                                final Uri url = Uri.parse('${link.value}');
-                                if (!await launchUrl(url)) {
-                                  CustomSnackBar.show(context,
-                                      message: 'Could not launch ${link.value}',
-                                      color: Colors.red);
-                              throw Exception('Could not launch ${link.value}');
-                              }
-                            }
-                              if(link.type == LinkType.email){
-                                print('EMAIL: ${link.value}');
-                                final Uri url = Uri.parse('mailto:${link.value}');
-                                if (!await launchUrl(url)) {
-                                  CustomSnackBar.show(context,
-                                      message: 'Could not launch ${link.value}',
-                                      color: Colors.red);
-                                  throw Exception('Could not launch ${link.value}');
+                            : LinkifyText(post.content, onTap: (link) async {
+                                if (link.type == LinkType.url) {
+                                  print('URL: ${link.value}');
+                                  final Uri url = Uri.parse('${link.value}');
+                                  if (!await launchUrl(url)) {
+                                    CustomSnackBar.show(context,
+                                        message:
+                                            'Could not launch ${link.value}',
+                                        color: Colors.red);
+                                    throw Exception(
+                                        'Could not launch ${link.value}');
+                                  }
                                 }
-                              }
+                                if (link.type == LinkType.email) {
+                                  print('EMAIL: ${link.value}');
+                                  final Uri url =
+                                      Uri.parse('mailto:${link.value}');
+                                  if (!await launchUrl(url)) {
+                                    CustomSnackBar.show(context,
+                                        message:
+                                            'Could not launch ${link.value}',
+                                        color: Colors.red);
+                                    throw Exception(
+                                        'Could not launch ${link.value}');
+                                  }
+                                }
                               },
-                            linkStyle: TextStyle(color: Colors.blue),
-                            linkTypes: [LinkType.url, LinkType.userTag, LinkType.hashTag, LinkType.email],
+                                linkStyle: TextStyle(color: Colors.blue),
+                                linkTypes: [
+                                  LinkType.url,
+                                  LinkType.userTag,
+                                  LinkType.hashTag,
+                                  LinkType.email
+                                ],
                                 textStyle: const TextStyle(
                                     // color: Colors.black,
                                     fontSize: 16.0)),

@@ -44,6 +44,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final images = sortedPostList
+        .where((post) => post.imageUrl != '')
+        .toList();
+
     return Scaffold(
       // backgroundColor: Colors.white,
         appBar: AppBar(
@@ -88,6 +93,7 @@ class HomePage extends StatelessWidget {
         ),
         body: ListView(
           children: [
+            images.isEmpty ? SizedBox() :
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("Featured",
@@ -97,6 +103,7 @@ class HomePage extends StatelessWidget {
                       fontWeight: FontWeight.bold)
               ),
             ),
+            images.isEmpty ? SizedBox() :
             Obx(() {
               return CarouselWidget(sortedPostList: sortedPostList);
             }),

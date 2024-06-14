@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'package:club_app/controllers/event_controller.dart';
 import 'package:club_app/controllers/post_controller.dart';
+import 'package:club_app/models/event_model.dart';
+import 'package:club_app/screens/event_page.dart';
 import 'package:club_app/screens/page_scroll_viewer.dart';
 import 'package:club_app/theme.dart';
 import 'package:club_app/utils/repositories/user_repository.dart';
@@ -61,6 +64,10 @@ Future<void> showLocalNotification(RemoteMessage message) async {
                 largeIcon: FilePathAndroidBitmap(largeIcon),
                 color: Colors.deepPurple,
                 colorized: true,
+                actions: [
+                  const AndroidNotificationAction(
+                      'view', 'View')
+                ],
                 styleInformation: BigPictureStyleInformation(
                   FilePathAndroidBitmap(image),
                 )
@@ -85,6 +92,7 @@ Future<void> showLocalNotification(RemoteMessage message) async {
     }
   }
 }
+
 
 /// Local Notifications Initialization
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -126,6 +134,9 @@ Future<void> firebaseInitializations() async {
     showLocalNotification(message);
 
     final Map<String, dynamic> data = message.data;
+    final eventController = Get.put(EventController());
+    eventController.fetchEvents();
+    if(data['postId'] == null || data['clubId'] == null) return;
     final unreadPostController = Get.put(UnreadPostController());
     await unreadPostController.getUnreadPosts();
     await unreadPostController.addUnreadPost(data['postId'], data['clubId']);
@@ -137,7 +148,9 @@ Future<void> firebaseInitializations() async {
   });
 
   // replacement for onResume: When the app is in the background and opened directly from the push notification.
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {});
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    // await onNotificationClick(message);
+  });
 
   // Firebase message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -160,6 +173,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   showLocalNotification(message);
 
   final Map<String, dynamic> data = message.data;
+  final eventController = Get.put(EventController());
+  eventController.fetchEvents();
+  if(data['postId'] == null || data['clubId'] == null) return;
   final unreadPostController = Get.put(UnreadPostController());
   await unreadPostController.getUnreadPosts();
   await unreadPostController.addUnreadPost(data['postId'], data['clubId']);

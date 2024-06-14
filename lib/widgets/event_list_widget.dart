@@ -2,43 +2,208 @@ import 'package:club_app/widgets/event_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/clubs_controller.dart';
 import '../controllers/event_controller.dart';
+import '../controllers/profile_controller.dart';
+import '../models/event_model.dart';
 import '../screens/create_event_page.dart';
 
 class EventListWidget extends StatelessWidget {
   EventListWidget({super.key});
 
   final eventController = Get.put(EventController());
+  final profileController = Get.put(ProfileController());
+  final clubsController = Get.put(ClubsController());
+
+  bool get isAuthorized {
+    final isAdmin = profileController.currentUser.value.role == 'admin';
+    final isAnyClubMember = clubsController.clubList.any((club) => club.members
+        .any((member) => member.id == profileController.currentUser.value.id));
+    return isAdmin || isAnyClubMember;
+  }
+
+  List<EventModel> get todayEventList {
+    final eventList = eventController.eventList;
+    final today = DateTime.now();
+    return eventList
+        .where((event) =>
+            DateTime(event.dateTime.year, event.dateTime.month,
+                event.dateTime.day) ==
+            DateTime(today.year, today.month, today.day))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<EventModel> get thisWeekEventList {
+    final eventList = eventController.eventList;
+    final today = DateTime.now();
+    final nextWeek = today.add(Duration(days: 7));
+    return eventList
+        .where((event) =>
+            event.dateTime.isAfter(today) && event.dateTime.isBefore(nextWeek))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<EventModel> get thisMonthEventList {
+    final eventList = eventController.eventList;
+    final today = DateTime.now();
+    final thisWeek = today.add(Duration(days: 7));
+    final lastDayOfMonth = DateTime(today.year, today.month + 1, 1);
+    return eventList
+        .where((event) =>
+            event.dateTime.isAfter(thisWeek) &&
+            event.dateTime.isBefore(lastDayOfMonth))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<EventModel> get upcomingEventList {
+    final eventList = eventController.eventList;
+    final today = DateTime.now();
+    final lastDayOfMonth = DateTime(today.year, today.month + 1, 1);
+    return eventList
+        .where((event) => event.dateTime.isAfter(lastDayOfMonth))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<EventModel> get sortedEventList {
+    final eventList = eventController.eventList;
+    eventList.sort((a, b) => a.date.compareTo(b.date));
+    return eventList;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Obx(() {
-        final eventWidgetList = eventController.eventList
-            .map((event) => SizedBox(child: EventWidget(event: event,)))
-            .toList();
-        eventWidgetList.add(SizedBox(height: 100,));
-        return Stack(
+    return Stack(
+      children: [
+        ListView(
           children: [
-            ListView(
-                children: eventWidgetList
-            ),
-            Positioned(
-              bottom: 80,
-              right: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+            Obx(() {
+              final eventWidgetList = [
+                todayEventList.isEmpty
+                    ? SizedBox()
+                    : SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Today',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+              ];
+              todayEventList.isEmpty
+                  ? null
+                  : todayEventList.forEach((event) {
+                      eventWidgetList
+                          .add(SizedBox(child: EventWidget(event: event)));
+                    });
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: eventWidgetList);
+            }),
+            Obx(() {
+              final eventWidgetList = [
+                thisWeekEventList.isEmpty
+                    ? SizedBox()
+                    : SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'This Week',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+              ];
+              thisWeekEventList.isEmpty
+                  ? null
+                  : thisWeekEventList.forEach((event) {
+                      eventWidgetList
+                          .add(SizedBox(child: EventWidget(event: event)));
+                    });
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: eventWidgetList);
+            }),
+            Obx(() {
+              final eventWidgetList = [
+                thisMonthEventList.isEmpty
+                    ? SizedBox()
+                    : SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'This Month',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+              ];
+              thisMonthEventList.isEmpty
+                  ? null
+                  : thisMonthEventList.forEach((event) {
+                      eventWidgetList
+                          .add(SizedBox(child: EventWidget(event: event)));
+                    });
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: eventWidgetList);
+            }),
+            Obx(() {
+              final eventWidgetList = [
+                upcomingEventList.isEmpty
+                    ? SizedBox()
+                    : SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Upcoming',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+              ];
+              upcomingEventList.isEmpty
+                  ? null
+                  : upcomingEventList.forEach((event) {
+                      eventWidgetList
+                          .add(SizedBox(child: EventWidget(event: event)));
+                    });
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: eventWidgetList);
+            }),
+            SizedBox(
+              height: 100,
+            )
+          ],
+        ),
+        !isAuthorized
+            ? SizedBox()
+            : Positioned(
+                bottom: 100,
+                right: 20,
                 child: FloatingActionButton(
+                  backgroundColor: Color(0xFF1C53B9),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateEventPage()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateEventPage(),
+                      ),
+                    );
                   },
                   child: Icon(Icons.add),
                 ),
               ),
-            ),
-          ],
-        );
-      }),
+      ],
     );
   }
 }

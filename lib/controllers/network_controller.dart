@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../utils/shared_prefs.dart';
 import 'clubs_controller.dart';
+import 'event_controller.dart';
 
 class NetworkController extends GetxController {
 
@@ -38,6 +39,7 @@ class NetworkController extends GetxController {
     if (token != ''){
       final postController = Get.put(PostController());
       final clubController = Get.put(ClubsController());
+      final eventController = Get.put(EventController());
     }
 
   }

@@ -137,14 +137,17 @@ class HomePage extends StatelessWidget {
                             )).toList()
                     );
                   }),
-
+                SizedBox(height: 100,)
                 ],
               ),
               Positioned(
                   bottom: 0,
                   right: 0,
                   left: 0,
-                  child: BottomNavBar()
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BottomNavBar(),
+                  )
               )
             ]);
       }),

@@ -2,6 +2,7 @@
 import 'package:intl/intl.dart';
 
 class EventModel{
+  final String id;
   final String name;
   final String description;
   final String date;
@@ -10,6 +11,11 @@ class EventModel{
   final String clubId;
   final String clubName;
   final String clubImageUrl;
+
+  DateTime get dateTime {
+    final timestamp = int.parse(date);
+    return DateTime.fromMillisecondsSinceEpoch(timestamp);
+  }
 
   String get formattedDate {
     final timestamp = int.parse(date);
@@ -24,6 +30,7 @@ class EventModel{
   }
 
   EventModel({
+    required this.id,
     required this.name,
     required this.description,
     required this.date,
@@ -36,6 +43,7 @@ class EventModel{
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
+      id: json['id'],
       name: json['name'],
       description: json['description'],
       date: json['date'],
@@ -49,14 +57,17 @@ class EventModel{
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'description': description,
       'date': date,
       'bannerUrl': bannerUrl,
       'location': location,
-      'clubId': clubId,
-      'clubName': clubName,
-      'clubImageUrl': clubImageUrl,
+      'club': {
+        'id': clubId,
+        'name': clubName,
+        'imageUrl': clubImageUrl,
+      },
     };
   }
 

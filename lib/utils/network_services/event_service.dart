@@ -115,5 +115,93 @@ class EventService{
     }
   }
 
+  Future<Map<String, dynamic>> updateEvent(id, name, description, date, location, club) async {
+
+    print("updating event...");
+    const url = '$endPoint/graphql';
+
+    print('id: $id');
+    print('name: $name');
+    print('description: $description');
+    print('date: $date');
+    print('location: $location');
+
+    final query = '''
+      mutation {
+        updateEvent(
+          id: "$id",
+          name: "$name",
+          description: "$description",
+          date: "$date",
+          location: "$location",
+          club: "$club"
+        ) {
+          id
+          name
+          description
+          date
+          createdAt
+          bannerUrl
+          location
+          club {
+            id
+            name
+            imageUrl
+          }
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: await headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+
+      return jsonDecode(response.body);
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      return Future.error('Failed to update event');
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteEvent(id) async {
+
+    print("Deleting event...");
+    const url = '$endPoint/graphql';
+
+    final query = '''
+      mutation {
+        deleteEvent(
+          id: "$id"
+        ) 
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: await headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+      return jsonDecode(response.body);
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      return Future.error('Failed to delete post');
+    }
+  }
+
 
 }

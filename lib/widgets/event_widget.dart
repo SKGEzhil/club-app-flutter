@@ -79,9 +79,13 @@ class EventWidget extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: 10.0),
-                                  Text(event.clubName,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                  Expanded(
+                                    child: Text(event.clubName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 10.0),

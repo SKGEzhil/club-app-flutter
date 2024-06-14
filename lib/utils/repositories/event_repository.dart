@@ -49,4 +49,42 @@ class EventRepository{
     }
   }
 
+  Future<List<EventModel>> updateEvent(id, name, description, date, location, club) async {
+    if (!isInternetConnectionAvailable()) {
+      return Future.error('No internet connection');
+    }
+    try {
+      final Map<String, dynamic> data =
+      await EventService().updateEvent(id, name, description, date, location, club);
+
+      if (data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        return Future.error(errorMessage);
+      }
+
+      return fetchEvents();
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<List<EventModel>> deleteEvent(id) async {
+    if (!isInternetConnectionAvailable()) {
+      return Future.error('No internet connection');
+    }
+    try {
+      final Map<String, dynamic> data = await EventService().deleteEvent(id);
+
+      if (data['errors'] != null) {
+        final errorMessage = data['errors'][0]['extensions']['message'];
+        return Future.error(errorMessage);
+      }
+
+      return fetchEvents();
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+
 }

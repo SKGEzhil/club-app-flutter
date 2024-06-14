@@ -42,6 +42,61 @@ class _CreateEventPageState extends State<CreateEventPage> {
   var organizingClub;
   var bannerUrl;
 
+  Future<void> createEvent(context) async {
+    if(imagePickerController.image == null){
+      CustomSnackBar.show(context,
+          message: 'Please select a banner image', color: Colors.red);
+      return;
+    }
+    if(eventNameController.text.isEmpty){
+      CustomSnackBar.show(context,
+          message: 'Please enter event name', color: Colors.red);
+      return;
+    }
+    if(eventDescriptionController.text.isEmpty){
+      CustomSnackBar.show(context,
+          message: 'Please enter event description', color: Colors.red);
+      return;
+    }
+    if(eventLocationController.text.isEmpty){
+      CustomSnackBar.show(context,
+          message: 'Please enter event location', color: Colors.red);
+      return;
+    }
+    if(eventDate == null){
+      CustomSnackBar.show(context,
+          message: 'Please select event date', color: Colors.red);
+      return;
+    }
+    if(organizingClub == null){
+      CustomSnackBar.show(context,
+          message: 'Please select organizing club', color: Colors.red);
+      return;
+    }
+    final imageUrl = await ImageRepository()
+        .uploadImage(imagePickerController.image!);
+    final event = EventModel(
+      name: eventNameController.text,
+      description: eventDescriptionController.text,
+      date: '$eventDate',
+      bannerUrl: imageUrl,
+      location: eventLocationController.text,
+      clubId: organizingClub.id,
+      clubName: organizingClub.name,
+      clubImageUrl: organizingClub.imageUrl, id: '',
+    );
+    final result = await eventController.createEvent(event);
+    imagePickerController.resetImage();
+    if (result['status'] == 'error') {
+      CustomSnackBar.show(context,
+          message: result['message'], color: Colors.red);
+    } else{
+      CustomSnackBar.show(context,
+          message: result['message'], color: Colors.green);
+    }
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -57,20 +112,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: ButtonWidget(
                     onPressed: () async {
-                      final imageUrl = await ImageRepository().uploadImage(imagePickerController.image!);
-                      final event = EventModel(
-                          name: eventNameController.text,
-                          description: eventDescriptionController.text,
-                          date: '$eventDate',
-                          bannerUrl: imageUrl,
-                          location: eventLocationController.text,
-                          clubId: organizingClub.id,
-                          clubName: organizingClub.name,
-                          clubImageUrl: organizingClub.imageUrl,);
-                      final result = await eventController.createEvent(event);
-                      if (result['status'] == 'error') {
-                        CustomSnackBar.show(context, message: result['message'], color: Colors.red);
-                      }
+                      await createEvent(context);
                     },
                     buttonText: 'Create',
                     textColor: Colors.blue,
@@ -176,8 +218,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 child: DropdownMenu(
                                     onSelected: (value) {
                                       setState(() {
-                                        organizingClub = clubsController.clubList
-                                            .firstWhere((club) => club.id == value);
+                                        organizingClub =
+                                            clubsController.clubList.firstWhere(
+                                                (club) => club.id == value);
                                       });
                                     },
                                     inputDecorationTheme: InputDecorationTheme(
@@ -189,17 +232,24 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    dropdownMenuEntries: clubsController
-                                        .clubList
-                                        .where((club) => club.members.any(
-                                            (member) =>
-                                                member.id ==
-                                                profileController
-                                                    .currentUser.value.id))
-                                        .map((club) {
-                                      return DropdownMenuEntry(
-                                          value: club.id, label: club.name);
-                                    }).toList()),
+                                    dropdownMenuEntries: profileController
+                                                .currentUser.value.role ==
+                                            'admin'
+                                        ? clubsController.clubList.map((club) {
+                                            return DropdownMenuEntry(
+                                                value: club.id, label: club.name);
+                                          }).toList()
+                                        : clubsController.clubList
+                                            .where((club) => club.members.any(
+                                                (member) =>
+                                                    member.id ==
+                                                    profileController
+                                                        .currentUser.value.id))
+                                            .map((club) {
+                                            return DropdownMenuEntry(
+                                                value: club.id,
+                                                label: club.name);
+                                          }).toList()),
                               ),
                             ),
                           )

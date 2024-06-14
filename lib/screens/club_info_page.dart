@@ -119,6 +119,7 @@ class ClubInfoPage extends StatelessWidget {
                 return const SizedBox();
               }
               return Text(
+                textAlign: TextAlign.center,
                 clubsController.clubList
                     .where((club) => club.id == clubId)
                     .first

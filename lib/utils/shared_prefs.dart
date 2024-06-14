@@ -1,5 +1,6 @@
 import 'package:aws_client/dynamo_document.dart';
 import 'package:club_app/models/club_model.dart';
+import 'package:club_app/models/event_model.dart';
 import 'package:club_app/models/unread_post_list_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -89,6 +90,31 @@ class SharedPrefs {
     List<Club> clubs =
         clubListString.map((club) => Club.fromJson(json.decode(club))).toList();
     return clubs;
+  }
+
+  static Future<void> saveEvents(List<EventModel> events) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> eventListString =
+        events.map((event) => json.encode(event.toJson())).toList();
+    await prefs.setStringList('events', eventListString);
+    print('Saved events');
+  }
+
+  static Future<List<EventModel>> getEvents() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> eventListString = prefs.getStringList('events') ?? [];
+    print('Events: ${eventListString.length}');
+    eventListString.forEach(
+      (element) {
+        print('Event: $element');
+      },
+    );
+    List<EventModel> events =
+        eventListString.map((event) => EventModel.fromJson(json.decode(event))).toList();
+    events.forEach((element) {
+      print('Event: ${element.name}');
+    });
+    return events;
   }
 
   static clearAll() async {

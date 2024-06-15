@@ -73,8 +73,8 @@ class HomePage extends StatelessWidget {
                         context) => AdminPage()));
                   },
                       buttonText: 'Admin',
-                      textColor: Colors.blue,
-                      buttonColor: Colors.blue.withOpacity(0.1))
+                      isColorInverted: true,
+                      isNegative: false)
               ) :
 
               const SizedBox(),

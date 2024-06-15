@@ -123,8 +123,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           await createEvent(context);
                         },
                         buttonText: 'Create',
-                        textColor: Colors.blue,
-                        buttonColor: Colors.blue.withOpacity(0.1)),
+                        isColorInverted: true,
+                        isNegative: false,),
                   )
                 ],
               ),
@@ -140,7 +140,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue.withOpacity(0.4)),
+                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -165,7 +165,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue.withOpacity(0.4)),
+                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -190,7 +190,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue.withOpacity(0.4)),
+                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -232,7 +232,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                           });
                                         },
                                         inputDecorationTheme: InputDecorationTheme(
-                                          fillColor: Colors.blue.withOpacity(0.1),
+                                          fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
                                           constraints: BoxConstraints(
                                             maxWidth: 180,
                                           ),
@@ -354,8 +354,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                     },
                                     preceedingIcon: Icons.calendar_month,
                                     buttonText: 'Change Date',
-                                    textColor: Colors.blue,
-                                    buttonColor: Colors.blue.withOpacity(0.1)),
+                                    isNegative: false,),
                               ],
                             ),
                           ),
@@ -374,8 +373,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 imagePickerController.getImage(ImageSource.gallery);
                               },
                               buttonText: 'Add banner image',
-                              textColor: Colors.blue,
-                              buttonColor: Colors.blue.withOpacity(0.1)),
+                              isNegative: false,),
                         );
                       }),
                       GetBuilder<ImagePickerController>(builder: (logic) {

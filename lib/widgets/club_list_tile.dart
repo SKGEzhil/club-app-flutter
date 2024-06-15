@@ -133,7 +133,7 @@ class _ClubListTileState extends State<ClubListTile>
                       width: 25,
                       height: 25,
                       decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.3),
+                          color: Theme.of(context).primaryColor.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(50)),
 
                       child:
@@ -149,7 +149,7 @@ class _ClubListTileState extends State<ClubListTile>
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue));
+                                  color: Theme.of(context).primaryColor));
                         }),
                       )
                   ),

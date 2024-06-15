@@ -26,8 +26,7 @@ class AdminPage extends StatelessWidget {
                   showDialog(context: context, builder: (context) => NewClubDialogue());
                 },
                 buttonText: 'Create new club',
-                textColor: Colors.blue,
-                buttonColor: Colors.blue.withOpacity(0.1))
+                isNegative: false,)
           ],
         ));
   }

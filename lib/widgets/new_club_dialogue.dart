@@ -1,116 +1,3 @@
-// import 'dart:io';
-//
-// import 'package:cached_network_image/cached_network_image.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// import '../controllers/image_picker_controller.dart';
-//
-// class NewClubDialogue extends StatelessWidget {
-//   NewClubDialogue({super.key});
-//
-//   final imagePickerController = Get.put(ImagePickerController());
-//
-//   final clubNameController = TextEditingController();
-//   final clubDescriptionController = TextEditingController();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Container(
-//         // height: 300,
-//           child: Material(
-//               child: Row(
-//                 mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Container(
-//             child: imagePickerController.image != null
-//                 ? ClipRRect(
-//                     borderRadius: BorderRadius.circular(65),
-//                     child: Image.file(
-//                       File(imagePickerController.image!.path),
-//                       width: 110,
-//                       height: 110,
-//                       fit: BoxFit.cover,
-//                     ),
-//                   )
-//                 : ClipRRect(
-//                     borderRadius: BorderRadius.circular(65),
-//                     child: CachedNetworkImage(
-//                       width: 110,
-//                       height: 110,
-//                       fit: BoxFit.cover,
-//                       imageUrl: 'https://via.placeholder.com/150x150',
-//                     ),
-//                   ),
-//           ),
-//
-//           SizedBox(width: 10),
-//
-//           Expanded(
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Container(
-//                   decoration: BoxDecoration(
-//                     border:
-//                     Border.all(color: Colors.blue.withOpacity(0.4)),
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   child: Padding(
-//                     padding: const EdgeInsets.fromLTRB(8.0, 5, 8, 5),
-//                     child: TextFormField(
-//                       // initialValue: club.name,
-//                       controller: clubNameController,
-//                       onChanged: (value) {
-//                         clubNameController.text = value;
-//                       },
-//                       decoration: InputDecoration(
-//                         border: InputBorder.none,
-//                         // hintText: '${club.name}',
-//                       ),
-//                       style: const TextStyle(
-//                         fontSize: 27,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 Container(
-//                   decoration: BoxDecoration(
-//                     border:
-//                     Border.all(color: Colors.blue.withOpacity(0.4)),
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   child: Padding(
-//                     padding: const EdgeInsets.fromLTRB(8.0, 5, 8, 5),
-//                     child: TextFormField(
-//                       // initialValue: club.name,
-//                       controller: clubDescriptionController,
-//                       onChanged: (value) {
-//                         clubDescriptionController.text = value;
-//                       },
-//                       decoration: InputDecoration(
-//                         border: InputBorder.none,
-//                         // hintText: '${club.name}',
-//                       ),
-//                       style: const TextStyle(
-//                         fontSize: 27,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ]
-//             ),
-//           )
-//
-//         ],
-//       ))),
-//     );
-//   }
-// }
-
 
 
 import 'dart:io';
@@ -245,7 +132,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                                     padding: const EdgeInsets.all(2),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Colors.blue,
+                                        color: Theme.of(context).primaryColor,
                                         borderRadius: BorderRadius.circular(50),
                                       ),
                                       child: Padding(
@@ -282,7 +169,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border:
-                                Border.all(color: Colors.blue.withOpacity(0.4)),
+                                Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Padding(
@@ -328,7 +215,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border:
-                                Border.all(color: Colors.blue.withOpacity(0.4)),
+                                Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Padding(
@@ -375,8 +262,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                                 })
                           },
                           buttonText: 'Create',
-                          textColor: Colors.blue,
-                          buttonColor: Colors.blue.withOpacity(0.1))
+                          isNegative: false,)
                     ],
                   ),
                 ),

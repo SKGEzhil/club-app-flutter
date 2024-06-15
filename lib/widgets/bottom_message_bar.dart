@@ -137,7 +137,7 @@ class BottomMessageBar extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 color:
-                                Colors.blue.withOpacity(0.2),
+                                Theme.of(context).primaryColor.withOpacity(0.1),
                                 borderRadius:
                                 BorderRadius.circular(25),
                               ),
@@ -149,7 +149,7 @@ class BottomMessageBar extends StatelessWidget {
                                   minLines: 1,
                                   // expands: true,
                                   controller: contentText,
-                                  cursorColor: Colors.blue,
+                                  cursorColor: Theme.of(context).primaryColor,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     focusedBorder: InputBorder.none,

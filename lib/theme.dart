@@ -23,7 +23,7 @@ class AppTheme {
         ),
       ),
       brightness: Brightness.dark,
-      primaryColor: Colors.black,
+      primaryColor: Color.fromRGBO(254, 198, 0, 1),
       hintColor: Colors.white,
       // scaffoldBackgroundColor: Colors.black,
       colorScheme: ColorScheme.fromSeed(
@@ -44,8 +44,10 @@ class AppTheme {
 
   static ThemeData get lightTheme{
     return ThemeData(
+      primaryColor: Color.fromRGBO(254, 198, 0, 1),
       cardTheme: CardTheme(
-        color: Colors.white,
+        // color: Colors.white,
+        color: Colors.amber.shade50,
         elevation: 5,
         shadowColor: Colors.black.withOpacity(0.5),
       ),
@@ -72,7 +74,8 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white
+          // backgroundColor: Colors.white
+          backgroundColor: Color.fromRGBO(254, 198, 0, 1)
       ),
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       useMaterial3: true,

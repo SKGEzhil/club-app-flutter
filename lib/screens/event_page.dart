@@ -188,7 +188,7 @@ class _EventPageState extends State<EventPage> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.15),
+                                  color: Theme.of(context).primaryColor.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(50)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -243,9 +243,7 @@ class _EventPageState extends State<EventPage> {
                                           !isEditMode.value;
                                         },
                                         buttonText: 'Cancel',
-                                        textColor: Colors.red,
-                                        buttonColor:
-                                        Colors.red.withOpacity(0.1)),
+                                        isNegative: true,),
                                     SizedBox(width: 8),
                                     ButtonWidget(
                                         onPressed: () {
@@ -265,9 +263,7 @@ class _EventPageState extends State<EventPage> {
                                                   ));
                                         },
                                         buttonText: 'Done',
-                                        textColor: Colors.blue,
-                                        buttonColor:
-                                        Colors.blue.withOpacity(0.1)),
+                                        isNegative: false,),
                                   ],
                                 )
                                     : ButtonWidget(
@@ -276,8 +272,7 @@ class _EventPageState extends State<EventPage> {
                                     },
                                     preceedingIcon: Icons.edit,
                                     buttonText: 'Edit',
-                                    textColor: Colors.blue,
-                                    buttonColor: Colors.blue.withOpacity(0.1)),
+                                    isNegative: false,),
                               ),
                             );
                           })
@@ -293,7 +288,7 @@ class _EventPageState extends State<EventPage> {
                               ? Container(
                             decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Colors.blue.withOpacity(0.4),
+                                    color: Theme.of(context).primaryColor.withOpacity(0.4),
                                     width: 1.0),
                                 borderRadius: BorderRadius.circular(10.0)),
                             child: Padding(
@@ -346,7 +341,7 @@ class _EventPageState extends State<EventPage> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 24,
-                                            color: Colors.blue),
+                                            color: Theme.of(context).primaryColor),
                                       );
                                     }),
                                     Obx(() {
@@ -396,17 +391,13 @@ class _EventPageState extends State<EventPage> {
                                             });
                                           },
                                           buttonText: 'Change Date',
-                                          textColor: Colors.blue,
-                                          buttonColor: Colors.blue.withOpacity(
-                                              0.1))
+                                          isNegative: false)
                                           : ButtonWidget(
                                           onPressed: () {
                                             addToCalendar(widget.event);
                                           },
                                           buttonText: 'Add to Calendar',
-                                          textColor: Colors.blue,
-                                          buttonColor:
-                                          Colors.blue.withOpacity(0.1)));
+                                          isNegative: false));
                                 }))
                               ],
                             ),
@@ -434,7 +425,7 @@ class _EventPageState extends State<EventPage> {
                                               ? Container(
                                             decoration: BoxDecoration(
                                                 border: Border.all(
-                                                    color: Colors.blue
+                                                    color: Theme.of(context).primaryColor
                                                         .withOpacity(0.4),
                                                     width: 1.0),
                                                 borderRadius:
@@ -448,7 +439,7 @@ class _EventPageState extends State<EventPage> {
                                                 style: TextStyle(
                                                     fontSize: 24,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.blue),
+                                                    color: Theme.of(context).primaryColor),
                                                 decoration: const InputDecoration(
                                                   border: InputBorder.none,
                                                 ),
@@ -462,7 +453,7 @@ class _EventPageState extends State<EventPage> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 24,
-                                                  color: Colors.blue),
+                                                  color: Theme.of(context).primaryColor),
                                             );
                                           }),
                                         );
@@ -506,7 +497,7 @@ class _EventPageState extends State<EventPage> {
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             color:
-                                            Colors.blue.withOpacity(0.4),
+                                            Theme.of(context).primaryColor.withOpacity(0.4),
                                             width: 1.0),
                                         borderRadius:
                                         BorderRadius.circular(10.0)),
@@ -565,8 +556,7 @@ class _EventPageState extends State<EventPage> {
                                       ));
                             },
                             buttonText: 'Delete Event',
-                            textColor: Colors.red,
-                            buttonColor: Colors.red.withOpacity(0.1)),
+                            isNegative: true,),
                       ),
                     ],
                   ),

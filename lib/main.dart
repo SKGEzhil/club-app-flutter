@@ -153,7 +153,7 @@ Future<void> firebaseInitializations() async {
 
   // Firebase message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.instance.subscribeToTopic("clubs-app-fcm");
+  FirebaseMessaging.instance.subscribeToTopic("clubs-app-fcm-testing");
   FirebaseMessaging.instance
       .getInitialMessage()
       .then((message) async {

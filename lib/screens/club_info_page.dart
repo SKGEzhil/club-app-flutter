@@ -85,8 +85,7 @@ class ClubInfoPage extends StatelessWidget {
                           onPressed: () => showEditClubDialogue(context),
                           buttonText: 'Edit info',
                           preceedingIcon: Icons.edit,
-                          textColor: Colors.blue,
-                          buttonColor: Colors.blue.withOpacity(0.1)),
+                          isNegative: false,),
                     )
             ],
           ),
@@ -198,7 +197,7 @@ class ClubInfoPage extends StatelessWidget {
                               }
                             }
                           },
-                          linkStyle: TextStyle(color: Colors.blue),
+                          linkStyle: TextStyle(color: Theme.of(context).primaryColor),
                           linkTypes: [
                             LinkType.url,
                             LinkType.userTag,
@@ -243,8 +242,7 @@ class ClubInfoPage extends StatelessWidget {
                                   });
                             },
                             buttonText: 'Delete Club',
-                            textColor: Colors.red,
-                            buttonColor: Colors.red.withOpacity(0.1)),
+                            isNegative: true,),
                       )))
             ],
           ),

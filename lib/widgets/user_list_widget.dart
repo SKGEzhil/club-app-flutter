@@ -93,11 +93,8 @@ class UserListWidget extends StatelessWidget {
 
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(18),
-          ),
+        child: Card(
+
           child: Wrap(
             children: [
               Row(
@@ -123,8 +120,7 @@ class UserListWidget extends StatelessWidget {
                     ButtonWidget(
                       onPressed: () => showAddUserDialogue(context),
                       buttonText: type == 'admin' ? 'Add Admin' : 'Add Member',
-                      textColor: Colors.blueAccent,
-                      buttonColor: Colors.blue.withOpacity(0.1),
+                      isNegative: false,
                     ),
                   )
                 ],
@@ -151,7 +147,7 @@ class UserListWidget extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.1),
+                                color: Theme.of(context).primaryColor.withOpacity(isDarkTheme ? 0.1 : 0.3),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -212,8 +208,7 @@ class UserListWidget extends StatelessWidget {
                                       });
                                     },
                                     buttonText: 'Remove',
-                                    textColor: Colors.redAccent,
-                                    buttonColor: Colors.redAccent.withOpacity(0.1),
+                                    isNegative: true,
                                   ),
                                 ],
                               ),

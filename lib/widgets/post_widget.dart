@@ -54,9 +54,9 @@ class PostWidget extends StatelessWidget {
     loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
-        message: result['message'], color: Colors.red)
+            message: result['message'], color: Colors.red)
         : CustomSnackBar.show(context,
-        message: result['message'], color: Colors.green);
+            message: result['message'], color: Colors.green);
     // Navigator.pop(context);
   }
 
@@ -66,9 +66,9 @@ class PostWidget extends StatelessWidget {
     loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
-        message: result['message'], color: Colors.red)
+            message: result['message'], color: Colors.red)
         : CustomSnackBar.show(context,
-        message: result['message'], color: Colors.green);
+            message: result['message'], color: Colors.green);
     // Navigator.pop(context);
   }
 
@@ -177,7 +177,9 @@ class PostWidget extends StatelessWidget {
                             ? Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: Colors.blue.withOpacity(0.4),
+                                        color: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.4),
                                         width: 1.0),
                                     borderRadius: BorderRadius.circular(10.0)),
                                 child: Padding(
@@ -219,7 +221,8 @@ class PostWidget extends StatelessWidget {
                                   }
                                 }
                               },
-                                linkStyle: TextStyle(color: Colors.blue),
+                                linkStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
                                 linkTypes: [
                                   LinkType.url,
                                   LinkType.userTag,
@@ -239,39 +242,38 @@ class PostWidget extends StatelessWidget {
                             : Row(
                                 children: [
                                   ButtonWidget(
-                                      onPressed: () {
-                                        isEditMode.value = false;
-                                      },
-                                      buttonText: 'Cancel',
-                                      textColor: Colors.red,
-                                      buttonColor: Colors.red.withOpacity(0.1)),
+                                    onPressed: () {
+                                      isEditMode.value = false;
+                                    },
+                                    buttonText: 'Cancel',
+                                    isNegative: true,
+                                  ),
                                   SizedBox(width: 8.0),
                                   ButtonWidget(
-                                      onPressed: () {
-                                        // isEditMode.value = false;
+                                    onPressed: () {
+                                      // isEditMode.value = false;
 
-                                        // show custom alert dialog
-                                        showDialog(
-                                            context: context,
-                                            builder: (dialogueContext) {
-                                              return CustomAlertDialogue(
-                                                context: dialogueContext,
-                                                title: 'Conformation',
-                                                content:
-                                                    'You are about to save the changes made to this post. Do you wish to proceed?',
-                                                onPressed: () async {
-                                                  Navigator.pop(dialogueContext);
-                                                  await updatePost(context);
-                                                  },
-                                              );
-                                            });
+                                      // show custom alert dialog
+                                      showDialog(
+                                          context: context,
+                                          builder: (dialogueContext) {
+                                            return CustomAlertDialogue(
+                                              context: dialogueContext,
+                                              title: 'Conformation',
+                                              content:
+                                                  'You are about to save the changes made to this post. Do you wish to proceed?',
+                                              onPressed: () async {
+                                                Navigator.pop(dialogueContext);
+                                                await updatePost(context);
+                                              },
+                                            );
+                                          });
 
-                                        // post.content = editPostController.text;
-                                      },
-                                      buttonText: 'Done',
-                                      textColor: Colors.blue,
-                                      buttonColor:
-                                          Colors.blue.withOpacity(0.1)),
+                                      // post.content = editPostController.text;
+                                    },
+                                    buttonText: 'Done',
+                                    isNegative: false,
+                                  ),
                                 ],
                               ),
                       );
@@ -361,7 +363,7 @@ class PostWidget extends StatelessWidget {
         CustomPopupMenuItem(
             title: 'Share',
             icon: Icons.share,
-            color: Colors.blue,
+            color: Theme.of(context).primaryColor,
             onTap: () {
               sharePost(post.imageUrl, post.content);
             }),
@@ -369,7 +371,7 @@ class PostWidget extends StatelessWidget {
         CustomPopupMenuItem(
             title: 'Edit Post',
             icon: Icons.edit,
-            color: Colors.blue,
+            color: Theme.of(context).primaryColor,
             onTap: () {
               isEditMode.value = true;
             }),

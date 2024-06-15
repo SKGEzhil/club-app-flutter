@@ -17,13 +17,11 @@ class CustomAlertDialogue extends AlertDialog {
                   Navigator.pop(context);
                 },
                 buttonText: 'Cancel',
-                textColor: Colors.red,
-                buttonColor: Colors.red.withOpacity(0.1)),
+                isNegative: true,),
             ButtonWidget(
                 onPressed: onPressed,
                 buttonText: 'OK',
-                textColor: Colors.blue,
-                buttonColor: Colors.blue.withOpacity(0.1)),
+                isNegative: false,),
           ],
         );
 

@@ -30,14 +30,14 @@ class LoadingWidget extends StatelessWidget {
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.3),
+              color: Theme.of(context).primaryColor.withOpacity(0.3),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: const CircularProgressIndicator(
+              child: CircularProgressIndicator(
                 strokeWidth: 4.0,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
                 strokeCap: StrokeCap.round,
               ),
             ),

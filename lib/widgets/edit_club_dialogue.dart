@@ -139,7 +139,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                                 padding: const EdgeInsets.all(2),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: Theme.of(context).primaryColor,
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: Padding(
@@ -179,7 +179,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                         child: Container(
                           decoration: BoxDecoration(
                             border:
-                                Border.all(color: Colors.blue.withOpacity(0.4)),
+                                Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
@@ -225,7 +225,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                         child: Container(
                           decoration: BoxDecoration(
                             border:
-                                Border.all(color: Colors.blue.withOpacity(0.4)),
+                                Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
@@ -274,8 +274,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                                 })
                           },
                       buttonText: 'Update Club Info',
-                      textColor: Colors.blue,
-                      buttonColor: Colors.blue.withOpacity(0.1))
+                      isNegative: false),
                 ],
               ),
             ),

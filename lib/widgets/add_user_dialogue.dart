@@ -87,8 +87,7 @@ class AddUserDialogue extends StatelessWidget {
                     });
                   },
                   buttonText: 'Add user',
-                  textColor: Colors.green,
-                  buttonColor: Colors.green.withOpacity(0.1),
+                  isNegative: false,
                 ),
               ],
             ),

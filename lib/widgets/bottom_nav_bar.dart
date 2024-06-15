@@ -36,11 +36,11 @@ class BottomNavBar extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.event, size: 30,
-                        color: bottomNavController.selectedIndex.value == 0 ? Colors.blueAccent : currentColors.oppositeColor.withOpacity(0.7)
+                        color: bottomNavController.selectedIndex.value == 0 ? Theme.of(context).primaryColor : currentColors.oppositeColor.withOpacity(0.7)
                       ),
                       Text('Events',
                         style: TextStyle(
-                          color: bottomNavController.selectedIndex.value == 0 ? Colors.blueAccent : currentColors.oppositeColor
+                          color: bottomNavController.selectedIndex.value == 0 ? Theme.of(context).primaryColor : currentColors.oppositeColor
                         ),
                       )
                     ],
@@ -59,11 +59,11 @@ class BottomNavBar extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.chat_bubble, size: 30,
-                        color: bottomNavController.selectedIndex.value == 1 ? Colors.blueAccent : currentColors.oppositeColor
+                        color: bottomNavController.selectedIndex.value == 1 ? Theme.of(context).primaryColor : currentColors.oppositeColor
                       ),
                       Text('Clubs',
                         style: TextStyle(
-                          color: bottomNavController.selectedIndex.value == 1 ? Colors.blueAccent : currentColors.oppositeColor
+                          color: bottomNavController.selectedIndex.value == 1 ? Theme.of(context).primaryColor : currentColors.oppositeColor
                         ),
                       )
                     ],

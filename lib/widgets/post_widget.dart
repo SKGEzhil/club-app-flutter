@@ -48,22 +48,28 @@ class PostWidget extends StatelessWidget {
   }
 
   Future<void> updatePost(context) async {
+    loadingController.toggleLoading();
     final result = await postController.updatePost(
         context, post.id, editPostController.text);
+    loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
-            message: result['message'], color: Colors.red)
-        : null;
-    Navigator.pop(context);
+        message: result['message'], color: Colors.red)
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
+    // Navigator.pop(context);
   }
 
   Future<void> deletePost(context) async {
+    loadingController.toggleLoading();
     final result = await postController.deletePost(context, post.id);
+    loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
-            message: result['message'], color: Colors.red)
-        : null;
-    Navigator.pop(context);
+        message: result['message'], color: Colors.red)
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
+    // Navigator.pop(context);
   }
 
   Future<String> _downloadAndSaveFile(String url) async {
@@ -247,14 +253,16 @@ class PostWidget extends StatelessWidget {
                                         // show custom alert dialog
                                         showDialog(
                                             context: context,
-                                            builder: (context) {
+                                            builder: (dialogueContext) {
                                               return CustomAlertDialogue(
-                                                context: context,
+                                                context: dialogueContext,
                                                 title: 'Conformation',
                                                 content:
                                                     'You are about to save the changes made to this post. Do you wish to proceed?',
-                                                onPressed: () =>
-                                                    updatePost(context),
+                                                onPressed: () async {
+                                                  Navigator.pop(dialogueContext);
+                                                  await updatePost(context);
+                                                  },
                                               );
                                             });
 
@@ -373,13 +381,16 @@ class PostWidget extends StatelessWidget {
             onTap: () {
               showDialog(
                   context: context,
-                  builder: (context) {
+                  builder: (dialogueContext) {
                     return CustomAlertDialogue(
-                      context: context,
+                      context: dialogueContext,
                       title: 'Conformation',
                       content:
                           'You are about to delete this post. Do you wish to proceed?',
-                      onPressed: () => deletePost(context),
+                      onPressed: () async {
+                        Navigator.pop(dialogueContext);
+                        await deletePost(context);
+                      },
                     );
                   });
               // delete post

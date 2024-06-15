@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 class CustomSnackBar{
 
   CustomSnackBar({required String message, required Color color});
 
   static show(BuildContext context, {required String message, required Color color}) {
-    ScaffoldMessenger.of(context)
+    ScaffoldMessenger.of(Get.context!)
         .showSnackBar(customSnackBar(message: message, color: color));
   }
 

@@ -25,7 +25,7 @@ class EventWidget extends StatelessWidget {
         // final iconColor = await isBright() ? Colors.black : Colors.white;
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EventPage(event: event)),
+          MaterialPageRoute(builder: (context) => EventPage(eventId: event.id)),
         );
       },
       child: Padding(

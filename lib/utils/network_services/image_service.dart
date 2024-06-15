@@ -23,13 +23,13 @@ class ImageService{
     final credentials = AwsClientCredentials(accessKey: AWS_ACCESS_KEY, secretKey: AWS_SECRET_KEY);
     final api = S3(region: 'ap-south-1', credentials: credentials);
     await api.putObject(
-      bucket: 'clubs-app-bucket',
+      bucket: 'club-app',
       key: filename,
       body: File(image.path).readAsBytesSync(),
     );
     api.close();
-    print("https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/$filename");
-    return "https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/$filename";
+    print("https://club-app.s3.ap-south-1.amazonaws.com/$filename");
+    return "https://club-app.s3.ap-south-1.amazonaws.com/$filename";
   }
 
 }

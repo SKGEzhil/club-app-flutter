@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../colors.dart';
 import '../controllers/image_picker_controller.dart';
+import '../controllers/loading_controller.dart';
 import '../controllers/post_controller.dart';
 import '../controllers/profile_controller.dart';
 
@@ -19,6 +20,7 @@ class BottomMessageBar extends StatelessWidget {
   final imagePickerController = Get.put(ImagePickerController());
   final postController = Get.put(PostController());
   final profileController = Get.find<ProfileController>();
+  final loadingController = Get.put(LoadingController());
 
   final contentText = TextEditingController();
 
@@ -29,8 +31,11 @@ class BottomMessageBar extends StatelessWidget {
   }
 
   Future<void> createPost(context) async {
+    final isValid = await postController.checkAwsCredentials();
+    loadingController.toggleLoading();
     final result = await postController.createPost(context,
         escapeGraphQLSpecialChars(contentText.text), profileController.currentUser.value.id, clubId);
+    loadingController.toggleLoading();
     contentText.text = '';
     if (result['status'] == 'error') {
       CustomSnackBar.show(context, message: result['message'], color: Colors.red);

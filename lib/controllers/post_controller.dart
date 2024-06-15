@@ -67,7 +67,7 @@ class PostController extends GetxController{
     try{
       postList.value = await PostRepository().updatePost(postId, content);
       update();
-      return {'status': 'ok', 'message': 'Post created successfully'};
+      return {'status': 'ok', 'message': 'Post updated successfully'};
     } catch(e) {
       print(e);
       return {'status': 'error', 'message': e.toString()};
@@ -79,7 +79,7 @@ class PostController extends GetxController{
     try{
       postList.value = await await PostRepository().deletePost( postId);
       update();
-      return {'status': 'ok', 'message': 'Post created successfully'};
+      return {'status': 'ok', 'message': 'Post deleted successfully'};
     } catch(e) {
       print(e);
       return {'status': 'error', 'message': e.toString()};

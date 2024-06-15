@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/admin_controller.dart';
 import '../controllers/clubs_controller.dart';
+import '../controllers/loading_controller.dart';
 import 'button_widget.dart';
 import 'custom_snackbar.dart';
 
@@ -12,24 +13,35 @@ class AddUserDialogue extends StatelessWidget {
   final adminController = Get.put(AdminController());
   final clubsController = Get.put(ClubsController());
   final emailController = TextEditingController();
+  final loadingController = Get.put(LoadingController());
 
   final clubId;
   final String type;
 
-  void addAdminUser(context) {
-    adminController.updateUserRole(context, emailController.text, "admin");
-    Navigator.pop(context);
-    Navigator.pop(context);
-  }
-
-  Future<void> addClubUser(context) async {
-    final result =  await clubsController.addUserToClub(context, clubId, emailController.text);
+  Future<void> addAdminUser(context) async {
+    loadingController.toggleLoading();
+    final result = await adminController.updateUserRole(context, emailController.text, "admin");
+    loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
         message: result['message'], color: Colors.red)
-        : null;
-    Navigator.pop(context);
-    Navigator.pop(context);
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
+    // Navigator.pop(context);
+    // Navigator.pop(context);
+  }
+
+  Future<void> addClubUser(context) async {
+    loadingController.toggleLoading();
+    final result =  await clubsController.addUserToClub(context, clubId, emailController.text);
+    loadingController.toggleLoading();
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
+    // Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   @override
@@ -60,11 +72,16 @@ class AddUserDialogue extends StatelessWidget {
                 ),
                 ButtonWidget(
                   onPressed: (){
-                    showDialog(context: context, builder: (context){
-                      return CustomAlertDialogue(context: context,
-                          onPressed: () => type == 'admin'
-                              ? addAdminUser(context)
-                              : addClubUser(context),
+                    showDialog(context: context, builder: (dialogueContext){
+                      return CustomAlertDialogue(context: dialogueContext,
+                          onPressed: ()
+                          {
+                            Navigator.pop(dialogueContext);
+                              type == 'admin'
+                                  ? addAdminUser(context)
+                                  : addClubUser(context);
+                              Navigator.pop(context);
+                            },
                           title: 'Add User',
                           content: 'Are you sure you want to add this user ${type == 'admin' ? 'as Admin' : 'to this Club'}?',);
                     });

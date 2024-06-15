@@ -55,7 +55,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('The Clubs'),
+        title: Obx(() {
+          return Text(bottomNavController.selectedIndex.value == 1
+              ? 'Clubs'
+              : 'Events');
+        }),
         // backgroundColor: Colors.white,
         actions: [
           Obx(() {
@@ -137,7 +141,7 @@ class HomePage extends StatelessWidget {
                             )).toList()
                     );
                   }),
-                SizedBox(height: 100,)
+                  SizedBox(height: 100,)
                 ],
               ),
               Positioned(

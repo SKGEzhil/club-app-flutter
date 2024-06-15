@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../colors.dart';
 import '../controllers/admin_controller.dart';
 import '../controllers/clubs_controller.dart';
+import '../controllers/loading_controller.dart';
 import '../controllers/profile_controller.dart';
 import 'add_user_dialogue.dart';
 import 'custom_snackbar.dart';
@@ -19,6 +20,7 @@ class UserListWidget extends StatelessWidget {
   final adminController = Get.put(AdminController());
   final clubsController = Get.put(ClubsController());
   final profileController = Get.put(ProfileController());
+  final loadingController = Get.put(LoadingController());
 
   UserModel get currentUser => profileController.currentUser.value;
 
@@ -36,24 +38,30 @@ class UserListWidget extends StatelessWidget {
   final String type;
 
   Future<void> removeAdminUser(context, index) async {
+    loadingController.toggleLoading();
     final result = await adminController.updateUserRole(context,
         adminController.adminUsers[index]
             .email, "user");
+    loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
         message: result['message'], color: Colors.red)
-        : null;
-    Navigator.pop(context);
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
+    // Navigator.pop(context);
   }
 
   Future<void> removeClubUser(context, index) async {
+    loadingController.toggleLoading();
     final result = await clubsController.removeUserFromClub(context, clubId,
         clubsController.clubList.where((club) => club.id == clubId).first.members[index].email);
+    loadingController.toggleLoading();
     result['status'] == 'error'
         ? CustomSnackBar.show(context,
         message: result['message'], color: Colors.red)
-        : null;
-    Navigator.pop(context);
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
+    // Navigator.pop(context);
   }
 
   void showAddUserDialogue(context){
@@ -187,9 +195,18 @@ class UserListWidget extends StatelessWidget {
 
                                   ButtonWidget(
                                     onPressed: (){
-                                      showDialog(context: context, builder: (context){
-                                        return CustomAlertDialogue(context: context,
-                                            onPressed: () => type == 'admin' ? removeAdminUser(context, index) : removeClubUser(context, index),
+                                      showDialog(context: context, builder: (dialogueContext){
+                                        return CustomAlertDialogue(context: dialogueContext,
+                                            onPressed: () {
+                                          Navigator.pop(dialogueContext);
+                                                            type == 'admin'
+                                                                ? removeAdminUser(
+                                                                    context,
+                                                                    index)
+                                                                : removeClubUser(
+                                                                    context,
+                                                                    index);
+                                                          },
                                             title: 'Remove User',
                                             content: 'Are you sure you want to remove ${user.name} from ${type == 'admin' ? 'Admin' : 'the Club'}?');
                                       });

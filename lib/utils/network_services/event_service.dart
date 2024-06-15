@@ -111,7 +111,7 @@ class EventService{
     } else {
       print("POST request failed");
       print('Response: ${response.body}');
-      return Future.error('Failed to create post');
+      return Future.error('Failed to create new event');
     }
   }
 
@@ -199,7 +199,7 @@ class EventService{
     } else {
       print("POST request failed");
       print('Response: ${response.body}');
-      return Future.error('Failed to delete post');
+      return Future.error('Failed to delete event');
     }
   }
 

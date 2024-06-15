@@ -167,7 +167,11 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
       imageUrl,
       profileController.currentUser.value.id,
     );
-    result['status'] == 'error' ? CustomSnackBar.show(context, message: result['message'], color: Colors.red) : null;
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
 
     Navigator.pop(context);
     Navigator.pop(context);

@@ -235,7 +235,7 @@ class ClubService{
     } else {
       print("POST request failed");
       print('Response: ${response.body}');
-      return Future.error('Failed to update club');
+      return Future.error('Failed to create new club');
     }
   }
 
@@ -265,7 +265,7 @@ class ClubService{
     } else {
       print("POST request failed");
       print('Response: ${response.body}');
-      return Future.error('Failed to update club');
+      return Future.error('Failed to delete club');
     }
   }
 

@@ -46,7 +46,6 @@ class AuthRepository{
     }
     // Check if user exists
     print('EMAIL: $email');
-
     try{
       Map<String, dynamic> data = await AuthService().isUserExist(email);
       if(data['data']['getUser'] != null){

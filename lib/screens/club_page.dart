@@ -26,12 +26,12 @@ class ClubPage extends StatelessWidget {
 
   final contentText = TextEditingController();
 
-  Future<void> createPost(context) async {
-    await postController.createPost(context, contentText.text,
-        profileController.currentUser.value.id, clubId);
-    contentText.text = '';
-    imagePickerController.resetImage();
-  }
+  // Future<void> createPost(context) async {
+  //   await postController.createPost(context, contentText.text,
+  //       profileController.currentUser.value.id, clubId);
+  //   contentText.text = '';
+  //   imagePickerController.resetImage();
+  // }
 
   @override
   Widget build(BuildContext context) {

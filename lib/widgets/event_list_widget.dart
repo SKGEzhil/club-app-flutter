@@ -191,7 +191,6 @@ class EventListWidget extends StatelessWidget {
                 bottom: 100,
                 right: 20,
                 child: FloatingActionButton(
-                  backgroundColor: Color(0xFF1C53B9),
                   onPressed: () {
                     Navigator.push(
                       context,

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../controllers/clubs_controller.dart';
 import '../controllers/image_picker_controller.dart';
+import '../controllers/loading_controller.dart';
 import '../models/club_model.dart';
 import '../utils/server_utils.dart';
 import 'button_widget.dart';
@@ -36,6 +37,7 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
   final clubDescriptionController = TextEditingController();
 
   final imagePickerController = Get.put(ImagePickerController());
+  final loadingController = Get.put(LoadingController());
 
   Club get club =>
       clubsController.clubList.where((club) => club.id == widget.clubId).first;
@@ -44,7 +46,9 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
 
   void updateClubInfo(context) async {
     var imageUrl = club.imageUrl;
+    // Navigator.pop(context);
 
+    loadingController.toggleLoading();
     if (imagePickerController.image != null) {
       imageUrl = await ImageRepository().uploadImage(imagePickerController.image!);
       imagePickerController.resetImage();
@@ -57,13 +61,15 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
 
     final result = await clubsController.updateClub(context, widget.clubId, clubNameController.text,
         clubDescriptionController.text, imageUrl);
+    loadingController.toggleLoading();
 
-    if (result['status'] == 'error') {
-      CustomSnackBar.show(context, message: result['message'], color: Colors.red);
-    }
+    result['status'] == 'error'
+        ? CustomSnackBar.show(context,
+        message: result['message'], color: Colors.red)
+        : CustomSnackBar.show(context,
+        message: result['message'], color: Colors.green);
 
-    Navigator.pop(context);
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   @override
@@ -254,10 +260,14 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
                         // updateClubInfo(context),
                             showDialog(
                                 context: context,
-                                builder: (context) {
+                                builder: (dialogueContext) {
                                   return CustomAlertDialogue(
-                                      context: context,
-                                      onPressed: () => updateClubInfo(context),
+                                      context: dialogueContext,
+                                      onPressed: () async {
+                                        Navigator.pop(dialogueContext);
+                                        updateClubInfo(context);
+                                        Navigator.pop(context);
+                                      },
                                       title: 'Conformation',
                                       content:
                                           'Are you sure you want to update the club info?');

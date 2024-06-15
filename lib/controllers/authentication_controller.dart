@@ -37,13 +37,13 @@ class AuthenticationController extends GetxController {
           if (userExist) {
             final user = await UserRepository().getUserDetails(googleUser.email);
             login(context, user, googleAuth);
-            return {'status': 'ok', 'message': 'User exists'};
+            return {'status': 'ok', 'message': 'Logged in successfully'};
           } else {
             print('User does not exist');
             final user = await UserRepository().createUser(
                 googleUser.displayName, googleUser.email, googleUser.photoUrl);
             login(context, user, googleAuth);
-            return {'status': 'ok', 'message': 'User created'};
+            return {'status': 'ok', 'message': 'Account created successfully'};
           }
         } catch(e) {
           print(e);

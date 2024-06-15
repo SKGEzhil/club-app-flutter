@@ -21,7 +21,7 @@ class AdminController extends GetxController {
     try{
       adminUsers.value = await AdminRepository().fetchAdminUsers();
       update();
-      return {'status': 'ok', 'message': 'User added to club successfully'};
+      return {'status': 'ok', 'message': 'Admin users fetched successfully'};
     } catch(e) {
       return {'status': 'error', 'message': e.toString()};
     }

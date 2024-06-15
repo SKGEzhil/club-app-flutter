@@ -1,4 +1,5 @@
-const endPoint = 'http://43.204.233.46:80';
+// const endPoint = 'http://43.204.233.46:80';
+const endPoint = 'http://10.0.2.2:4000';
 
 /// Queries
 const fetchPostQuery = '''

@@ -1,17 +1,19 @@
 # Club Event Management App
 
-This is a club event management application developed using Dart and Flutter. The application allows club members and admins to post about upcoming events. Other users can view these events on the respective club's page.
+This is a club event management application developed using Dart and Flutter. The application allows club members and admins to post about upcoming events. Other users can view these events and see posts on the respective club's page.
 
 ## Screenshots
 <table>
   <tr>
-    <td><img src="screenshots/Screenshot_20240613_114923.png" alt="Screenshot 1" width="200"/></td>
-    <td><img src="screenshots/Screenshot_20240613_115327.png" alt="Screenshot 3" width="200"/></td>
-    <td><img src="screenshots/Screenshot_1718258798.png" alt="Screenshot 5" width="200"/></td>
+    <td><img src="screenshots/Screenshot_1718434040.png" alt="Screenshot 1" width="200"/></td>
+    <td><img src="screenshots/Screenshot_1718434067.png" alt="Screenshot 3" width="200"/></td>
+    <td><img src="screenshots/Screenshot_1718434054.png" alt="Screenshot 5" width="200"/></td>
+    <td><img src="screenshots/Screenshot_1718434450.png" alt="Screenshot 4" width="200"/></td>
   </tr>
   <tr>
-    <td><img src="screenshots/Screenshot_1718258708.png" alt="Screenshot 4" width="200"/></td>
+   <td><img src="screenshots/Screenshot_1718434461.png" alt="Screenshot 4" width="200"/></td>
     <td><img src="screenshots/Screenshot_1718258807.png" alt="Screenshot 6" width="200"/></td>
+    <td><img src="screenshots/Screenshot_1718434500.png" alt="Screenshot 4" width="200"/></td>
     <td><img src="screenshots/Screenshot_20240613_115305.png" alt="Screenshot 2" width="200"/></td>
 
   </tr>
@@ -20,7 +22,9 @@ This is a club event management application developed using Dart and Flutter. Th
 
 ## Features
 
-1. **Post Operations**: Users can create a new post for an event, can edit the post later and can also delete it forever. They can add text content and also attach an image from their gallery. The text content supports special characters as well.
+1. **Post Operations**: Users can create a new post, can edit the post later and can also delete it forever. They can add text content and also attach an image from their gallery. The text content supports special characters as well.
+
+2. **Event Operations**: Users can create a new event, can edit the event later and can also delete it forever. They can add an event name, description, date, time, and also attach banner image for events. Users can also add those events to their calendar
 
 2. **Club Operations**: Users can create a new club, can modify club details later and can also delete it forever. They can add a club name, description, and also attach an image for display picture.
 
@@ -35,9 +39,9 @@ This is a club event management application developed using Dart and Flutter. Th
 
 #### The application supports three types of user roles:
 
-1. **User**: A user is someone who has registered on the app. They can view the events posted by club members and admins on the respective club's page. They cannot create or manage events.
+1. **User**: A user is someone who has registered on the app. They can view posts and events created by club members or admins on the respective club's page. They cannot create any post or manage events.
 
-2. **Club Member**: A club member has all the rights of a user. In addition, they can create events for their respective club. They can also edit or delete the events they have created. Also, they can add or remove members from the club.
+2. **Club Member**: A club member has all the rights of a user. In addition, they can create events and posts for their respective club. They can also edit or delete the events or posts they have created. Also, they can add or remove members from the club.
 
 3. **Admin**: An admin has all the rights of a club member. In addition, they can create new clubs, edit or delete existing clubs, and add or remove members from any club. They can also view and manage all events posted by club members.
 

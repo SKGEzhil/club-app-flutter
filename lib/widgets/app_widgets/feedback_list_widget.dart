@@ -22,7 +22,7 @@ class FeedbackListWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => FeedbackPage(
-                          feedbackForm: feedbackController.feedbackList[0])));
+                          feedbackForm: feedbackController.feedbackList[index])));
                 },
                 child: ListTile(
                   title: Text(feedbackController.feedbackList[index].clubName),

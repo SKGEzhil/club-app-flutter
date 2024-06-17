@@ -41,4 +41,17 @@ class FeedbackRepository {
     }
   }
 
+  Future<List<FeedbackModel>> createFeedbackForm(eventId, clubId, List<String> questionList) async {
+    if (!isInternetConnectionAvailable()) {
+      return Future.error('No internet connection');
+    }
+    try {
+      final Map<String, dynamic> data =
+      await FeedbackService().createFeedbackForm(eventId, clubId, questionList);
+      return fetchFeedbackForms();
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
 }

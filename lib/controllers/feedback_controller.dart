@@ -34,4 +34,14 @@ class FeedbackController extends GetxController {
     }
   }
 
+  Future<Map<String, dynamic>> createFeedbackForm(eventId, clubId, List<String> questionList) async {
+    try{
+      feedbackList.value = await FeedbackRepository().createFeedbackForm(eventId, clubId, questionList);
+      return {'status': 'ok', 'message': 'Feedback form created successfully'};
+    } catch(e){
+      print(e);
+      return {'status': 'error', 'message': 'Failed to create feedback form'};
+    }
+  }
+
 }

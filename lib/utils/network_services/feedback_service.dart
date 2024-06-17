@@ -98,5 +98,51 @@ class FeedbackService{
     }
   }
 
+  Future<Map<String, dynamic>> createFeedbackForm(eventId, clubId, List<String> questionList) async {
+
+    print("Fetching events...");
+    const url = '$endPoint/graphql';
+
+    final query = '''
+      mutation {
+        createFeedbackForm(event: "$eventId", club: "$clubId", questions: [${questionList.map((e) => '"$e"').join(',')}]) {
+          id
+          event {
+            id
+            name
+          }
+          club {
+            id
+            name
+          }
+          questions {
+            question
+            rating
+          }
+          comments
+        }
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: await headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+      return jsonDecode(response.body);
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      return Future.error('Failed to upload feedback');
+    }
+  }
+
+
 
 }

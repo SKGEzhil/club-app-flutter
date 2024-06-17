@@ -154,10 +154,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                     : currentColors.oppositeColor.withOpacity(0.1),
                               ),
                               height: 10,
-                              constraints: BoxConstraints(
-                                minWidth: 30,
-                                maxWidth: 100,
-                              ),
+                              width: MediaQuery.of(context).size.width /
+                                  (widget.feedbackForm.questions.length + 2),
                             ),
                           )))
                       .values

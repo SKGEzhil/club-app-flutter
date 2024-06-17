@@ -52,6 +52,7 @@ class ButtonWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15, 6, 15, 6),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 preceedingIcon == null
@@ -63,9 +64,10 @@ class ButtonWidget extends StatelessWidget {
                       ),
                 preceedingIcon == null
                     ? SizedBox()
-                    : const SizedBox(
+                    : buttonText != '' ? const SizedBox(
                         width: 5,
-                      ),
+                      ) : SizedBox(),
+
                 Text(
                   buttonText,
                   style: TextStyle(

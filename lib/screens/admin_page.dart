@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../controllers/admin_controller.dart';
 import 'package:get/get.dart';
 
-import '../widgets/new_club_dialogue.dart';
-import '../widgets/user_list_widget.dart';
+import '../widgets/dialogue_widgets/new_club_dialogue.dart';
+import '../widgets/app_widgets/user_list_widget.dart';
 
 class AdminPage extends StatelessWidget {
   AdminPage({super.key});

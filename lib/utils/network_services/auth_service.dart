@@ -54,7 +54,7 @@ class AuthService{
     } else {
       print("POST request failed");
       print('Response: ${response.body}');
-      return Future.error('Failed to verify google user');
+      return Future.error((jsonDecode(response.body))['message']);
     }
   }
 

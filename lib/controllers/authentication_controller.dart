@@ -18,7 +18,14 @@ class AuthenticationController extends GetxController {
 
   Future<Map<String, dynamic>> authenticate(BuildContext context) async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser;
+      if(Platform.isIOS){
+        googleUser = await GoogleSignIn(
+            clientId: '255948244097-53c89fc4f7kuc0gqr290iu5gj87hrkdb.apps.googleusercontent.com'
+        ).signIn();
+      } else {
+        googleUser = await GoogleSignIn().signIn();
+      }
       final googleAuth = await googleUser?.authentication;
 
       print(googleUser?.displayName);

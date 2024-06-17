@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../colors.dart';
-import '../controllers/bottom_nav_controller.dart';
+import '../../colors.dart';
+import '../../controllers/bottom_nav_controller.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
@@ -64,6 +64,29 @@ class BottomNavBar extends StatelessWidget {
                       Text('Clubs',
                         style: TextStyle(
                           color: bottomNavController.selectedIndex.value == 1 ? Theme.of(context).primaryColor : currentColors.oppositeColor
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  onTap: () {
+                    bottomNavController.selectIndex(2);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.feedback_outlined, size: 30,
+                          color: bottomNavController.selectedIndex.value == 2 ? Theme.of(context).primaryColor : currentColors.oppositeColor
+                      ),
+                      Text('Feedback',
+                        style: TextStyle(
+                            color: bottomNavController.selectedIndex.value == 2 ? Theme.of(context).primaryColor : currentColors.oppositeColor
                         ),
                       )
                     ],

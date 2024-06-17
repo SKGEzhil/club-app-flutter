@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/models/event_model.dart';
 import 'package:club_app/screens/image_viewer.dart';
 import 'package:club_app/widgets/button_widget.dart';
-import 'package:club_app/widgets/custom_alert_dialogue.dart';
+import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

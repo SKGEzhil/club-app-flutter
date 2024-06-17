@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/controllers/clubs_controller.dart';
 import 'package:club_app/widgets/button_widget.dart';
-import 'package:club_app/widgets/edit_club_dialogue.dart';
-import 'package:club_app/widgets/user_list_widget.dart';
+import 'package:club_app/widgets/dialogue_widgets/edit_club_dialogue.dart';
+import 'package:club_app/widgets/app_widgets/user_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linkfy_text/linkfy_text.dart';
@@ -12,7 +12,7 @@ import '../controllers/image_picker_controller.dart';
 import '../controllers/loading_controller.dart';
 import '../controllers/profile_controller.dart';
 import '../models/user_model.dart';
-import '../widgets/custom_alert_dialogue.dart';
+import '../widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_widget.dart';
 

@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/utils/repositories/image_repository.dart';
-import 'package:club_app/widgets/custom_alert_dialogue.dart';
+import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../controllers/clubs_controller.dart';
-import '../controllers/image_picker_controller.dart';
-import '../controllers/loading_controller.dart';
-import '../models/club_model.dart';
-import '../utils/server_utils.dart';
-import 'button_widget.dart';
-import 'custom_snackbar.dart';
+import '../../controllers/clubs_controller.dart';
+import '../../controllers/image_picker_controller.dart';
+import '../../controllers/loading_controller.dart';
+import '../../models/club_model.dart';
+import '../../utils/server_utils.dart';
+import '../button_widget.dart';
+import '../custom_snackbar.dart';
 
 class EditClubDialogue extends StatefulWidget {
   EditClubDialogue({super.key, required this.clubId});

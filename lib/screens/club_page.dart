@@ -1,6 +1,6 @@
 import 'package:club_app/controllers/clubs_controller.dart';
 import 'package:club_app/screens/club_info_page.dart';
-import 'package:club_app/widgets/bottom_message_bar.dart';
+import 'package:club_app/widgets/app_widgets/bottom_message_bar.dart';
 import 'package:club_app/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,7 @@ import '../controllers/loading_controller.dart';
 import '../controllers/post_controller.dart';
 import '../controllers/profile_controller.dart';
 
-import '../widgets/post_widget.dart';
+import '../widgets/app_widgets/post_widget.dart';
 
 class ClubPage extends StatelessWidget {
   ClubPage({super.key, required this.clubName, required this.clubId});

@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/models/user_model.dart';
 import 'package:club_app/widgets/button_widget.dart';
-import 'package:club_app/widgets/custom_alert_dialogue.dart';
+import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../colors.dart';
-import '../controllers/admin_controller.dart';
-import '../controllers/clubs_controller.dart';
-import '../controllers/loading_controller.dart';
-import '../controllers/profile_controller.dart';
-import 'add_user_dialogue.dart';
-import 'custom_snackbar.dart';
+import '../../colors.dart';
+import '../../controllers/admin_controller.dart';
+import '../../controllers/clubs_controller.dart';
+import '../../controllers/loading_controller.dart';
+import '../../controllers/profile_controller.dart';
+import '../dialogue_widgets/add_user_dialogue.dart';
+import '../custom_snackbar.dart';
 
 class UserListWidget extends StatelessWidget {
   UserListWidget({

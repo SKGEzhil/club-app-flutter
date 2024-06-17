@@ -6,19 +6,19 @@ import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/colors.dart';
 import 'package:club_app/widgets/button_widget.dart';
-import 'package:club_app/widgets/custom_alert_dialogue.dart';
+import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linkfy_text/linkfy_text.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../controllers/clubs_controller.dart';
-import '../controllers/loading_controller.dart';
-import '../controllers/post_controller.dart';
-import '../controllers/profile_controller.dart';
-import '../models/post_model.dart';
-import '../models/user_model.dart';
-import '../screens/image_viewer.dart';
+import '../../controllers/clubs_controller.dart';
+import '../../controllers/loading_controller.dart';
+import '../../controllers/post_controller.dart';
+import '../../controllers/profile_controller.dart';
+import '../../models/post_model.dart';
+import '../../models/user_model.dart';
+import '../../screens/image_viewer.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PostWidget extends StatelessWidget {

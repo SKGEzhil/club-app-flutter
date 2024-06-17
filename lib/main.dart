@@ -197,8 +197,23 @@ Future<void> main() async {
   await networkController.onInit();
   print(networkController.isOnline.value);
 
-  networkController.isOnline.value ?
-  await firebaseInitializations() : null;
+
+  // Initializing Firebase Messaging for iOS (Not functional)
+  if (Platform.isIOS) {
+    print('IOS');
+    // String? apnsToken = await _firebaseMessaging.getAPNSToken();
+    // if (apnsToken != null) {
+    //   try {
+    //     await _firebaseMessaging.subscribeToTopic('clubs-app-fcm-testing');
+    //   } on FirebaseException catch (e) {
+    //     debugPrint("George here is the error: $e");
+    //   }
+    // }
+  } else {
+    networkController.isOnline.value ?
+    await firebaseInitializations() : null;
+
+  }
 
   final Widget landingPage;
 

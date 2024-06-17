@@ -1,9 +1,10 @@
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/screens/admin_page.dart';
 import 'package:club_app/screens/login_page.dart';
-import 'package:club_app/widgets/bottom_nav_bar.dart';
+import 'package:club_app/widgets/app_widgets/bottom_nav_bar.dart';
+import 'package:club_app/widgets/app_widgets/feedback_list_widget.dart';
 import 'package:club_app/widgets/button_widget.dart';
-import 'package:club_app/widgets/event_list_widget.dart';
+import 'package:club_app/widgets/app_widgets/event_list_widget.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../controllers/authentication_controller.dart';
@@ -13,8 +14,8 @@ import '../controllers/profile_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../models/club_model.dart';
 import '../models/post_model.dart';
-import '../widgets/carousel_widget.dart';
-import '../widgets/club_list_tile.dart';
+import '../widgets/app_widgets/carousel_widget.dart';
+import '../widgets/app_widgets/club_list_tile.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -56,9 +57,9 @@ class HomePage extends StatelessWidget {
       // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Obx(() {
-          return Text(bottomNavController.selectedIndex.value == 1
-              ? 'Clubs'
-              : 'Events');
+          return Text(bottomNavController.selectedIndex.value == 0
+              ? 'Events'
+              : bottomNavController.selectedIndex.value == 1 ? 'Clubs' : 'Feedback');
         }),
         // backgroundColor: Colors.white,
         actions: [
@@ -109,8 +110,7 @@ class HomePage extends StatelessWidget {
             children: [
               bottomNavController.selectedIndex.value == 0 ?
               EventListWidget() :
-
-
+                  bottomNavController.selectedIndex.value == 1 ?
               ListView(
                 children: [
                   images.isEmpty ? SizedBox() :
@@ -143,7 +143,8 @@ class HomePage extends StatelessWidget {
                   }),
                   SizedBox(height: 100,)
                 ],
-              ),
+              ) :
+              FeedbackListWidget(),
               Positioned(
                   bottom: 0,
                   right: 0,

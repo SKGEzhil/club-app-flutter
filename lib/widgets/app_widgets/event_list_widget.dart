@@ -1,12 +1,12 @@
-import 'package:club_app/widgets/event_widget.dart';
+import 'package:club_app/widgets/app_widgets/event_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/clubs_controller.dart';
-import '../controllers/event_controller.dart';
-import '../controllers/profile_controller.dart';
-import '../models/event_model.dart';
-import '../screens/create_event_page.dart';
+import '../../controllers/clubs_controller.dart';
+import '../../controllers/event_controller.dart';
+import '../../controllers/profile_controller.dart';
+import '../../models/event_model.dart';
+import '../../screens/create_event_page.dart';
 
 class EventListWidget extends StatelessWidget {
   EventListWidget({super.key});

@@ -1,11 +1,11 @@
-import 'package:club_app/widgets/custom_alert_dialogue.dart';
+import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/admin_controller.dart';
-import '../controllers/clubs_controller.dart';
-import '../controllers/loading_controller.dart';
-import 'button_widget.dart';
-import 'custom_snackbar.dart';
+import '../../controllers/admin_controller.dart';
+import '../../controllers/clubs_controller.dart';
+import '../../controllers/loading_controller.dart';
+import '../button_widget.dart';
+import '../custom_snackbar.dart';
 
 class AddUserDialogue extends StatelessWidget {
   AddUserDialogue({super.key, this.clubId, required this.type});

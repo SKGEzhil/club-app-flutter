@@ -3,13 +3,13 @@ import 'package:club_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
-import '../colors.dart';
-import '../controllers/post_controller.dart';
-import '../controllers/unread_post_controller.dart';
-import '../models/club_model.dart';
-import '../models/post_model.dart';
-import '../screens/club_page.dart';
-import '../utils/shared_prefs.dart';
+import '../../colors.dart';
+import '../../controllers/post_controller.dart';
+import '../../controllers/unread_post_controller.dart';
+import '../../models/club_model.dart';
+import '../../models/post_model.dart';
+import '../../screens/club_page.dart';
+import '../../utils/shared_prefs.dart';
 
 class ClubListTile extends StatefulWidget {
   ClubListTile({

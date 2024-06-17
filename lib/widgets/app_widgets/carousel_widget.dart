@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../models/post_model.dart';
+import '../../models/post_model.dart';
 import 'package:get/get.dart';
 
-import '../screens/image_viewer.dart';
+import '../../screens/image_viewer.dart';
 
 class CarouselWidget extends StatelessWidget {
   const CarouselWidget({

@@ -57,6 +57,8 @@ dependencies:
   add_2_calendar: ^3.0.1
   syncfusion_flutter_sliders: ^26.1.35
   syncfusion_flutter_core: ^26.1.35
+  fl_chart: ^0.68.0
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:

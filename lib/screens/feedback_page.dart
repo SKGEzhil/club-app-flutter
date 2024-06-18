@@ -1,6 +1,7 @@
 import 'package:club_app/controllers/loading_controller.dart';
 import 'package:club_app/models/feedback_model.dart';
 import 'package:club_app/widgets/app_widgets/rating_bar.dart';
+import 'package:club_app/widgets/dialogue_widgets/suggestion_dialogue.dart';
 import 'package:club_app/widgets/button_widget.dart';
 import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -39,15 +40,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
         Theme.of(Get.context!).primaryColor);
   }
 
-  void uploadFeedback(context) async {
-   if(sliderValues.any((value) => value == 0)){
-      CustomSnackBar.show(context,
-          message: 'Please rate all questions', color: Colors.red);
-      return;
-   }
-   loadingController.toggleLoading();
+  void uploadFeedback(context, suggestionText) async {
+    loadingController.toggleLoading();
     final result = await feedbackController.uploadFeedback(
-        widget.feedbackForm.id, sliderValues);
+        widget.feedbackForm.id, sliderValues, suggestionText);
     loadingController.toggleLoading();
     if (result['status'] == 'error') {
       CustomSnackBar.show(context,
@@ -56,6 +52,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       CustomSnackBar.show(context,
           message: result['message'], color: Colors.green);
     }
+    Navigator.of(context).pop();
   }
 
   void changeRating(int index, int value) {
@@ -102,7 +99,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
     return Stack(
       children: [
-            Scaffold(
+        Scaffold(
             appBar: AppBar(
               title: Text('Feedback'),
               actions: [
@@ -111,7 +108,24 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   child: ButtonWidget(
                     onPressed: () {
                       print("Submit");
-                      uploadFeedback(context);
+                      if (sliderValues.any((value) => value == 0)) {
+                        CustomSnackBar.show(context,
+                            message: 'Please rate all questions', color: Colors.red);
+                        return;
+                      }
+                      showDialog(
+                          context: context,
+                          builder: (dialogueContext) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SuggestionDialogue(
+                                onSubmit: (suggestionText) {
+                                  uploadFeedback(context, suggestionText);
+                                },
+                              ),
+                            );
+                          });
+                      // uploadFeedback(context);
                     },
                     buttonText: 'Submit',
                     isNegative: false,
@@ -151,7 +165,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 borderRadius: BorderRadius.circular(5),
                                 color: pageIndex == index
                                     ? Theme.of(context).primaryColor
-                                    : currentColors.oppositeColor.withOpacity(0.1),
+                                    : currentColors.oppositeColor
+                                        .withOpacity(0.1),
                               ),
                               height: 10,
                               width: MediaQuery.of(context).size.width /
@@ -190,7 +205,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                             child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                    widget.feedbackForm.questions[index].question,
+                                    widget
+                                        .feedbackForm.questions[index].question,
                                     style: TextStyle(
                                         color: currentColors.oppositeColor
                                             .withOpacity(0.8),
@@ -226,13 +242,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
             )),
         Obx(() {
           return Container(
-            child:
-            loadingController.isLoading.value
-                ?
-            LoadingWidget() : null,
+            child: loadingController.isLoading.value ? LoadingWidget() : null,
           );
         }),
-          ],
+      ],
     );
   }
 }

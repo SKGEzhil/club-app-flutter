@@ -17,14 +17,19 @@ class FeedbackService{
   }
 
 
-  Future<Map<String, dynamic>> fetchFeedbackForms() async {
+  Future<Map<String, dynamic>> fetchFeedbackForms(List<String> userClubs) async {
 
     print("Fetching events...");
     const url = '$endPoint/graphql';
 
-    const query = '''
+    print("User clubs: $userClubs");
+    userClubs.forEach((element) {
+      print("User club: $element");
+    });
+
+    final query = '''
       query {
-        getFeedbacks {
+        getFeedbacks (userClubs: [${userClubs.map((e) => '"$e"').join(',')}]) {
           id
           questions {
             question
@@ -62,14 +67,14 @@ class FeedbackService{
     }
   }
 
-  Future<Map<String, dynamic>> uploadFeedback(id, ratingList) async {
+  Future<Map<String, dynamic>> uploadFeedback(id, ratingList, suggestion) async {
 
     print("Fetching events...");
     const url = '$endPoint/graphql';
 
     final query = '''
       mutation {
-        uploadFeedback(id: "$id", ratingList: $ratingList) {
+        uploadFeedback(id: "$id", ratingList: $ratingList, comment: "$suggestion") {
           id
           questions {
             question
@@ -143,6 +148,35 @@ class FeedbackService{
     }
   }
 
+  Future<Map<String, dynamic>> deleteFeedbackForm(id) async {
+
+    print("Fetching events...");
+    const url = '$endPoint/graphql';
+
+    final query = '''
+      mutation {
+        deleteFeedback(id: "$id") 
+      }
+    ''';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: await headers,
+      body: jsonEncode({
+        'query': query,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("POST request successful");
+      print('Response: ${response.body}');
+      return jsonDecode(response.body);
+
+    } else {
+      print("POST request failed");
+      print('Response: ${response.body}');
+      return Future.error('Failed to delete feedback');
+    }
+  }
 
 
 }

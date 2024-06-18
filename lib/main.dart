@@ -3,6 +3,7 @@ import 'package:club_app/controllers/event_controller.dart';
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/models/event_model.dart';
 import 'package:club_app/screens/event_page.dart';
+import 'package:club_app/temp.dart';
 import 'package:club_app/theme.dart';
 import 'package:club_app/utils/repositories/user_repository.dart';
 import 'package:club_app/utils/server_utils.dart';

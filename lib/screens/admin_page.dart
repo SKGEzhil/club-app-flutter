@@ -1,8 +1,6 @@
 import 'package:club_app/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../controllers/admin_controller.dart';
-import 'package:get/get.dart';
 
 import '../widgets/dialogue_widgets/new_club_dialogue.dart';
 import '../widgets/app_widgets/user_list_widget.dart';

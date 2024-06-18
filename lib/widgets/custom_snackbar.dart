@@ -14,7 +14,7 @@ class CustomSnackBar{
 
   static SnackBar customSnackBar({required String message, required Color color}) {
     return SnackBar(
-      content: Text(message, style: TextStyle(color: Colors.white),),
+      content: Text(message, style: const TextStyle(color: Colors.white),),
       elevation: 10.0,
       duration: const Duration(seconds: 3),
       showCloseIcon: true,
@@ -40,12 +40,12 @@ class CustomGetSnackBar{
         },
         child: const Icon(Icons.close, color: Colors.white, size: 20,)
       ),
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 300),
       barBlur: 10,
       snackPosition: SnackPosition.TOP,
       backgroundColor: color,
       colorText: Colors.white,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
   }
 }

@@ -58,14 +58,14 @@ class BottomMessageBar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Divider(
+          const Divider(
             height: 0,
           ),
           GetBuilder<ImagePickerController>(builder: (logic) {
             return Container(
               // color: Colors.transparent,
               child: imagePickerController.image == null
-                  ? SizedBox(
+                  ? const SizedBox(
                 width: 0,
               )
                   : Align(
@@ -93,7 +93,7 @@ class BottomMessageBar extends StatelessWidget {
                         onTap: () {
                           imagePickerController.resetImage();
                         },
-                        child: Align(
+                        child: const Align(
                           alignment: Alignment.topRight,
                           child: CircleAvatar(
                             radius: 10.0,

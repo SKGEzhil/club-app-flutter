@@ -134,10 +134,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Event Name :',
+                      const Text('Event Name :',
                           style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
@@ -148,7 +148,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           child: TextFormField(
                             // initialValue: club.name,
                             controller: eventNameController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
                             style: const TextStyle(
@@ -158,11 +158,11 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text('Event Description :',
+                      const SizedBox(height: 20),
+                      const Text('Event Description :',
                           style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
@@ -173,7 +173,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           child: TextFormField(
                             maxLines: 5,
                             controller: eventDescriptionController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
                             style: const TextStyle(
@@ -183,11 +183,11 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text('Event Location :',
+                      const SizedBox(height: 20),
+                      const Text('Event Location :',
                           style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
@@ -198,7 +198,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           child: TextFormField(
                             maxLines: 1,
                             controller: eventLocationController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
                             style: const TextStyle(
@@ -208,16 +208,16 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
-                              Text('Organizing Club :',
+                              const Text('Organizing Club :',
                                   style: TextStyle(
                                       fontSize: 20, fontWeight: FontWeight.bold)),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -233,7 +233,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                         },
                                         inputDecorationTheme: InputDecorationTheme(
                                           fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                                          constraints: BoxConstraints(
+                                          constraints: const BoxConstraints(
                                             maxWidth: 180,
                                           ),
                                           border: OutlineInputBorder(
@@ -302,7 +302,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                             child: Row(
                               children: [
                                 eventDate == null
-                                    ? Text('Select Event Date',
+                                    ? const Text('Select Event Date',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold))
@@ -314,19 +314,19 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                         Text(
                                             'Date : ${DateFormat('dd MMM').format(
                                                 eventDate)}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold)),
                                         Text(
                                             'Time : ${DateFormat.jm().format(
                                                 eventDate)}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold)),
                                       ]),
                                 ),
                                 eventDate == null
-                                    ? SizedBox(
+                                    ? const SizedBox(
                                   width: 0,
                                 )
                                     : ButtonWidget(
@@ -360,12 +360,12 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       GetBuilder<ImagePickerController>(builder: (logic) {
                         return Align(
                           alignment: Alignment.center,
                           child:
-                          imagePickerController.image != null ? SizedBox(
+                          imagePickerController.image != null ? const SizedBox(
                             width: 0,
                           ) :
                           ButtonWidget(
@@ -380,7 +380,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         return Container(
                           // color: Colors.transparent,
                           child: imagePickerController.image == null
-                              ? SizedBox(
+                              ? const SizedBox(
                             width: 0,
                           )
                               : Align(
@@ -407,7 +407,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                     onTap: () {
                                       imagePickerController.resetImage();
                                     },
-                                    child: Align(
+                                    child: const Align(
                                       alignment: Alignment.topRight,
                                       child: CircleAvatar(
                                         radius: 10.0,
@@ -426,7 +426,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           ),
                         );
                       }),
-                      SizedBox(height: 100),
+                      const SizedBox(height: 100),
                     ],
                   ),
                 ),

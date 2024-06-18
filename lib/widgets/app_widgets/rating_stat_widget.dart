@@ -41,7 +41,7 @@ class RatingStatWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 3,),
+                const SizedBox(height: 3,),
                 Padding(
                   padding: const EdgeInsets.only(left: 3.0, right: 3.0),
                   child: Text('5',
@@ -99,7 +99,7 @@ class RatingStatWidget extends StatelessWidget {
                       )
                   ),
                 ),
-                SizedBox(height: 3,),
+                const SizedBox(height: 3,),
 
               ],
             ),
@@ -116,13 +116,13 @@ class RatingStatWidget extends StatelessWidget {
                     Container(
                       height: 10,
                       width: (MediaQuery.of(context).size.width - 120) * (ratings[4]/totalRatings) ,
-                      child: SizedBox(),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.green,
                       ),
+                      child: const SizedBox(),
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Text('${ratings[4]}')
                   ],
                 ),
@@ -136,13 +136,13 @@ class RatingStatWidget extends StatelessWidget {
                     Container(
                       height: 10,
                       width: (MediaQuery.of(context).size.width - 120) * (ratings[3]/totalRatings),
-                      child: SizedBox(),
+                      child: const SizedBox(),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.yellow,
                       ),
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Text('${ratings[3]}')
                   ],
                 ),
@@ -157,13 +157,13 @@ class RatingStatWidget extends StatelessWidget {
                     Container(
                       height: 10,
                       width: (MediaQuery.of(context).size.width - 120) * (ratings[2]/totalRatings),
-                      child: SizedBox(),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.amber,
                       ),
+                      child: const SizedBox(),
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Text('${ratings[2]}')
                   ],
                 ),
@@ -178,13 +178,13 @@ class RatingStatWidget extends StatelessWidget {
                     Container(
                       height: 10,
                       width: (MediaQuery.of(context).size.width - 120) * (ratings[1]/totalRatings),
-                      child: SizedBox(),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.deepOrange,
                       ),
+                      child: const SizedBox(),
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Text('${ratings[1]}')
                   ],
                 ),
@@ -199,13 +199,13 @@ class RatingStatWidget extends StatelessWidget {
                     Container(
                       height: 10,
                       width: (MediaQuery.of(context).size.width - 120) * (ratings[0]/totalRatings),
-                      child: SizedBox(),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.red,
                       ),
+                      child: const SizedBox(),
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Text('${ratings[0]}')
                   ],
                 ),

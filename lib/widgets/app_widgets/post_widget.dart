@@ -248,7 +248,7 @@ class PostWidget extends StatelessWidget {
                                     buttonText: 'Cancel',
                                     isNegative: true,
                                   ),
-                                  SizedBox(width: 8.0),
+                                  const SizedBox(width: 8.0),
                                   ButtonWidget(
                                     onPressed: () {
                                       // isEditMode.value = false;
@@ -310,7 +310,7 @@ class PostWidget extends StatelessWidget {
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                SizedBox(width: 4.0),
+                                                const SizedBox(width: 4.0),
                                                 Icon(
                                                     size: 12.0,
                                                     color: currentColors
@@ -323,7 +323,7 @@ class PostWidget extends StatelessWidget {
                                                         fontSize: 12.0,
                                                         color: currentColors
                                                             .tertiaryTextColor)),
-                                                SizedBox(width: 4.0),
+                                                const SizedBox(width: 4.0),
                                               ],
                                             ),
                                           ),
@@ -367,7 +367,7 @@ class PostWidget extends StatelessWidget {
             onTap: () {
               sharePost(post.imageUrl, post.content);
             }),
-        PopupMenuDivider(),
+        const PopupMenuDivider(),
         CustomPopupMenuItem(
             title: 'Edit Post',
             icon: Icons.edit,
@@ -375,7 +375,7 @@ class PostWidget extends StatelessWidget {
             onTap: () {
               isEditMode.value = true;
             }),
-        PopupMenuDivider(),
+        const PopupMenuDivider(),
         CustomPopupMenuItem(
             title: 'Delete Post',
             icon: Icons.delete_outline,

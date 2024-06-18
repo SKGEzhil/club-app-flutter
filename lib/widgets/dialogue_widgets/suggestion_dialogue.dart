@@ -20,15 +20,15 @@ class SuggestionDialogue extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Material(
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      const Text(
                         "Suggestions",
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           border:
@@ -42,7 +42,7 @@ class SuggestionDialogue extends StatelessWidget {
                             // initialValue: club.description,
                             maxLines: 5,
                             minLines: 2,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Write your suggestions here (*optional)',
                               border: InputBorder.none,
                               // hintText: '${club.name}',
@@ -54,7 +54,7 @@ class SuggestionDialogue extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       ButtonWidget(onPressed: (){
                         onSubmit(suggestionController.text);
                         Navigator.pop(context);

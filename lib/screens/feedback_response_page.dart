@@ -31,7 +31,7 @@ class FeedbackResponsePage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     feedback.eventName,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                 )),
             feedback.comments.isEmpty ? Container() :
@@ -39,7 +39,7 @@ class FeedbackResponsePage extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Container(
                 width: double.infinity,
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxHeight: 200,
                 ),
                 decoration: BoxDecoration(
@@ -111,7 +111,7 @@ class FeedbackResponsePage extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text('Ratings',
+                                const Text('Ratings',
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,

@@ -23,7 +23,7 @@ class AppTheme {
         ),
       ),
       brightness: Brightness.dark,
-      primaryColor: Color.fromRGBO(254, 198, 0, 1),
+      primaryColor: const Color.fromRGBO(254, 198, 0, 1),
       hintColor: Colors.white,
       // scaffoldBackgroundColor: Colors.black,
       colorScheme: ColorScheme.fromSeed(
@@ -44,7 +44,7 @@ class AppTheme {
 
   static ThemeData get lightTheme{
     return ThemeData(
-      primaryColor: Color.fromRGBO(254, 198, 0, 1),
+      primaryColor: const Color.fromRGBO(254, 198, 0, 1),
       cardTheme: CardTheme(
         // color: Colors.white,
         color: Colors.amber.shade50,

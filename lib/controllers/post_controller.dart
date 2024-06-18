@@ -1,15 +1,9 @@
-import 'dart:io';
 
-import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:club_app/secrets.dart';
 import 'package:club_app/utils/repositories/image_repository.dart';
 import 'package:club_app/utils/repositories/post_repository.dart';
-import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 import '../models/post_model.dart';
 import 'package:aws_client/s3_2006_03_01.dart';
 

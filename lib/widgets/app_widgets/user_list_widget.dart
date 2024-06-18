@@ -104,7 +104,7 @@ class UserListWidget extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       child: Text(type == 'admin' ? 'All Admin Users' : 'All Club Members',
-                        style: TextStyle(
+                        style: const TextStyle(
                             // color: Colors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
@@ -114,7 +114,7 @@ class UserListWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child:
-                    !isAuthorized ? SizedBox(
+                    !isAuthorized ? const SizedBox(
                       height: 40,
                     ) :
                     ButtonWidget(
@@ -126,13 +126,13 @@ class UserListWidget extends StatelessWidget {
                 ],
               ),
               Container(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxHeight: 300,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Scrollbar(
-                    radius: Radius.circular(10),
+                    radius: const Radius.circular(10),
                     thickness: 5,
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -161,7 +161,7 @@ class UserListWidget extends StatelessWidget {
                                         fit: BoxFit.cover,
                                         imageUrl: user.photoUrl),
                                   ),
-                                  SizedBox(width: 10,),
+                                  const SizedBox(width: 10,),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment
@@ -169,7 +169,7 @@ class UserListWidget extends StatelessWidget {
                                       children: [
                                         Text(
                                           user.name,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -187,7 +187,7 @@ class UserListWidget extends StatelessWidget {
 
                                   !isAuthorized
 
-                              ? SizedBox() :
+                              ? const SizedBox() :
 
                                   ButtonWidget(
                                     onPressed: (){

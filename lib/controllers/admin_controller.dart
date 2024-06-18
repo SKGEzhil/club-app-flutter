@@ -1,11 +1,7 @@
-import 'dart:convert';
 
-import 'package:club_app/controllers/profile_controller.dart';
 import 'package:club_app/models/user_model.dart';
 import 'package:club_app/utils/repositories/admin_repository.dart';
-import 'package:club_app/utils/server_utils.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class AdminController extends GetxController {
 

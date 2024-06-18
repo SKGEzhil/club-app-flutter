@@ -40,7 +40,7 @@ class FeedbackResponsePage extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 constraints: const BoxConstraints(
-                  maxHeight: 200,
+                  maxHeight: 250,
                 ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor.withOpacity(0.1),

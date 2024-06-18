@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:club_app/controllers/event_controller.dart';
 import 'package:club_app/controllers/post_controller.dart';
+import 'package:club_app/screens/server_down_page.dart';
 import 'package:club_app/theme.dart';
 import 'package:club_app/utils/repositories/user_repository.dart';
 import 'package:club_app/utils/shared_prefs.dart';
@@ -21,9 +22,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 /// Save Notification large icon
 Future<String> _downloadAndSaveFile(String url) async {
-  String filename = '${DateTime
-      .now()
-      .millisecondsSinceEpoch}.png';
+  String filename = '${DateTime.now().millisecondsSinceEpoch}.png';
   final Directory directory = await getApplicationDocumentsDirectory();
   final String filePath = '${directory.path}/$filename';
   final http.Response response = await http.get(Uri.parse(url));
@@ -52,22 +51,16 @@ Future<void> showLocalNotification(RemoteMessage message) async {
           data['title'],
           data['body'],
           NotificationDetails(
-            android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
+            android: AndroidNotificationDetails(channel.id, channel.name,
                 channelDescription: channel.description,
                 icon: 'launch_background',
                 largeIcon: FilePathAndroidBitmap(largeIcon),
                 color: Colors.deepPurple,
                 colorized: true,
-                actions: [
-                  const AndroidNotificationAction(
-                      'view', 'View')
-                ],
+                actions: [const AndroidNotificationAction('view', 'View')],
                 styleInformation: BigPictureStyleInformation(
                   FilePathAndroidBitmap(image),
-                )
-            ),
+                )),
           ));
     } else {
       flutterLocalNotificationsPlugin.show(
@@ -89,7 +82,6 @@ Future<void> showLocalNotification(RemoteMessage message) async {
   }
 }
 
-
 /// Local Notifications Initialization
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
@@ -100,8 +92,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
+    FlutterLocalNotificationsPlugin();
 
 /// Getting Firebase Messaging Instance
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -117,10 +108,9 @@ Future<void> firebaseInitializations() async {
 
   print("HELLO WORLD");
 
-
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   // onMessage: When the app is open and it receives a push notification
@@ -132,7 +122,7 @@ Future<void> firebaseInitializations() async {
     final Map<String, dynamic> data = message.data;
     final eventController = Get.put(EventController());
     eventController.fetchEvents();
-    if(data['postId'] == null || data['clubId'] == null) return;
+    if (data['postId'] == null || data['clubId'] == null) return;
     final unreadPostController = Get.put(UnreadPostController());
     await unreadPostController.getUnreadPosts();
     await unreadPostController.addUnreadPost(data['postId'], data['clubId']);
@@ -151,9 +141,7 @@ Future<void> firebaseInitializations() async {
   // Firebase message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("clubs-app-fcm-testing");
-  FirebaseMessaging.instance
-      .getInitialMessage()
-      .then((message) async {
+  FirebaseMessaging.instance.getInitialMessage().then((message) async {
     // await onNotificationClick(message, 'get_init');
   });
 
@@ -171,7 +159,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final Map<String, dynamic> data = message.data;
   final eventController = Get.put(EventController());
   eventController.fetchEvents();
-  if(data['postId'] == null || data['clubId'] == null) return;
+  if (data['postId'] == null || data['clubId'] == null) return;
   final unreadPostController = Get.put(UnreadPostController());
   await unreadPostController.getUnreadPosts();
   await unreadPostController.addUnreadPost(data['postId'], data['clubId']);
@@ -184,7 +172,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void appInitialization() async {
   final networkController = Get.put(NetworkController());
   final isOnline = networkController.isOnline.value;
-
 }
 
 Future<void> main() async {
@@ -193,7 +180,6 @@ Future<void> main() async {
   final networkController = Get.put(NetworkController());
   await networkController.onInit();
   print(networkController.isOnline.value);
-
 
   // Initializing Firebase Messaging for iOS (Not functional)
   if (Platform.isIOS) {
@@ -207,34 +193,39 @@ Future<void> main() async {
     //   }
     // }
   } else {
-    networkController.isOnline.value ?
-    await firebaseInitializations() : null;
-
+    networkController.isOnline.value ? await firebaseInitializations() : null;
   }
 
-  final Widget landingPage;
+  var landingPage;
 
   // Login check
   final token = await SharedPrefs.getToken();
   print("TOKEN $token");
   if (token != '') {
     final user = await SharedPrefs.getUserDetails();
-    if(networkController.isOnline.value) {
-      final updatedUser = await UserRepository().getUserDetails(user.email);
-      await SharedPrefs.saveUserDetails(updatedUser);
+    if (networkController.isOnline.value) {
+      try {
+        final updatedUser = await UserRepository().getUserDetails(user.email);
+        await SharedPrefs.saveUserDetails(updatedUser);
+        landingPage = HomePage();
+      } catch (e) {
+        print('error: $e');
+        landingPage = ServerDownPage();
+      }
     }
-    landingPage = HomePage();
+    print('LANDING PAGE: Homepage');
   } else {
     landingPage = LoginPage();
   }
 
   HttpOverrides.global = MyHttpOverrides();
-  runApp(MyApp(landingPage: landingPage,));
+  runApp(MyApp(
+    landingPage: landingPage,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key, required this.landingPage});
-
 
   final Widget landingPage;
   final themeController = Get.put(ThemeController());
@@ -261,7 +252,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host,
-          int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

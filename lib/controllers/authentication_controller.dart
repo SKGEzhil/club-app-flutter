@@ -1,14 +1,10 @@
-import 'dart:convert';
 
-import 'package:club_app/models/user_model.dart';
 import 'package:club_app/screens/home_page.dart';
 import 'package:club_app/utils/repositories/auth_repository.dart';
 import 'package:club_app/utils/repositories/user_repository.dart';
-import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:io' show Platform;

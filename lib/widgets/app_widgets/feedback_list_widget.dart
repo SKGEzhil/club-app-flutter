@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:club_app/models/feedback_model.dart';
 import 'package:club_app/screens/feedback_response_page.dart';
 import 'package:club_app/widgets/button_widget.dart';
 import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';

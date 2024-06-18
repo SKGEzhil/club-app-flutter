@@ -17,7 +17,6 @@ import '../controllers/loading_controller.dart';
 import '../controllers/profile_controller.dart';
 import '../widgets/loading_widget.dart';
 import 'club_info_page.dart';
-import 'club_page.dart';
 
 class EventPage extends StatefulWidget {
   EventPage({
@@ -157,7 +156,7 @@ class _EventPageState extends State<EventPage> {
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       leading: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back,
                         ),
                         onPressed: () => Navigator.pop(context),
@@ -198,7 +197,7 @@ class _EventPageState extends State<EventPage> {
                                               widget.event.clubImageUrl),
                                       radius: 15,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 8,
                                     ),
                                     Container(
@@ -211,12 +210,12 @@ class _EventPageState extends State<EventPage> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         widget.event.clubName,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                   ],
@@ -227,7 +226,7 @@ class _EventPageState extends State<EventPage> {
                           Obx(() {
                             return Container(
                               child: !isAuthorized
-                                  ? SizedBox()
+                                  ? const SizedBox()
                                   : Container(
                                       child: isEditMode.value
                                           ? Row(
@@ -241,7 +240,7 @@ class _EventPageState extends State<EventPage> {
                                                   buttonText: 'Cancel',
                                                   isNegative: true,
                                                 ),
-                                                SizedBox(width: 8),
+                                                const SizedBox(width: 8),
                                                 ButtonWidget(
                                                   onPressed: () {
                                                     showDialog(
@@ -292,7 +291,7 @@ class _EventPageState extends State<EventPage> {
                                                   buttonText: 'Delete',
                                                   isNegative: true,
                                                 ),
-                                                SizedBox(width: 8),
+                                                const SizedBox(width: 8),
                                                 ButtonWidget(
                                                   onPressed: () {
                                                     isEditMode.value =
@@ -308,7 +307,7 @@ class _EventPageState extends State<EventPage> {
                           })
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Obx(() {
@@ -329,7 +328,7 @@ class _EventPageState extends State<EventPage> {
                                         left: 8, right: 8),
                                     child: TextFormField(
                                       controller: editNameController,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold),
                                       decoration: const InputDecoration(
@@ -342,14 +341,14 @@ class _EventPageState extends State<EventPage> {
                               : Obx(() {
                                   return Text(
                                     widget.event.name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 32,
                                         fontWeight: FontWeight.bold),
                                   );
                                 }),
                         );
                       }),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Card(
@@ -357,8 +356,8 @@ class _EventPageState extends State<EventPage> {
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
                           children: [
-                            Icon(Icons.calendar_month_rounded, size: 40),
-                            SizedBox(
+                            const Icon(Icons.calendar_month_rounded, size: 40),
+                            const SizedBox(
                               width: 12,
                             ),
                             Column(
@@ -386,7 +385,7 @@ class _EventPageState extends State<EventPage> {
                                                 .format(editedEventDate)
                                             : widget.event.formattedTime
                                         : widget.event.formattedTime,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 17),
                                   );
@@ -435,7 +434,7 @@ class _EventPageState extends State<EventPage> {
                           ],
                         ),
                       )),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Card(
@@ -443,8 +442,8 @@ class _EventPageState extends State<EventPage> {
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
                           children: [
-                            Icon(Icons.location_on, size: 40),
-                            SizedBox(
+                            const Icon(Icons.location_on, size: 40),
+                            const SizedBox(
                               width: 12,
                             ),
                             Expanded(
@@ -496,7 +495,7 @@ class _EventPageState extends State<EventPage> {
                                             }),
                                     );
                                   }),
-                                  Text(
+                                  const Text(
                                     'Location',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -508,7 +507,7 @@ class _EventPageState extends State<EventPage> {
                           ],
                         ),
                       )),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Card(
@@ -517,7 +516,7 @@ class _EventPageState extends State<EventPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
+                              const Row(
                                 children: [
                                   Text('Description',
                                       style: TextStyle(
@@ -525,7 +524,7 @@ class _EventPageState extends State<EventPage> {
                                           fontWeight: FontWeight.bold)),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Obx(() {
@@ -546,7 +545,7 @@ class _EventPageState extends State<EventPage> {
                                             child: TextFormField(
                                               controller:
                                                   editDescriptionController,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500),
                                               decoration: const InputDecoration(
@@ -559,25 +558,25 @@ class _EventPageState extends State<EventPage> {
                                       : Obx(() {
                                           return Text(
                                             widget.event.description,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500),
                                           );
                                         }),
                                 );
                               }),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       !isAuthorized
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Obx(() {
                               return Align(
                                 alignment: Alignment.bottomCenter,
@@ -585,7 +584,7 @@ class _EventPageState extends State<EventPage> {
                                         (feedbackForm) =>
                                             feedbackForm.eventId ==
                                             widget.event.id)
-                                    ? SizedBox(
+                                    ? const SizedBox(
                                         width: 0,
                                       )
                                     : ButtonWidget(

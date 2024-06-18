@@ -51,7 +51,7 @@ class ClubPage extends StatelessWidget {
                         clubId: clubId,
                       )));
             },
-            icon: Icon(
+            icon: const Icon(
                 Icons.info),
           )
         ],
@@ -70,9 +70,9 @@ class ClubPage extends StatelessWidget {
                   ],
                 ))
                 .toList();
-            postWidgets.add(Column(
+            postWidgets.add(const Column(
               children: [
-                const SizedBox(height: 100),
+                SizedBox(height: 100),
               ],
             ));
 
@@ -105,7 +105,7 @@ class ClubPage extends StatelessWidget {
                   right: 0,
                   child: BottomMessageBar(clubId: clubId),
                 )
-                    : Positioned(
+                    : const Positioned(
                     bottom: 0,
                     right: 0,
                     child: SizedBox())

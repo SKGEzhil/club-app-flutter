@@ -153,9 +153,9 @@ class ClubInfoPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         GetBuilder<ClubsController>(builder: (logic) {
-                          return Text(
+                          return const Text(
                             'Description',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),

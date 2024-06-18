@@ -11,8 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../controllers/clubs_controller.dart';
 import '../../controllers/image_picker_controller.dart';
 import '../../controllers/profile_controller.dart';
-import '../../models/club_model.dart';
-import '../../utils/server_utils.dart';
 import '../button_widget.dart';
 import '../custom_snackbar.dart';
 
@@ -77,11 +75,11 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
               borderRadius: BorderRadius.circular(20),
               child: Material(
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      const Text(
                         "Create New Club",
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -135,8 +133,8 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                                         color: Theme.of(context).primaryColor,
                                         borderRadius: BorderRadius.circular(50),
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(6.0),
                                         child: Icon(
                                           size: 18,
                                           Icons.edit,
@@ -151,7 +149,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                           ],
                         ),
                       ),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Club Name :',
@@ -161,7 +159,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      const SizedBox(height: 5,),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -180,7 +178,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                                   onChanged: (value) {
                                     clubNameController.text = value;
                                   },
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     // hintText: '${club.name}',
                                   ),
@@ -194,10 +192,10 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Description :',
@@ -207,7 +205,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      const SizedBox(height: 5,),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -228,7 +226,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                                   // initialValue: club.description,
                                   maxLines: 4,
                                   minLines: 1,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     // hintText: '${club.name}',
                                   ),
@@ -242,7 +240,7 @@ class _EditClubDialogueState extends State<NewClubDialogue> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ButtonWidget(

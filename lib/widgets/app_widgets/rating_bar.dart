@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 
 class RatingBar extends StatefulWidget {
   const RatingBar({super.key, required this.onRatingChanged, required this.initialRating,});
@@ -34,9 +32,9 @@ class _RatingBarState extends State<RatingBar> {
             thumbColor: Colors.orange,
             trackHeight: 10.0,
             showValueIndicator: ShowValueIndicator.onlyForDiscrete,
-            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-            overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
-            valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 28.0),
+            valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
             valueIndicatorColor: Colors.orange,
             valueIndicatorTextStyle: const TextStyle(
               color: Colors.white,

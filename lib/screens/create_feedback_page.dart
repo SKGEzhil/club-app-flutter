@@ -46,7 +46,7 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
           appBar: AppBar(
             title: const Text('Create Feedback'),
             actions: [
-              SizedBox(),
+              const SizedBox(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ButtonWidget(
@@ -86,7 +86,7 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
                                   child: TextFormField(
                                     maxLines: 1,
                                     controller: questionController,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       border: InputBorder.none,
                                     ),
                                     style: const TextStyle(
@@ -140,8 +140,8 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
                                           questionControllers.removeAt(index);
                                         });
                                       },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(3.0),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(3.0),
                                         child: Icon(
                                           size: 20,
                                           Icons.delete,

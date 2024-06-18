@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../controllers/authentication_controller.dart';
 import '../controllers/loading_controller.dart';
 import '../widgets/loading_widget.dart';
-import 'home_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});

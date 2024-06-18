@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import '../../colors.dart';
 import '../../controllers/post_controller.dart';
 import '../../controllers/unread_post_controller.dart';

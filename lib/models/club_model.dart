@@ -1,5 +1,4 @@
 import 'package:club_app/models/user_model.dart';
-import 'package:flutter/material.dart';
 
 class Club{
   final String id;

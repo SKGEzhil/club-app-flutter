@@ -37,7 +37,7 @@ class EventListWidget extends StatelessWidget {
   List<EventModel> get thisWeekEventList {
     final eventList = eventController.eventList;
     final today = DateTime.now();
-    final nextWeek = today.add(Duration(days: 7));
+    final nextWeek = today.add(const Duration(days: 7));
     return eventList
         .where((event) =>
             event.dateTime.isAfter(today) && event.dateTime.isBefore(nextWeek))
@@ -48,7 +48,7 @@ class EventListWidget extends StatelessWidget {
   List<EventModel> get thisMonthEventList {
     final eventList = eventController.eventList;
     final today = DateTime.now();
-    final thisWeek = today.add(Duration(days: 7));
+    final thisWeek = today.add(const Duration(days: 7));
     final lastDayOfMonth = DateTime(today.year, today.month + 1, 1);
     return eventList
         .where((event) =>
@@ -83,10 +83,10 @@ class EventListWidget extends StatelessWidget {
             Obx(() {
               final eventWidgetList = [
                 todayEventList.isEmpty
-                    ? SizedBox()
-                    : SizedBox(
+                    ? const SizedBox()
+                    : const SizedBox(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             'Today',
                             style: TextStyle(
@@ -108,10 +108,10 @@ class EventListWidget extends StatelessWidget {
             Obx(() {
               final eventWidgetList = [
                 thisWeekEventList.isEmpty
-                    ? SizedBox()
-                    : SizedBox(
+                    ? const SizedBox()
+                    : const SizedBox(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             'This Week',
                             style: TextStyle(
@@ -133,10 +133,10 @@ class EventListWidget extends StatelessWidget {
             Obx(() {
               final eventWidgetList = [
                 thisMonthEventList.isEmpty
-                    ? SizedBox()
-                    : SizedBox(
+                    ? const SizedBox()
+                    : const SizedBox(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             'This Month',
                             style: TextStyle(
@@ -158,10 +158,10 @@ class EventListWidget extends StatelessWidget {
             Obx(() {
               final eventWidgetList = [
                 upcomingEventList.isEmpty
-                    ? SizedBox()
-                    : SizedBox(
+                    ? const SizedBox()
+                    : const SizedBox(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             'Upcoming',
                             style: TextStyle(
@@ -180,13 +180,13 @@ class EventListWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: eventWidgetList);
             }),
-            SizedBox(
+            const SizedBox(
               height: 100,
             )
           ],
         ),
         !isAuthorized
-            ? SizedBox()
+            ? const SizedBox()
             : Positioned(
                 bottom: 100,
                 right: 20,
@@ -199,7 +199,7 @@ class EventListWidget extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 ),
               ),
       ],

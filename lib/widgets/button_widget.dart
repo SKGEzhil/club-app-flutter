@@ -22,7 +22,7 @@ class ButtonWidget extends StatelessWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     final Color buttonColor = isNegative ? Colors.red : Theme.of(context).primaryColor;
-    final Color textColor = isNegative ? Colors.white : Color.fromRGBO(40, 40, 40, 1);
+    final Color textColor = isNegative ? Colors.white : const Color.fromRGBO(40, 40, 40, 1);
     final Color invertedTextColor = !isDark ? buttonColor : textColor;
     final Color invertedButtonColor = !isDark ? textColor : buttonColor;
 
@@ -56,17 +56,17 @@ class ButtonWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 preceedingIcon == null
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Icon(
                         preceedingIcon,
                         color: isColorInverted != null ? (isColorInverted ? invertedTextColor : textColor) : textColor,
                         size: 18,
                       ),
                 preceedingIcon == null
-                    ? SizedBox()
+                    ? const SizedBox()
                     : buttonText != '' ? const SizedBox(
                         width: 5,
-                      ) : SizedBox(),
+                      ) : const SizedBox(),
 
                 Text(
                   buttonText,

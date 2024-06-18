@@ -113,7 +113,7 @@ class HomePage extends StatelessWidget {
                   bottomNavController.selectedIndex.value == 1 ?
               ListView(
                 children: [
-                  images.isEmpty ? SizedBox() :
+                  images.isEmpty ? const SizedBox() :
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("Featured",
@@ -123,7 +123,7 @@ class HomePage extends StatelessWidget {
                             fontWeight: FontWeight.bold)
                     ),
                   ),
-                  images.isEmpty ? SizedBox() :
+                  images.isEmpty ? const SizedBox() :
                   Obx(() {
                     return CarouselWidget(sortedPostList: sortedPostList);
                   }),
@@ -141,7 +141,7 @@ class HomePage extends StatelessWidget {
                             )).toList()
                     );
                   }),
-                  SizedBox(height: 100,)
+                  const SizedBox(height: 100,)
                 ],
               ) :
               FeedbackListWidget(),

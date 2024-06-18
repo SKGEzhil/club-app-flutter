@@ -1,13 +1,8 @@
-import 'dart:convert';
 
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/utils/repositories/club_repository.dart';
-import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 import '../models/club_model.dart';
 import 'network_controller.dart';

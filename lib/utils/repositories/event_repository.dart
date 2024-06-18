@@ -1,8 +1,6 @@
 
 import 'package:club_app/models/event_model.dart';
-import 'package:club_app/models/post_model.dart';
 import 'package:club_app/utils/network_services/event_service.dart';
-import '../network_services/post_service.dart';
 import '/controllers/network_controller.dart';
 import 'package:get/get.dart';
 

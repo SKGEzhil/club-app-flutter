@@ -31,7 +31,7 @@ class LoadingWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor.withOpacity(0.3),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),

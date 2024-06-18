@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/models/event_model.dart';
 import 'package:club_app/screens/event_page.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class EventWidget extends StatelessWidget {
   const EventWidget({super.key, required this.event});
@@ -78,41 +77,41 @@ class EventWidget extends StatelessWidget {
                                       imageUrl: event.clubImageUrl,
                                     ),
                                   ),
-                                  SizedBox(width: 10.0),
+                                  const SizedBox(width: 10.0),
                                   Expanded(
                                     child: Text(event.clubName,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold, fontSize: 17.0)),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 10.0),
+                              const SizedBox(height: 10.0),
                               Text(event.name,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold, fontSize: 20.0)),
-                              SizedBox(height: 5.0),
+                              const SizedBox(height: 5.0),
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.calendar_month_outlined,
                                   ),
-                                  SizedBox(width: 5.0),
+                                  const SizedBox(width: 5.0),
                                   Text(event.formattedDate,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15.0, fontWeight: FontWeight.w500)),
                                 ],
                               ),
-                              SizedBox(height: 5.0),
+                              const SizedBox(height: 5.0),
                               Row(
                                 children: [
-                                  Icon(Icons.location_on_outlined),
-                                  SizedBox(width: 5.0),
+                                  const Icon(Icons.location_on_outlined),
+                                  const SizedBox(width: 5.0),
                                   Text(event.location,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 15.0, fontWeight: FontWeight.w500)),
                                 ],
                               ),

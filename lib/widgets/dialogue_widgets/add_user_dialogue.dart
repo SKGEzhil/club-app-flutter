@@ -59,7 +59,7 @@ class AddUserDialogue extends StatelessWidget {
               children: [
                 Text(
                   type == 'admin' ? 'Add Admin User' : 'Add Club User',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -1,4 +1,3 @@
-import 'package:aws_client/dynamo_document.dart';
 import 'package:club_app/models/club_model.dart';
 import 'package:club_app/models/event_model.dart';
 import 'package:club_app/models/unread_post_list_model.dart';

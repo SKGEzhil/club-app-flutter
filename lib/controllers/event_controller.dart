@@ -1,6 +1,5 @@
 import 'package:club_app/models/event_model.dart';
 import 'package:club_app/utils/repositories/event_repository.dart';
-import 'package:club_app/utils/server_utils.dart';
 import 'package:club_app/utils/shared_prefs.dart';
 import 'package:get/get.dart';
 

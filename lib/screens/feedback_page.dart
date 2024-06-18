@@ -101,7 +101,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       children: [
         Scaffold(
             appBar: AppBar(
-              title: Text('Feedback'),
+              title: const Text('Feedback'),
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -140,7 +140,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     widget.feedbackForm.eventName,
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                   ),
                 ),
                 Row(
@@ -154,7 +154,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 borderRadius: BorderRadius.circular(5)),
                             onTap: () {
                               pageController.animateToPage(index,
-                                  duration: Duration(milliseconds: 500),
+                                  duration: const Duration(milliseconds: 500),
                                   curve: Curves.ease);
                               setState(() {
                                 pageIndex = index;
@@ -213,7 +213,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold))),
                           ),
-                          SizedBox(height: 170),
+                          const SizedBox(height: 170),
                           Expanded(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -223,7 +223,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                         color: ratingTextColors[index],
                                         fontSize: 40,
                                         fontWeight: FontWeight.w500)),
-                                SizedBox(height: 30),
+                                const SizedBox(height: 30),
                                 RatingBar(
                                   onRatingChanged: (value) {
                                     changeRating(index, value.toInt());

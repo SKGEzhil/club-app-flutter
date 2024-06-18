@@ -170,7 +170,7 @@ class UserListWidget extends StatelessWidget {
                                         Text(
                                           user.name,
                                           style: const TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 17,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(

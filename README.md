@@ -5,16 +5,18 @@ This is a club event management application developed using Dart and Flutter. Th
 ## Screenshots
 <table>
   <tr>
-    <td><img src="screenshots/Screenshot_1718434040.png" alt="Screenshot 1" width="200"/></td>
-    <td><img src="screenshots/Screenshot_1718434067.png" alt="Screenshot 3" width="200"/></td>
-    <td><img src="screenshots/Screenshot_1718434054.png" alt="Screenshot 5" width="200"/></td>
-    <td><img src="screenshots/Screenshot_1718434450.png" alt="Screenshot 4" width="200"/></td>
+    <td><img src="screenshots/sc1.png" alt="Screenshot 1" width="200"/></td>
+    <td><img src="screenshots/sc9.png" alt="Screenshot 3" width="200"/></td>
+    <td><img src="screenshots/sc2.png" alt="Screenshot 5" width="200"/></td>
+    <td><img src="screenshots/sc8.png" alt="Screenshot 4" width="200"/></td>
+   <td><img src="screenshots/sc3.png" alt="Screenshot 4" width="200"/></td>
   </tr>
   <tr>
-   <td><img src="screenshots/Screenshot_1718434461.png" alt="Screenshot 4" width="200"/></td>
-    <td><img src="screenshots/Screenshot_1718258807.png" alt="Screenshot 6" width="200"/></td>
-    <td><img src="screenshots/Screenshot_1718434500.png" alt="Screenshot 4" width="200"/></td>
-    <td><img src="screenshots/Screenshot_20240613_115305.png" alt="Screenshot 2" width="200"/></td>
+   <td><img src="screenshots/sc10.png" alt="Screenshot 4" width="200"/></td>
+    <td><img src="screenshots/sc4.png" alt="Screenshot 6" width="200"/></td>
+    <td><img src="screenshots/sc5.png" width="200"/></td>
+    <td><img src="screenshots/sc6.png" alt="Screenshot 2" width="200"/></td>
+   <td><img src="screenshots/sc7.png" alt="Screenshot 2" width="200"/></td>
 
   </tr>
 </table>
@@ -26,24 +28,35 @@ This is a club event management application developed using Dart and Flutter. Th
 
 2. **Event Operations**: Users can create a new event, can edit the event later and can also delete it forever. They can add an event name, description, date, time, and also attach banner image for events. Users can also add those events to their calendar
 
-2. **Club Operations**: Users can create a new club, can modify club details later and can also delete it forever. They can add a club name, description, and also attach an image for display picture.
+3. **Club Operations**: Users can create a new club, can modify club details later and can also delete it forever. They can add a club name, description, and also attach an image for display picture.
 
-3. **Admin Functionalities**: There are some specific widgets and tasks that can be accessed only by admins.
+4. **Feedback System**: Users can create feedback forms for events and end users can submit their feedback.
 
-4. **Theme Support**: The application supports both light and dark themes. The theme colors are dynamically applied based on the current theme setting of the user's device.
+5. **Admin Functionalities**: There are some specific widgets and tasks that can be accessed only by admins.
 
-5. **Error Handling**: Error handling is done at its best so that the app will display a snackbar of what occurred from the client side or server side
+6. **Theme Support**: The application supports both light and dark themes. The theme colors are dynamically applied based on the current theme setting of the user's device.
+
+7. **Error Handling**: Error handling is done at its best so that the app will display a snackbar of what occurred from the client side or server side
 
 
-## User Roles and Rights
 
-#### The application supports three types of user roles:
+## User Roles and Permissions
 
-1. **User**: A user is someone who has registered on the app. They can view posts and events created by club members or admins on the respective club's page. They cannot create any post or manage events.
+### Basic Rights
 
-2. **Club Member**: A club member has all the rights of a user. In addition, they can create events and posts for their respective club. They can also edit or delete the events or posts they have created. Also, they can add or remove members from the club.
+| Role        | View Events/Posts |    Create Events    | Edit/Delete Events  |    Create Posts     |  Edit/Delete Posts  | Give Feedback |
+|-------------|:-----------------:|:-------------------:|:-------------------:|:-------------------:|:-------------------:|:-------------:|
+| User        |         ✅         |          ⬜          |          ⬜          |          ⬜          |          ⬜          |       ✅       |
+| Club Member |         ✅         | ✅ (their club only) | ✅ (their club only) | ✅ (their club only) | ✅ (their club only) |       ✅       |
+| Admin       |         ✅         |    ✅ (all clubs)    |    ✅ (all clubs)    |    ✅ (all clubs)    |    ✅ (all clubs)    |       ✅       |
 
-3. **Admin**: An admin has all the rights of a club member. In addition, they can create new clubs, edit or delete existing clubs, and add or remove members from any club. They can also view and manage all events posted by club members.
+### Advanced Rights
+
+| Role        | Add/Remove Members from Club | Add/Remove members from Admin | Create Clubs | Edit/Delete Clubs | Create Feedback Forms | View Feedback Responses |
+|-------------|:----------------------------:|:-----------------------------:|:------------:|:-----------------:|:---------------------:|:-----------------------:|
+| User        |              ⬜               |               ⬜               |      ⬜       |         ⬜         |           ⬜           |            ⬜            |
+| Club Member |              ✅               |               ⬜               |      ⬜       |         ⬜         |  ✅ (their club only)  |   ✅ (their club only)   |
+| Admin       |              ✅               |               ✅               |      ✅       |         ✅         |     ✅ (all clubs)     |      ✅ (all clubs)      |
 
 
 ## Setup and Local Development

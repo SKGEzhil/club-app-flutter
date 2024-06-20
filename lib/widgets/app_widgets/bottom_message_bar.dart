@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../colors.dart';
+import '../../config/colors.dart';
 import '../../controllers/image_picker_controller.dart';
 import '../../controllers/loading_controller.dart';
 import '../../controllers/post_controller.dart';

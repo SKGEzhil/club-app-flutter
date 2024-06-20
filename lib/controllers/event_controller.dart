@@ -15,35 +15,7 @@ class EventController extends GetxController {
     fetchEvents() : fetchEventsFromSharedPrefs();
   }
 
-  var eventList = <EventModel>[
-    // EventModel(
-    //     name: 'New Year Party 2024',
-    //     description: 'Description 1',
-    //     date: 'Jun 14',
-    //     bannerUrl: 'Banner Url 1',
-    //     location: 'Hyderabad',
-    //     clubName: 'Club 1',
-    //     clubImageUrl: 'https://via.placeholder.com/50x50',
-    //     clubId: '1', id: ''),
-    // EventModel(
-    //     name: 'Event 2',
-    //     description: 'Description 2',
-    //     date: 'Date 2',
-    //     bannerUrl: 'Banner Url 2',
-    //     location: 'Location 2',
-    //     clubName: 'Club 2',
-    //     clubImageUrl: 'https://via.placeholder.com/50x50',
-    //     clubId: '1', id: ''),
-    // EventModel(
-    //     name: 'Event 3',
-    //     description: 'Description 3',
-    //     date: 'Date 3',
-    //     bannerUrl: 'Banner Url 3',
-    //     location: 'Location 3',
-    //     clubName: 'Club 3',
-    //     clubImageUrl: 'https://via.placeholder.com/50x50',
-    //     clubId: '1', id: ''),
-  ].obs;
+  var eventList = <EventModel>[].obs;
 
   Future<void> fetchEvents() async {
     eventList.value = await EventRepository().fetchEvents();
@@ -53,7 +25,6 @@ class EventController extends GetxController {
 
   void fetchEventsFromSharedPrefs() async {
     eventList.value = await SharedPrefs.getEvents();
-    print('Events from shared prefs: ${eventList.length}');
     update();
   }
 

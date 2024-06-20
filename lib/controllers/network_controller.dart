@@ -35,7 +35,6 @@ class NetworkController extends GetxController {
 
   Future<void> fetchData() async {
     final token = await SharedPrefs.getToken();
-    print("TOKEN $token");
     if (token != ''){
       final postController = Get.put(PostController());
       final clubController = Get.put(ClubsController());

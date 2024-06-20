@@ -21,6 +21,4 @@ class UnreadPosts {
     "ClubId": clubId,
   };
 
-  // static List<String> unreadPostsFromJson(String str) => List<String>.from(json.decode(str).map((x) => x));
-  // static String unreadPostsToJson(List<String> data) => json.encode(List<dynamic>.from(data.map((x) => x)));
 }

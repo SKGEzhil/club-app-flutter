@@ -1,9 +1,10 @@
 
 import 'package:club_app/screens/home_page.dart';
+import 'package:club_app/secrets.dart';
 import 'package:club_app/utils/repositories/auth_repository.dart';
 import 'package:club_app/utils/repositories/user_repository.dart';
 import 'package:club_app/utils/shared_prefs.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,22 +18,26 @@ class AuthenticationController extends GetxController {
       final GoogleSignInAccount? googleUser;
       if(Platform.isIOS){
         googleUser = await GoogleSignIn(
-            clientId: '255948244097-53c89fc4f7kuc0gqr290iu5gj87hrkdb.apps.googleusercontent.com'
+            clientId: GOOGLE_CLIENT_ID
         ).signIn();
       } else {
         googleUser = await GoogleSignIn().signIn();
       }
       final googleAuth = await googleUser?.authentication;
 
-      print(googleUser?.displayName);
-      print(googleUser?.email);
+      if (kDebugMode) {
+        print(googleUser?.displayName);
+        print(googleUser?.email);
+      }
 
       if (googleUser == null) {
         print('Sign in failed');
         return {'status': 'error', 'message': 'Sign in failed'};
       } else {
-        print("token: ${googleAuth?.accessToken}");
-        print("photo: ${googleUser.photoUrl}");
+        if (kDebugMode) {
+          print("token: ${googleAuth?.accessToken}");
+          print("photo: ${googleUser.photoUrl}");
+        }
 
         try{
           final userExist = await AuthRepository()
@@ -49,14 +54,18 @@ class AuthenticationController extends GetxController {
             return {'status': 'ok', 'message': 'Account created successfully'};
           }
         } catch(e) {
-          print(e);
+          if (kDebugMode) {
+            print(e);
+          }
           return {'status': 'error', 'message': e.toString()};
         }
 
 
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {'status': 'error', 'message': e.toString()};
     }
   }

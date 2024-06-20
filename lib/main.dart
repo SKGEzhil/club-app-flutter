@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:club_app/controllers/event_controller.dart';
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/screens/server_down_page.dart';
-import 'package:club_app/theme.dart';
 import 'package:club_app/utils/repositories/user_repository.dart';
 import 'package:club_app/utils/shared_prefs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:club_app/screens/home_page.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'config/theme.dart';
 import 'controllers/global_bindings.dart';
 import 'controllers/network_controller.dart';
 import 'controllers/theme_controller.dart';
@@ -36,12 +37,14 @@ Future<void> showLocalNotification(RemoteMessage message) async {
   final Map<String, dynamic>? data = message.data;
 
   if (data != null) {
-    print("largeIcon ${data['largeIcon']}");
-    print("image ${data['image']}");
-    print("title ${data['title']}");
-    print("body ${data['body']}");
-    print("postId ${data['postId']}");
-    print("clubId ${data['clubId']}");
+    if(kDebugMode){
+      print("largeIcon ${data['largeIcon']}");
+      print("image ${data['image']}");
+      print("title ${data['title']}");
+      print("body ${data['body']}");
+      print("postId ${data['postId']}");
+      print("clubId ${data['clubId']}");
+    }
     final String largeIcon = await _downloadAndSaveFile(data['largeIcon']);
     var image;
     if (data['image'] != '') {
@@ -106,8 +109,6 @@ Future<void> firebaseInitializations() async {
 
   await FirebaseMessaging.instance.requestPermission();
 
-  print("HELLO WORLD");
-
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -115,8 +116,6 @@ Future<void> firebaseInitializations() async {
 
   // onMessage: When the app is open and it receives a push notification
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    // TODO: Handle foreground messages
-    print("onMessage");
     showLocalNotification(message);
 
     final Map<String, dynamic> data = message.data;
@@ -140,20 +139,18 @@ Future<void> firebaseInitializations() async {
 
   // Firebase message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.instance.subscribeToTopic("clubs-app-fcm-testing");
+  FirebaseMessaging.instance.subscribeToTopic("clubs-app-fcm-testing-2");
   FirebaseMessaging.instance.getInitialMessage().then((message) async {
     // await onNotificationClick(message, 'get_init');
   });
 
   // Getting the FCM token
   final token = await FirebaseMessaging.instance.getToken();
-  print("FCMToken: $token");
 }
 
 /// Callback for handling background messages
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Notification");
   showLocalNotification(message);
 
   final Map<String, dynamic> data = message.data;
@@ -184,14 +181,6 @@ Future<void> main() async {
   // Initializing Firebase Messaging for iOS (Not functional)
   if (Platform.isIOS) {
     print('IOS');
-    // String? apnsToken = await _firebaseMessaging.getAPNSToken();
-    // if (apnsToken != null) {
-    //   try {
-    //     await _firebaseMessaging.subscribeToTopic('clubs-app-fcm-testing');
-    //   } on FirebaseException catch (e) {
-    //     debugPrint("George here is the error: $e");
-    //   }
-    // }
   } else {
     networkController.isOnline.value ? await firebaseInitializations() : null;
   }
@@ -200,7 +189,6 @@ Future<void> main() async {
 
   // Login check
   final token = await SharedPrefs.getToken();
-  print("TOKEN $token");
   if (token != '') {
     final user = await SharedPrefs.getUserDetails();
     if (networkController.isOnline.value) {
@@ -213,7 +201,6 @@ Future<void> main() async {
         landingPage = ServerDownPage();
       }
     }
-    print('LANDING PAGE: Homepage');
   } else {
     landingPage = LoginPage();
   }

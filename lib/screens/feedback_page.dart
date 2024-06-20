@@ -7,7 +7,7 @@ import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../colors.dart';
+import '../config/colors.dart';
 import '../controllers/feedback_controller.dart';
 import '../widgets/loading_widget.dart';
 
@@ -107,7 +107,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ButtonWidget(
                     onPressed: () {
-                      print("Submit");
                       if (sliderValues.any((value) => value == 0)) {
                         CustomSnackBar.show(context,
                             message: 'Please rate all questions', color: Colors.red);
@@ -181,7 +180,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     onPageChanged: (index) {
                       setState(() {
                         pageIndex = index;
-                        print(pageIndex);
                       });
                     },
                     controller: pageController,

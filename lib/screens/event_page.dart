@@ -71,7 +71,6 @@ class _EventPageState extends State<EventPage> {
           .any((member) => member.id == profileController.currentUser.value.id);
 
   Future<void> updateEvent(context) async {
-    print('Edited Date: ${editNameController.text}');
     loadingController.toggleLoading();
     final result = await eventController.updateEvent(
         widget.event.id,

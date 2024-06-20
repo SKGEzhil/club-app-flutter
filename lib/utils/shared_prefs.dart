@@ -9,10 +9,7 @@ import '../models/user_model.dart';
 class SharedPrefs {
   static Future<void> saveUserDetails(UserModel user) async {
     final prefs = await SharedPreferences.getInstance();
-
     final userDetails = jsonEncode(user.toJson());
-    print(userDetails);
-
     prefs.setString("user_details", userDetails.toString());
   }
 
@@ -21,14 +18,11 @@ class SharedPrefs {
 
     final userDetails =
         UserModel.fromJson(jsonDecode(prefs.getString("user_details")!));
-    print("USER NaMe: ${userDetails.name}");
-
     return userDetails;
   }
 
   static saveToken(String? token) async {
     final prefs = await SharedPreferences.getInstance();
-    print('SAVED TOKEN: $token');
     prefs.setString("token", token!);
   }
 
@@ -43,11 +37,7 @@ class SharedPrefs {
     List<String> unreadPostListString = unreadPosts
         .map((unreadPost) => json.encode(unreadPost.toJson()))
         .toList();
-    unreadPostListString.forEach((element) async {
-      print('element: $element');
-    });
     await prefs.setStringList('unread_posts', unreadPostListString);
-    print('Saved!!');
   }
 
   static Future<List<UnreadPosts>> getUnreadPosts() async {
@@ -64,7 +54,6 @@ class SharedPrefs {
     List<String> postListString =
         post.map((post) => json.encode(post.toJson())).toList();
     await prefs.setStringList('posts', postListString);
-    print('Saved posts');
   }
 
   static Future<List<Post>> getPost() async {
@@ -80,7 +69,6 @@ class SharedPrefs {
     List<String> clubListString =
         clubs.map((club) => json.encode(club.toJson())).toList();
     await prefs.setStringList('clubs', clubListString);
-    print('Saved clubs');
   }
 
   static Future<List<Club>> getClubs() async {
@@ -96,23 +84,13 @@ class SharedPrefs {
     List<String> eventListString =
         events.map((event) => json.encode(event.toJson())).toList();
     await prefs.setStringList('events', eventListString);
-    print('Saved events');
   }
 
   static Future<List<EventModel>> getEvents() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> eventListString = prefs.getStringList('events') ?? [];
-    print('Events: ${eventListString.length}');
-    eventListString.forEach(
-      (element) {
-        print('Event: $element');
-      },
-    );
     List<EventModel> events =
         eventListString.map((event) => EventModel.fromJson(json.decode(event))).toList();
-    events.forEach((element) {
-      print('Event: ${element.name}');
-    });
     return events;
   }
 

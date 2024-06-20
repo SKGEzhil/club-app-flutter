@@ -4,7 +4,7 @@ import 'package:club_app/widgets/custom_popup_menu_item.dart';
 import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:club_app/colors.dart';
+import 'package:club_app/config/colors.dart';
 import 'package:club_app/widgets/button_widget.dart';
 import 'package:club_app/widgets/dialogue_widgets/custom_alert_dialogue.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +91,6 @@ class PostWidget extends StatelessWidget {
     loadingController.toggleLoading();
 
     if (result.status == ShareResultStatus.success) {
-      print('Thank you for sharing the picture!');
     }
   }
 
@@ -196,7 +195,6 @@ class PostWidget extends StatelessWidget {
                               )
                             : LinkifyText(post.content, onTap: (link) async {
                                 if (link.type == LinkType.url) {
-                                  print('URL: ${link.value}');
                                   final Uri url = Uri.parse('${link.value}');
                                   if (!await launchUrl(url)) {
                                     CustomSnackBar.show(context,
@@ -208,7 +206,6 @@ class PostWidget extends StatelessWidget {
                                   }
                                 }
                                 if (link.type == LinkType.email) {
-                                  print('EMAIL: ${link.value}');
                                   final Uri url =
                                       Uri.parse('mailto:${link.value}');
                                   if (!await launchUrl(url)) {

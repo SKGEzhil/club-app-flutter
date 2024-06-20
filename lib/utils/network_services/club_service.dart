@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:club_app/config/constants.dart';
 import 'package:club_app/utils/shared_prefs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -8,7 +9,6 @@ class ClubService{
 
   Future<Map<String, String>> get headers async {
     final token = await SharedPrefs.getToken();
-    print('token: $token');
     return {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -53,16 +53,16 @@ class ClubService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
-      // Map<String, dynamic> data = jsonDecode(response.body);
-      // final clubs = (data['data'])['getClubs'];
-      // final clubList = clubs.map<Club>((club) => Club.fromJson(club)).toList();
-      // return clubList;
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to fetch clubs');
 
     }
@@ -91,20 +91,16 @@ class ClubService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
-      // Map<String, dynamic> data = jsonDecode(response.body);
-      //
-      // if(data['errors'] != null) {
-      //   final errorMessage = data['errors'][0]['extensions']['message'];
-      //   // CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
-      // }
-      //
-      // return fetchClubs();
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to add members to club');
     }
   }
@@ -132,20 +128,16 @@ class ClubService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
-      // Map<String, dynamic> data = jsonDecode(response.body);
-      //
-      // if(data['errors'] != null) {
-      //   final errorMessage = data['errors'][0]['extensions']['message'];
-      //   // CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
-      // }
-      //
-      // return fetchClubs();
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to remove members from club');
     }
   }
@@ -172,24 +164,17 @@ class ClubService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
-      // Map<String, dynamic> data = jsonDecode(response.body);
-      //
-      // if(data['errors'] != null) {
-      //   final errorMessage = data['errors'][0]['extensions']['message'];
-      //   return Future.error(errorMessage);
-      //   // CustomSnackBar.show(context, message: errorMessage, color: Colors.redAccent);
-      //   // throw Exception('Failed to update club');
-      // }
-      //
-      // return fetchClubs();
-
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to update club');
     }
   }
@@ -216,13 +201,17 @@ class ClubService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to create new club');
     }
   }
@@ -246,13 +235,17 @@ class ClubService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to delete club');
     }
   }

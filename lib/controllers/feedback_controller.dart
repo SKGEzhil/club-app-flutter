@@ -25,9 +25,6 @@ class FeedbackController extends GetxController {
 
   Future<void> fetchFeedbackForms() async {
     try{
-      userClubs.forEach((element) {
-        print(element);
-      });
       final response = await FeedbackRepository().fetchFeedbackForms(userClubs);
       feedbackList.value = response;
       update();

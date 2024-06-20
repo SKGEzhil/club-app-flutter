@@ -49,7 +49,6 @@ class _RatingBarState extends State<RatingBar> {
             onChanged: (double value) {
               setState(() {
                 sliderValue = value;
-                print(sliderValue);
                 widget.onRatingChanged(value);
               });
             },

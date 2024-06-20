@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:aws_client/s3_2006_03_01.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import '/secrets.dart';
 
@@ -17,7 +18,9 @@ class ImageService{
       body: File(image.path).readAsBytesSync(),
     );
     api.close();
-    print("https://club-app.s3.ap-south-1.amazonaws.com/$filename");
+    if (kDebugMode) {
+      print("https://club-app.s3.ap-south-1.amazonaws.com/$filename");
+    }
     return "https://club-app.s3.ap-south-1.amazonaws.com/$filename";
   }
 

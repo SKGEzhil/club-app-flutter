@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/screens/admin_page.dart';
 import 'package:club_app/screens/login_page.dart';
+import 'package:club_app/screens/secret_info_page.dart';
 import 'package:club_app/widgets/app_widgets/bottom_nav_bar.dart';
 import 'package:club_app/widgets/app_widgets/feedback_list_widget.dart';
 import 'package:club_app/widgets/button_widget.dart';
@@ -58,11 +61,14 @@ class HomePage extends StatelessWidget {
       // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Obx(() {
-          return Text(bottomNavController.selectedIndex.value == 0
-              ? 'Events'
-              : bottomNavController.selectedIndex.value == 1
-                  ? 'Clubs'
-                  : 'Feedback');
+          return GestureDetector(
+            onTap: Info().handleTap,
+            child: Text(bottomNavController.selectedIndex.value == 0
+                ? 'Events'
+                : bottomNavController.selectedIndex.value == 1
+                    ? 'Clubs'
+                    : 'Feedback'),
+          );
         }),
         // backgroundColor: Colors.white,
         actions: [

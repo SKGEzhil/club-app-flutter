@@ -27,6 +27,12 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
 
   Future<void> submitForm(context) async {
     loadingController.toggleLoading();
+    if(questionControllers.any((element) => element.text.isEmpty)){
+      CustomSnackBar.show(context,
+          message: 'Please fill all the fields', color: Colors.red);
+      loadingController.toggleLoading();
+      return;
+    }
     final result = await feedbackController.createFeedbackForm(widget.eventId,
         widget.clubId, questionControllers.map((e) => e.text).toList());
     loadingController.toggleLoading();
@@ -67,7 +73,6 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
                   children: [
                     ButtonWidget(
                         onPressed: () {
-                          print('Add Question');
                           setState(() {
                             var questionController = TextEditingController();
                             questionControllers.add(questionController);

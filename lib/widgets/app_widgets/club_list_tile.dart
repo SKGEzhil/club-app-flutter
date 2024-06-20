@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:club_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../colors.dart';
+import '../../config/colors.dart';
 import '../../controllers/post_controller.dart';
 import '../../controllers/unread_post_controller.dart';
 import '../../models/club_model.dart';
@@ -41,14 +41,8 @@ class _ClubListTileState extends State<ClubListTile>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      print('Came to foreground');
       final unreadPosts = await SharedPrefs.getUnreadPosts();
-      unreadPosts.forEach((element) {
-        print('GET GET UNREAD POST: ${element.postId}');
-      });
       await unreadPostController.getUnreadPosts();
-      // app is resumed (came to foreground from background)
-      // refresh data here
     }
   }
 
@@ -124,8 +118,7 @@ class _ClubListTileState extends State<ClubListTile>
               Obx(() {
                 return SizedBox(
                   child: unreadPostController.unreadPostList
-                      .where((post) => post.clubId == widget.club.id)
-                      .length == 0 ? Container() :
+                      .where((post) => post.clubId == widget.club.id).isEmpty ? Container() :
 
                   Container(
                       padding: const EdgeInsets.all(2),

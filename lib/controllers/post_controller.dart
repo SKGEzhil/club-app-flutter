@@ -28,20 +28,17 @@ class PostController extends GetxController{
   Future<void> fetchPosts() async {
     postList.value = await PostRepository().fetchPosts();
     await SharedPrefs.savePost(postList);
-    print("LENGTH: ${postList.length}");
     update();
   }
 
   void fetchPostsFromSharedPrefs() async {
     postList.value = await SharedPrefs.getPost();
-    print("LENGTH: ${postList.length}");
     update();
   }
 
   Future<Map<String, dynamic>> createPost(context, content, createdBy, club) async {
     final dateTime = DateTime.now();
     final formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm').format(dateTime);
-    print(formattedDateTime);
     var imageUrl = '';
     if (imagePickerController.image != null) {
       imageUrl = await ImageRepository().uploadImage(imagePickerController.image!);

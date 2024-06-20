@@ -2,7 +2,7 @@ import 'package:club_app/widgets/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../colors.dart';
+import '../config/colors.dart';
 import '../controllers/authentication_controller.dart';
 import '../controllers/loading_controller.dart';
 import '../widgets/loading_widget.dart';

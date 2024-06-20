@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../config/colors.dart';
 import '../controllers/loading_controller.dart';
 import 'package:get/get.dart';
 

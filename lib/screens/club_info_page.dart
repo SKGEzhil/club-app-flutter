@@ -29,7 +29,6 @@ class ClubInfoPage extends StatelessWidget {
   UserModel get currentUser => profileController.currentUser.value;
 
   bool get isAuthorized {
-    print("current user: ${currentUser.role}");
     return currentUser.role == 'admin' ||
         clubsController.clubList
             .where((club) => club.id == clubId)
@@ -172,7 +171,6 @@ class ClubInfoPage extends StatelessWidget {
                               : TextOverflow.ellipsis,
                           onTap: (link) async {
                             if (link.type == LinkType.url) {
-                              print('URL: ${link.value}');
                               final Uri url = Uri.parse('${link.value}');
                               if (!await launchUrl(url)) {
                                 CustomSnackBar.show(context,
@@ -184,7 +182,6 @@ class ClubInfoPage extends StatelessWidget {
                               }
                             }
                             if (link.type == LinkType.email) {
-                              print('EMAIL: ${link.value}');
                               final Uri url =
                               Uri.parse('mailto:${link.value}');
                               if (!await launchUrl(url)) {

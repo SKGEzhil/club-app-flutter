@@ -53,11 +53,6 @@ class _EditClubDialogueState extends State<EditClubDialogue> {
       imagePickerController.resetImage();
     }
 
-    print('Club Name: ${clubNameController.text}');
-    print('Club Description: ${clubDescriptionController.text}');
-    print('Club Image: $imageUrl');
-    print('Club ID: ${widget.clubId}');
-
     final result = await clubsController.updateClub(context, widget.clubId, clubNameController.text,
         clubDescriptionController.text, imageUrl);
     loadingController.toggleLoading();

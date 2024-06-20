@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:club_app/utils/shared_prefs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../config/constants.dart';
 
@@ -7,7 +8,6 @@ class PostService{
 
   Future<Map<String, String>> get headers async {
     final token = await SharedPrefs.getToken();
-    print('token: $token');
     return {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -29,13 +29,17 @@ class PostService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to fetch posts');
     }
   }
@@ -55,14 +59,18 @@ class PostService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
 
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to create post');
     }
   }
@@ -82,14 +90,18 @@ class PostService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
 
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to update post');
     }
   }
@@ -111,12 +123,16 @@ class PostService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to delete post');
     }
   }

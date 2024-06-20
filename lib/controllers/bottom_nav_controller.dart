@@ -5,7 +5,6 @@ class BottomNavController extends GetxController {
 
   void selectIndex(int index) {
     selectedIndex.value = index;
-    print('CURRENT INDEX: $index');
     update();
   }
 }

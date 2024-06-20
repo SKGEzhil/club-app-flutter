@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import '../../config/constants.dart';
 import '../shared_prefs.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +11,6 @@ class FeedbackService{
 
   Future<Map<String, String>> get headers async {
     final token = await SharedPrefs.getToken();
-    print('token: $token');
     return {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -21,11 +22,6 @@ class FeedbackService{
 
     print("Fetching events...");
     const url = '$endPoint/graphql';
-
-    print("User clubs: $userClubs");
-    userClubs.forEach((element) {
-      print("User club: $element");
-    });
 
     final query = '''
       query {
@@ -56,13 +52,17 @@ class FeedbackService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to fetch feedbacks');
     }
   }
@@ -92,13 +92,17 @@ class FeedbackService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to upload feedback');
     }
   }
@@ -137,13 +141,17 @@ class FeedbackService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to upload feedback');
     }
   }
@@ -167,13 +175,17 @@ class FeedbackService{
       }),
     );
     if (response.statusCode == 200) {
-      print("POST request successful");
-      print('Response: ${response.body}');
+      if(kDebugMode) {
+        print("POST request successful");
+        print('Response: ${response.body}');
+      }
       return jsonDecode(response.body);
 
     } else {
-      print("POST request failed");
-      print('Response: ${response.body}');
+      if (kDebugMode) {
+        print("POST request failed");
+        print('Response: ${response.body}');
+      }
       return Future.error('Failed to delete feedback');
     }
   }

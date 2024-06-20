@@ -6,7 +6,7 @@ import '../widgets/dialogue_widgets/new_club_dialogue.dart';
 import '../widgets/app_widgets/user_list_widget.dart';
 
 class AdminPage extends StatelessWidget {
-  AdminPage({super.key});
+  const AdminPage({super.key});
 
   @override
   Widget build(BuildContext context) {

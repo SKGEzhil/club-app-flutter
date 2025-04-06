@@ -1,12 +1,13 @@
+import 'package:club_app/controllers/clubs_controller.dart';
+import 'package:club_app/controllers/event_controller.dart';
+import 'package:club_app/controllers/profile_controller.dart';
+import 'package:club_app/screens/calendarPage.dart';
 import 'package:club_app/widgets/app_widgets/event_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/clubs_controller.dart';
-import '../../controllers/event_controller.dart';
-import '../../controllers/profile_controller.dart';
+import '../../config/colors.dart';
 import '../../models/event_model.dart';
-import '../../screens/create_event_page.dart';
 
 class EventListWidget extends StatelessWidget {
   EventListWidget({super.key});
@@ -87,6 +88,12 @@ class EventListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the current theme is light or dark
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    // Choose the color based on the theme
+    ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
+
     return Stack(
       children: [
         ListView(
@@ -104,128 +111,24 @@ class EventListWidget extends StatelessWidget {
           ],
         ),
 
-        // ListView(
-        //   children: [
-        //     Obx(() {
-        //       final eventWidgetList = [
-        //         todayEventList.isEmpty
-        //             ? const SizedBox()
-        //             : const SizedBox(
-        //                 child: Padding(
-        //                   padding: EdgeInsets.all(8.0),
-        //                   child: Text(
-        //                     'Today',
-        //                     style: TextStyle(
-        //                         fontSize: 22, fontWeight: FontWeight.bold),
-        //                   ),
-        //                 ),
-        //               ),
-        //       ];
-        //       todayEventList.isEmpty
-        //           ? null
-        //           : todayEventList.forEach((event) {
-        //               eventWidgetList
-        //                   .add(SizedBox(child: EventWidget(event: event)));
-        //             });
-        //       return Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: eventWidgetList);
-        //     }),
-        //     Obx(() {
-        //       final eventWidgetList = [
-        //         thisWeekEventList.isEmpty
-        //             ? const SizedBox()
-        //             : const SizedBox(
-        //                 child: Padding(
-        //                   padding: EdgeInsets.all(8.0),
-        //                   child: Text(
-        //                     'This Week',
-        //                     style: TextStyle(
-        //                         fontSize: 22, fontWeight: FontWeight.bold),
-        //                   ),
-        //                 ),
-        //               ),
-        //       ];
-        //       thisWeekEventList.isEmpty
-        //           ? null
-        //           : thisWeekEventList.forEach((event) {
-        //               eventWidgetList
-        //                   .add(SizedBox(child: EventWidget(event: event)));
-        //             });
-        //       return Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: eventWidgetList);
-        //     }),
-        //     Obx(() {
-        //       final eventWidgetList = [
-        //         thisMonthEventList.isEmpty
-        //             ? const SizedBox()
-        //             : const SizedBox(
-        //                 child: Padding(
-        //                   padding: EdgeInsets.all(8.0),
-        //                   child: Text(
-        //                     'This Month',
-        //                     style: TextStyle(
-        //                         fontSize: 22, fontWeight: FontWeight.bold),
-        //                   ),
-        //                 ),
-        //               ),
-        //       ];
-        //       thisMonthEventList.isEmpty
-        //           ? null
-        //           : thisMonthEventList.forEach((event) {
-        //               eventWidgetList
-        //                   .add(SizedBox(child: EventWidget(event: event)));
-        //             });
-        //       return Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: eventWidgetList);
-        //     }),
-        //     Obx(() {
-        //       final eventWidgetList = [
-        //         upcomingEventList.isEmpty
-        //             ? const SizedBox()
-        //             : const SizedBox(
-        //                 child: Padding(
-        //                   padding: EdgeInsets.all(8.0),
-        //                   child: Text(
-        //                     'Upcoming',
-        //                     style: TextStyle(
-        //                         fontSize: 22, fontWeight: FontWeight.bold),
-        //                   ),
-        //                 ),
-        //               ),
-        //       ];
-        //       upcomingEventList.isEmpty
-        //           ? null
-        //           : upcomingEventList.forEach((event) {
-        //               eventWidgetList
-        //                   .add(SizedBox(child: EventWidget(event: event)));
-        //             });
-        //       return Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: eventWidgetList);
-        //     }),
-        //     const SizedBox(
-        //       height: 100,
-        //     )
-        //   ],
-        // ),
+        
         !isAuthorized
             ? const SizedBox()
             : Positioned(
                 bottom: 100,
                 right: 20,
                 child: FloatingActionButton(
+                  heroTag: 'calendar',
+                  backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreateEventPage(),
+                        builder: (context) => CalendarPage(),
                       ),
                     );
                   },
-                  child: const Icon(Icons.add),
+                  child: Icon(Icons.calendar_month, color: Colors.black.withOpacity(0.7)),
                 ),
               ),
       ],

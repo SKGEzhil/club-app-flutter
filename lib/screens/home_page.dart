@@ -4,7 +4,9 @@ import 'dart:ui';
 import 'package:club_app/controllers/post_controller.dart';
 import 'package:club_app/screens/admin_page.dart';
 import 'package:club_app/screens/calendarPage.dart';
+import 'package:club_app/screens/club_list_page.dart';
 import 'package:club_app/screens/login_page.dart';
+import 'package:club_app/screens/profile_page.dart';
 import 'package:club_app/screens/secret_info_page.dart';
 import 'package:club_app/widgets/app_widgets/bottom_nav_bar.dart';
 import 'package:club_app/widgets/app_widgets/feedback_list_widget.dart';
@@ -69,47 +71,10 @@ class HomePage extends StatelessWidget {
             child: bottomNavController.selectedIndex.value == 0
                 ? EventListWidget()
                 : bottomNavController.selectedIndex.value == 1
-                    ? CalendarPage()
-            // ListView(
-            //             children: [
-            //               images.isEmpty
-            //                   ? const SizedBox()
-            //                   : const Padding(
-            //                       padding: EdgeInsets.all(8.0),
-            //                       child: Text("Featured",
-            //                           style: TextStyle(
-            //                               // color: Colors.black,
-            //                               fontSize: 20,
-            //                               fontWeight: FontWeight.bold)),
-            //                     ),
-            //               images.isEmpty
-            //                   ? const SizedBox()
-            //                   : Obx(() {
-            //                       return CarouselWidget(
-            //                           sortedPostList: sortedPostList);
-            //                     }),
-            //               Obx(() {
-            //                 return Column(
-            //                     children: sortedClubList
-            //                         .map((club) => Column(
-            //                               children: [
-            //                                 ClubListTile(
-            //                                   club: club,
-            //                                 ),
-            //                                 const Divider(
-            //                                   thickness: 0,
-            //                                   height: 0,
-            //                                 )
-            //                               ],
-            //                             ))
-            //                         .toList());
-            //               }),
-            //               const SizedBox(
-            //                 height: 100,
-            //               )
-            //             ],
-            //           )
-                    : FeedbackListWidget(),
+                    ? ClubListPage()
+                    : bottomNavController.selectedIndex.value == 2
+                        ? FeedbackListWidget()
+                        : ProfilePage(),
           ),
           bottomNavController.isSheetOpen.value ?
           ScreenOverlay() : SizedBox(),
@@ -130,11 +95,8 @@ class HomePage extends StatelessWidget {
   }
 
   AppBar buildAppBar(BuildContext context) {
-
     // Determine if the current theme is light or dark
-    bool isDarkTheme = Theme
-        .of(context)
-        .brightness == Brightness.dark;
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     // Choose the color based on the theme
     ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
@@ -148,8 +110,10 @@ class HomePage extends StatelessWidget {
               Text(bottomNavController.selectedIndex.value == 0
                   ? 'Events'
                   : bottomNavController.selectedIndex.value == 1
-                  ? 'Calendar'
-                  : 'Feedback',
+                  ? 'Clubs'
+                  : bottomNavController.selectedIndex.value == 2
+                  ? 'Feedback'
+                  : 'Profile',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold
@@ -158,15 +122,16 @@ class HomePage extends StatelessWidget {
               Text(bottomNavController.selectedIndex.value == 0
                   ? 'Current & Upcoming Events'
                   : bottomNavController.selectedIndex.value == 1
-                  ? 'Event Calendar'
-                  : 'Provide your Feedback',
+                  ? 'All Available Clubs'
+                  : bottomNavController.selectedIndex.value == 2
+                  ? 'Provide your Feedback'
+                  : 'Settings & Profile',
                 style: TextStyle(
                   fontSize: 15,
                   color: currentColors.oppositeColor.withOpacity(0.6),
                   fontWeight: FontWeight.w500
                 ),
               ),
-
             ],
           ),
         );

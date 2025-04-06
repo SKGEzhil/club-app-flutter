@@ -334,7 +334,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       bottonNavItems(currentColors, Icons.home, 0),
-                      bottonNavItems(currentColors, Icons.calendar_month, 1),
+                      bottonNavItems(currentColors, Icons.group, 1),
                       InkWell(
                         customBorder: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -350,11 +350,11 @@ class _BottomNavBarState extends State<BottomNavBar>
                             width: 50,
                             decoration: BoxDecoration(
                               color:
-                              currentColors.oppositeColor.withOpacity(0.7),
+                              Colors.black.withOpacity(0.7),
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Icon(Icons.add,
-                                size: 30, color: currentColors.mainColor),
+                                size: 30, color: Colors.white),
                           ),
                         ),
                       ),
@@ -383,7 +383,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon,
-              size: 30, color: currentColors.oppositeColor.withOpacity(0.7)),
+              size: 30, color: Colors.black.withOpacity(0.7)),
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Container(

@@ -1,7 +1,8 @@
 // const endPoint = 'http://43.204.233.46:80';
-// const endPoint = 'http://10.0.2.2:4000';
+// const endPoint = 'http://34.122.201.242:8080';
+const endPoint = 'http://10.0.2.2:4000';
 // const endPoint = 'http://localhost:4000';
-const endPoint = 'http://192.168.29.15:4000';
+// const endPoint = 'http://192.168.29.15:4000';
 
 /// Queries
 const fetchPostQuery = '''

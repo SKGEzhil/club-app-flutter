@@ -74,117 +74,143 @@ class EventListWidget extends StatelessWidget {
     return eventList;
   }
 
+  List<String> get dateList {
+    final eventList = eventController.eventList;
+    List<String> dateList = [];
+    eventList.forEach((event) {
+      dateList.contains(event.formattedDate)
+          ? null
+          : dateList.add(event.formattedDate);
+    });
+    return dateList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ListView(
           children: [
-            Obx(() {
-              final eventWidgetList = [
-                todayEventList.isEmpty
-                    ? const SizedBox()
-                    : const SizedBox(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Today',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-              ];
-              todayEventList.isEmpty
-                  ? null
-                  : todayEventList.forEach((event) {
-                      eventWidgetList
-                          .add(SizedBox(child: EventWidget(event: event)));
-                    });
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: eventWidgetList);
-            }),
-            Obx(() {
-              final eventWidgetList = [
-                thisWeekEventList.isEmpty
-                    ? const SizedBox()
-                    : const SizedBox(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'This Week',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-              ];
-              thisWeekEventList.isEmpty
-                  ? null
-                  : thisWeekEventList.forEach((event) {
-                      eventWidgetList
-                          .add(SizedBox(child: EventWidget(event: event)));
-                    });
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: eventWidgetList);
-            }),
-            Obx(() {
-              final eventWidgetList = [
-                thisMonthEventList.isEmpty
-                    ? const SizedBox()
-                    : const SizedBox(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'This Month',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-              ];
-              thisMonthEventList.isEmpty
-                  ? null
-                  : thisMonthEventList.forEach((event) {
-                      eventWidgetList
-                          .add(SizedBox(child: EventWidget(event: event)));
-                    });
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: eventWidgetList);
-            }),
-            Obx(() {
-              final eventWidgetList = [
-                upcomingEventList.isEmpty
-                    ? const SizedBox()
-                    : const SizedBox(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Upcoming',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-              ];
-              upcomingEventList.isEmpty
-                  ? null
-                  : upcomingEventList.forEach((event) {
-                      eventWidgetList
-                          .add(SizedBox(child: EventWidget(event: event)));
-                    });
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: eventWidgetList);
-            }),
-            const SizedBox(
-              height: 100,
-            )
+            Column(
+                children: dateList.map((date) {
+                  return EventWidget(
+                      eventList: sortedEventList
+                          .where((event) => event.formattedDate == date)
+                          .map((event) => event)
+                          .toList(),
+                      date: date);
+                }).toList(),
+              )
           ],
         ),
+
+        // ListView(
+        //   children: [
+        //     Obx(() {
+        //       final eventWidgetList = [
+        //         todayEventList.isEmpty
+        //             ? const SizedBox()
+        //             : const SizedBox(
+        //                 child: Padding(
+        //                   padding: EdgeInsets.all(8.0),
+        //                   child: Text(
+        //                     'Today',
+        //                     style: TextStyle(
+        //                         fontSize: 22, fontWeight: FontWeight.bold),
+        //                   ),
+        //                 ),
+        //               ),
+        //       ];
+        //       todayEventList.isEmpty
+        //           ? null
+        //           : todayEventList.forEach((event) {
+        //               eventWidgetList
+        //                   .add(SizedBox(child: EventWidget(event: event)));
+        //             });
+        //       return Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: eventWidgetList);
+        //     }),
+        //     Obx(() {
+        //       final eventWidgetList = [
+        //         thisWeekEventList.isEmpty
+        //             ? const SizedBox()
+        //             : const SizedBox(
+        //                 child: Padding(
+        //                   padding: EdgeInsets.all(8.0),
+        //                   child: Text(
+        //                     'This Week',
+        //                     style: TextStyle(
+        //                         fontSize: 22, fontWeight: FontWeight.bold),
+        //                   ),
+        //                 ),
+        //               ),
+        //       ];
+        //       thisWeekEventList.isEmpty
+        //           ? null
+        //           : thisWeekEventList.forEach((event) {
+        //               eventWidgetList
+        //                   .add(SizedBox(child: EventWidget(event: event)));
+        //             });
+        //       return Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: eventWidgetList);
+        //     }),
+        //     Obx(() {
+        //       final eventWidgetList = [
+        //         thisMonthEventList.isEmpty
+        //             ? const SizedBox()
+        //             : const SizedBox(
+        //                 child: Padding(
+        //                   padding: EdgeInsets.all(8.0),
+        //                   child: Text(
+        //                     'This Month',
+        //                     style: TextStyle(
+        //                         fontSize: 22, fontWeight: FontWeight.bold),
+        //                   ),
+        //                 ),
+        //               ),
+        //       ];
+        //       thisMonthEventList.isEmpty
+        //           ? null
+        //           : thisMonthEventList.forEach((event) {
+        //               eventWidgetList
+        //                   .add(SizedBox(child: EventWidget(event: event)));
+        //             });
+        //       return Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: eventWidgetList);
+        //     }),
+        //     Obx(() {
+        //       final eventWidgetList = [
+        //         upcomingEventList.isEmpty
+        //             ? const SizedBox()
+        //             : const SizedBox(
+        //                 child: Padding(
+        //                   padding: EdgeInsets.all(8.0),
+        //                   child: Text(
+        //                     'Upcoming',
+        //                     style: TextStyle(
+        //                         fontSize: 22, fontWeight: FontWeight.bold),
+        //                   ),
+        //                 ),
+        //               ),
+        //       ];
+        //       upcomingEventList.isEmpty
+        //           ? null
+        //           : upcomingEventList.forEach((event) {
+        //               eventWidgetList
+        //                   .add(SizedBox(child: EventWidget(event: event)));
+        //             });
+        //       return Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: eventWidgetList);
+        //     }),
+        //     const SizedBox(
+        //       height: 100,
+        //     )
+        //   ],
+        // ),
         !isAuthorized
             ? const SizedBox()
             : Positioned(

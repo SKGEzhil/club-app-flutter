@@ -74,8 +74,8 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: const AppBarTheme(
-          // backgroundColor: Colors.white
-          backgroundColor: Color.fromRGBO(254, 198, 0, 1)
+          backgroundColor: Colors.white
+          // backgroundColor: Color.fromRGBO(254, 198, 0, 1)
       ),
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       useMaterial3: true,

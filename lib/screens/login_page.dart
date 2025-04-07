@@ -1,8 +1,6 @@
 import 'package:club_app/widgets/custom_snackbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../config/colors.dart';
 import '../controllers/authentication_controller.dart';
 import '../controllers/loading_controller.dart';
 import '../widgets/loading_widget.dart';
@@ -13,125 +11,128 @@ class LoginPage extends StatelessWidget {
   final authenticationController = Get.put(AuthenticationController());
   final loadingController = Get.put(LoadingController());
 
+  static const accentColor = Color(0xFFF5C518);
+
   @override
   Widget build(BuildContext context) {
-
-    // Determine if the current theme is light or dark
-    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-
-    // Choose the color based on the theme
-    ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
-
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Stack(
         children: [
+          // Background with gradient and wave
           Container(
-            color: Theme.of(context).primaryColor,
-            height: MediaQuery.of(context).size.height * 0.2,
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
-            child: CustomPaint(
-              size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.4),
-              painter: BluePainter(),
+            decoration: const BoxDecoration(
+              color: accentColor,
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.23,
+            top: 0,
+            left: 0,
+            right: 0,
+            child: CustomPaint(
+              size: Size(MediaQuery.of(context).size.width, 300),
+              painter: WavePainter(color: Colors.black.withOpacity(0.05)),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: CustomPaint(
+              size: Size(MediaQuery.of(context).size.width, 300),
+              painter: WavePainter(color: Colors.black.withOpacity(0.03)),
+            ),
+          ),
+          
+          // Main Content
+          SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome!',
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(65, 61, 49, 1.0),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: Text(
-                        'The app where you can find all the clubs and events in one place.',
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Spacer(flex: 1),
+                  // Title and Subtitle
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Clubs&\nEvents.',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 48,
+                          height: 1.1,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(65, 61, 49, 1.0),
+                          color: Colors.black.withOpacity(0.8),
                         ),
+                        textAlign: TextAlign.left,
                       ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Find all clubs and events in\none place.',
+                        style: TextStyle(
+                          fontSize: 20,
+                          height: 1.3,
+                          color: Colors.black.withOpacity(0.7),
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                  const Spacer(flex: 2),
+                  // Login Section
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'You can login using your Google\naccount to continue',
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.3,
+                            color: Colors.black.withOpacity(0.6),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        // Google Sign In Button
+                        InkWell(
+                          onTap: () async {
+                            loadingController.toggleLoading();
+                            final result = await authenticationController.authenticate(context);
+                            loadingController.toggleLoading();
+                            result['status'] == 'error'
+                                ? CustomSnackBar.show(context,
+                                    message: result['message'], color: Colors.red)
+                                : CustomSnackBar.show(context,
+                                    message: result['message'], color: Colors.green);
+                          },
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.55,
+                            ),
+                            child: Image.asset(
+                              'assets/android_light_rd_ctn@4x.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  const Spacer(flex: 1),
+                ],
               ),
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    'You can login using your Google account to continue',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: currentColors.oppositeColor.withOpacity(0.7)
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: InkWell(
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    onTap: () async {
-                      loadingController.toggleLoading();
-                      final result = await authenticationController.authenticate(context);
-                      loadingController.toggleLoading();
-                      result['status'] == 'error'
-                              ? CustomSnackBar.show(context,
-                                  message: result['message'], color: Colors.red)
-                              : CustomSnackBar.show(context,
-                          message: result['message'], color: Colors.green);
-                    },
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.7,
-                      ),
-                      child: Image.asset(
-                          Theme.of(context).brightness == Brightness.dark
-                              ?
-                          'assets/android_light_rd_ctn@4x.png' : 'assets/android_dark_rd_ctn@4x.png'
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          
+          // Loading Overlay
           Obx(() {
-            return Container(
-              child:
-              loadingController.isLoading.value
-                  ?
-              LoadingWidget() : null,
-            );
+            return loadingController.isLoading.value
+                ? LoadingWidget()
+                : const SizedBox.shrink();
           }),
         ],
       ),
@@ -139,29 +140,61 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class BluePainter extends CustomPainter {
+class WavePainter extends CustomPainter {
+  final Color color;
+
+  WavePainter({required this.color});
+
   @override
   void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
 
-    Path path_0 = Path();
-    path_0.moveTo(size.width*0.06185000,0);
-    path_0.lineTo(size.width*0.9317000,0);
-    path_0.cubicTo(size.width*0.9317000,0,size.width*0.9916250,size.height*0.006662067,size.width*0.9974250,size.height*0.05668147);
-    path_0.cubicTo(size.width*1.003225,size.height*0.1067009,size.width*0.9974250,size.height*0.9518779,size.width*0.9974250,size.height*0.9518779);
-    path_0.cubicTo(size.width*0.9974250,size.height*0.9518779,size.width*0.7345500,size.height*1.068561,size.width*0.5064500,size.height*0.9385322);
-    path_0.cubicTo(size.width*0.2783500,size.height*0.8085033,0,size.height*0.9652020,0,size.height*0.9652020);
-    path_0.lineTo(0,size.height*0.06668535);
-    path_0.cubicTo(0,size.height*0.06668535,size.width*0.001925000,size.height*0.01166401,size.width*0.06185000,0);
-    path_0.close();
+    final path = Path();
+    
+    // Starting point
+    path.moveTo(0, size.height * 0.3);
+    
+    // First wave
+    path.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.2,
+      size.width * 0.5,
+      size.height * 0.3,
+    );
+    
+    // Second wave
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.4,
+      size.width,
+      size.height * 0.3,
+    );
+    
+    // Third wave (smaller)
+    path.lineTo(size.width, size.height * 0.5);
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.45,
+      size.width * 0.5,
+      size.height * 0.5,
+    );
+    
+    path.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.55,
+      0,
+      size.height * 0.5,
+    );
+    
+    // Complete the path
+    path.lineTo(0, 0);
+    path.close();
 
-    Paint paint_0_fill = Paint()..style=PaintingStyle.fill;
-    paint_0_fill.color = Theme.of(Get.context!).primaryColor;
-    canvas.drawPath(path_0,paint_0_fill);
-
+    canvas.drawPath(path, paint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -41,362 +41,320 @@ class Info{
 class SecretInfoPage extends StatelessWidget {
   const SecretInfoPage({super.key});
 
+  // Custom accent color - yellowish shade
+  static const Color accentColor = Color(0xFFF5C518);
+
+  Widget _buildSocialButton({
+    required String text,
+    required String iconPath,
+    required Color backgroundColor,
+    required Color textColor,
+    required VoidCallback onTap,
+    bool isAssetImage = true,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 8,
+        ),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isAssetImage)
+              Image.asset(iconPath, height: 20, width: 20)
+            else
+              Icon(Icons.star, size: 20, color: textColor),
+            const SizedBox(width: 6),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                color: textColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Align(
-            alignment: Alignment.center,
-            child: Text('Club App',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.colorScheme.onSurface,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Club App',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: Align(
-          alignment: Alignment.center,
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(70.0),
-                ),
-                child: const CircleAvatar(
-                  radius: 70,
-                  backgroundImage: CachedNetworkImageProvider('https://via.placeholder.com/500'),
-                ),
-              ),
-              const Text('App Info',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
-              const SizedBox(height: 10),
-              const Text('Version: 1.0.1',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-              const Text('This project is licensed under the MIT License',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        onTap: () => launchUrl(Uri.parse(Links.sourceCode)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: const Color.fromRGBO(27, 31, 34, 1.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset('assets/github_icon_2.png',
-                                    height: 25, width: 25),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'Source Code',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                const SizedBox(width: 3),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          onTap: () {
-                            // final InAppReview inAppReview =
-                            //     InAppReview.instance;
-                            // inAppReview.openStoreListing();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: const Color.fromRGBO(255, 181, 0, 1.0),
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 25,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    'Rate App',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  SizedBox(width: 3),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                child: Divider(),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.black.withOpacity(0.1),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 4),
-                            child: Text('Developer Info',
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold)),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  InkWell(
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                          builder: (context) => const ImageViewer(
-                                            image: 'https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/pfp.png',
-                                          )));
-                                    },
-                                    child: const CircleAvatar(
-                                      radius: 30,
-                                      backgroundImage:
-                                      AssetImage('assets/pfp.png'),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  const Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Karthik Gnana Ezhil S',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500)),
-                                      Text(
-                                        'BTech Engineering Physics 2027',
-                                      ),
-                                      Text('IIT Hyderabad',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700)),
-                                      SizedBox(height: 5),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(right: 12.0),
-                                child: Divider(),
-                              ),
-                              const Text(
-                                'Contact',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 3, 12, 0),
-                                child: InkWell(
-                                  customBorder: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  onTap: () {
-                                    launchUrl(Links()._emailLaunchUri);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.deepOrangeAccent
-                                          .withOpacity(0.9),
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SizedBox(width: 5),
-                                          Text('Email: ',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600)),
-                                          Text('skgezhil2005@gmail.com',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w400)),
-                                          SizedBox(width: 5),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    onTap: () =>
-                                        launchUrl(Uri.parse(Links.linkedIn)),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color:
-                                        const Color.fromRGBO(255, 255, 255, 1.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Image.asset(
-                                                'assets/linkedin_icon.png',
-                                                height: 25,
-                                                width: 25),
-                                            const SizedBox(width: 7),
-                                            const Text(
-                                              'LinkedIn',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            const SizedBox(width: 3),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 7),
-                                  InkWell(
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    onTap: () =>
-                                        launchUrl(Uri.parse(Links.github)),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: const Color.fromRGBO(27, 31, 34, 1.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Image.asset(
-                                                'assets/github_icon_2.png',
-                                                height: 25,
-                                                width: 25),
-                                            const SizedBox(width: 5),
-                                            const Text(
-                                              'GitHub',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            const SizedBox(width: 3),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 7),
-                                  InkWell(
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    onTap: () =>
-                                        launchUrl(Uri.parse(Links.instagram)),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color:
-                                        const Color.fromRGBO(253, 44, 136, 1.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const SizedBox(width: 3),
-                                            Image.asset(
-                                                'assets/instagram_icon.webp',
-                                                height: 25,
-                                                width: 25),
-                                            const SizedBox(width: 5),
-                                            const Text(
-                                              'Instagram',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            const SizedBox(width: 3),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                            ],
+              // App Info Section
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: accentColor.withOpacity(0.2),
+                            blurRadius: 20,
+                            spreadRadius: 5,
                           ),
                         ],
                       ),
+                      child: const CircleAvatar(
+                        radius: 60,
+                        backgroundImage: CachedNetworkImageProvider('https://via.placeholder.com/500'),
+                      ),
                     ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'App Info',
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Version: 1.0.1',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                    Text(
+                      'This project is licensed under the MIT License',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Action Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildSocialButton(
+                    text: 'Source Code',
+                    iconPath: 'assets/github_icon_2.png',
+                    backgroundColor: isDark ? Colors.white12 : Colors.black,
+                    textColor: isDark ? Colors.white : Colors.white,
+                    onTap: () => launchUrl(Uri.parse(Links.sourceCode)),
+                  ),
+                  const SizedBox(width: 12),
+                  _buildSocialButton(
+                    text: 'Rate App',
+                    iconPath: '',
+                    backgroundColor: accentColor,
+                    textColor: Colors.black,
+                    onTap: () {},
+                    isAssetImage: false,
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Developer Info Section
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Developer Info',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const ImageViewer(
+                                  image: 'https://clubs-app-bucket.s3.ap-south-1.amazonaws.com/pfp.png',
+                                ),
+                              ));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: accentColor.withOpacity(0.2),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              child: const CircleAvatar(
+                                radius: 40,
+                                backgroundImage: AssetImage('assets/pfp.png'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Karthik Gnana Ezhil S',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'BTech Engineering Physics 2027',
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                                  ),
+                                ),
+                                Text(
+                                  'IIT Hyderabad',
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Contact',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      InkWell(
+                        onTap: () => launchUrl(Links()._emailLaunchUri),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: accentColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: accentColor,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.email_outlined,
+                                color: accentColor,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'skgezhil2005@gmail.com',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Social Media Icons
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _buildSocialButton(
+                            text: 'LinkedIn',
+                            iconPath: 'assets/linkedin_icon.png',
+                            backgroundColor: const Color(0xFF0A66C2),
+                            textColor: Colors.white,
+                            onTap: () => launchUrl(Uri.parse(Links.linkedIn)),
+                          ),
+                          _buildSocialButton(
+                            text: 'GitHub',
+                            iconPath: 'assets/github_icon_2.png',
+                            backgroundColor: isDark ? Colors.white12 : Colors.black,
+                            textColor: isDark ? Colors.white : Colors.white,
+                            onTap: () => launchUrl(Uri.parse(Links.github)),
+                          ),
+                          _buildSocialButton(
+                            text: 'Instagram',
+                            iconPath: 'assets/instagram_icon.webp',
+                            backgroundColor: const Color(0xFFE4405F),
+                            textColor: Colors.white,
+                            onTap: () => launchUrl(Uri.parse(Links.instagram)),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

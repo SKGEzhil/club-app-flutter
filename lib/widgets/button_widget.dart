@@ -7,7 +7,8 @@ class ButtonWidget extends StatelessWidget {
       required this.buttonText,
       this.preceedingIcon,
       required this.isNegative,
-      this.isColorInverted});
+      this.isColorInverted,
+      this.height = 40});
 
   final VoidCallback onPressed;
   final String buttonText;
@@ -16,6 +17,7 @@ class ButtonWidget extends StatelessWidget {
   // final Color buttonColor;
   final isColorInverted;
   final preceedingIcon;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +48,12 @@ class ButtonWidget extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         onTap: onPressed,
         child: Container(
+          height: height,
           decoration: BoxDecoration(
               color: isColorInverted != null ? (isColorInverted ? invertedButtonColor : buttonColor) : buttonColor,
               borderRadius: BorderRadius.circular(50)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 6, 15, 6),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

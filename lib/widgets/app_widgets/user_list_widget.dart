@@ -24,6 +24,9 @@ class UserListWidget extends StatelessWidget {
   final profileController = Get.put(ProfileController());
   final loadingController = Get.put(LoadingController());
 
+  // Custom accent color - yellowish shade
+  static const Color accentColor = Color(0xFFF5C518);
+
   UserModel get currentUser => profileController.currentUser.value;
 
   bool get isAuthorized {
@@ -52,7 +55,6 @@ class UserListWidget extends StatelessWidget {
             message: result['message'], color: Colors.red)
         : CustomSnackBar.show(context,
             message: result['message'], color: Colors.green);
-    // Navigator.pop(context);
   }
 
   Future<void> removeClubUser(context, index) async {
@@ -71,7 +73,6 @@ class UserListWidget extends StatelessWidget {
             message: result['message'], color: Colors.red)
         : CustomSnackBar.show(context,
             message: result['message'], color: Colors.green);
-    // Navigator.pop(context);
   }
 
   void showAddUserDialogue(context) {
@@ -87,11 +88,8 @@ class UserListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if the current theme is light or dark
-    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-
-    // Choose the color based on the theme
-    ThemeColors currentColors = isDarkTheme ? darkColors : lightColors;
+    final theme = Theme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
 
     return Obx(() {
       if (type != 'admin') {
@@ -101,152 +99,150 @@ class UserListWidget extends StatelessWidget {
         }
       }
 
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          child: Wrap(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      child: Text(
-                        type == 'admin'
-                            ? 'All Admin Users'
-                            : 'All Club Members',
-                        style: const TextStyle(
-                            // color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  type == 'admin' ? 'Admin Users' : 'Club Members',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: !isAuthorized
-                        ? const SizedBox(
-                            height: 40,
-                          )
-                        : ButtonWidget(
-                            onPressed: () => showAddUserDialogue(context),
-                            buttonText:
-                                type == 'admin' ? 'Add Admin' : 'Add Member',
-                            isNegative: false,
-                          ),
-                  )
-                ],
-              ),
-              Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 300,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Scrollbar(
-                    radius: const Radius.circular(10),
-                    thickness: 5,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: type == 'admin'
-                          ? adminController.adminUsers.length
-                          : clubsController.clubList
-                              .where((club) => club.id == clubId)
-                              .first
-                              .members
-                              .length,
-                      itemBuilder: (context, index) {
-                        final user = type == 'admin'
-                            ? adminController.adminUsers[index]
-                            : clubsController.clubList
-                                .where((club) => club.id == clubId)
-                                .first
-                                .members[index];
+                if (isAuthorized)
+                  IconButton(
+                    onPressed: () => showAddUserDialogue(context),
+                    icon: Icon(
+                      Icons.person_add_rounded,
+                      color: accentColor,
+                    ),
+                    tooltip: type == 'admin' ? 'Add Admin' : 'Add Member',
+                  ),
+              ],
+            ),
+          ),
 
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(isDarkTheme ? 0.1 : 0.3),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: CachedNetworkImage(
-                                        width: 40,
-                                        height: 40,
-                                        fit: BoxFit.cover,
-                                        imageUrl: user.photoUrl),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          user.name,
-                                          style: const TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          user.email,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: currentColors
-                                                  .secondaryTextColor),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  !isAuthorized
-                                      ? const SizedBox()
-                                      : ButtonWidget(
-                                          onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (dialogueContext) {
-                                                  return CustomAlertDialogue(
-                                                      context: dialogueContext,
-                                                      onPressed: () {
-                                                        Navigator.pop(
-                                                            dialogueContext);
-                                                        type == 'admin'
-                                                            ? removeAdminUser(
-                                                                context, index)
-                                                            : removeClubUser(
-                                                                context, index);
-                                                      },
-                                                      title: 'Remove User',
-                                                      content:
-                                                          'Are you sure you want to remove ${user.name} from ${type == 'admin' ? 'Admin' : 'the Club'}?');
-                                                });
-                                          },
-                                          buttonText: 'Remove',
-                                          isNegative: true,
-                                        ),
-                                ],
-                              ),
+          // Users List
+          Container(
+            constraints: const BoxConstraints(maxHeight: 300),
+            child: ListView.builder(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              itemCount: type == 'admin'
+                  ? adminController.adminUsers.length
+                  : clubsController.clubList
+                      .where((club) => club.id == clubId)
+                      .first
+                      .members
+                      .length,
+              itemBuilder: (context, index) {
+                final user = type == 'admin'
+                    ? adminController.adminUsers[index]
+                    : clubsController.clubList
+                        .where((club) => club.id == clubId)
+                        .first
+                        .members[index];
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          width: 48,
+                          height: 48,
+                          fit: BoxFit.cover,
+                          imageUrl: user.photoUrl,
+                          placeholder: (context, url) => Container(
+                            width: 48,
+                            height: 48,
+                            color: accentColor.withOpacity(0.1),
+                            child: Icon(
+                              Icons.person,
+                              color: accentColor.withOpacity(0.5),
                             ),
                           ),
-                        );
-                      },
+                          errorWidget: (context, url, error) => Container(
+                            width: 48,
+                            height: 48,
+                            color: accentColor.withOpacity(0.1),
+                            child: Icon(
+                              Icons.error_outline,
+                              color: accentColor.withOpacity(0.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        user.name,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      subtitle: Text(
+                        user.email,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
+                      trailing: isAuthorized
+                          ? IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (dialogueContext) {
+                                    return CustomAlertDialogue(
+                                      context: dialogueContext,
+                                      onPressed: () {
+                                        Navigator.pop(dialogueContext);
+                                        type == 'admin'
+                                            ? removeAdminUser(context, index)
+                                            : removeClubUser(context, index);
+                                      },
+                                      title: 'Remove User',
+                                      content:
+                                          'Are you sure you want to remove ${user.name} from ${type == 'admin' ? 'Admin' : 'the Club'}?',
+                                    );
+                                  },
+                                );
+                              },
+                              icon: Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.red.withOpacity(0.8),
+                              ),
+                              tooltip: 'Remove User',
+                            )
+                          : null,
                     ),
                   ),
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        ),
+        ],
       );
     });
   }

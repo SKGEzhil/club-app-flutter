@@ -64,23 +64,23 @@ class _FeedbackPageState extends State<FeedbackPage> {
           ratingTextColors[index] = Theme.of(Get.context!).primaryColor;
           break;
         case 1:
-          ratingTexts[index] = 'Very bad';
+          ratingTexts[index] = '😭';
           ratingTextColors[index] = Colors.red;
           break;
         case 2:
-          ratingTexts[index] = 'Bad';
+          ratingTexts[index] = '🙁';
           ratingTextColors[index] = Colors.deepOrangeAccent;
           break;
         case 3:
-          ratingTexts[index] = 'Average';
+          ratingTexts[index] = '🙂';
           ratingTextColors[index] = Colors.orange;
           break;
         case 4:
-          ratingTexts[index] = 'Good';
+          ratingTexts[index] = '😀';
           ratingTextColors[index] = Colors.amber;
           break;
         case 5:
-          ratingTexts[index] = 'Excellent';
+          ratingTexts[index] = '😁';
           ratingTextColors[index] = Colors.green;
           break;
         default:
@@ -102,47 +102,40 @@ class _FeedbackPageState extends State<FeedbackPage> {
         Scaffold(
             appBar: AppBar(
               title: const Text('Feedback'),
-              // actions: [
-              //   Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: ButtonWidget(
-              //       onPressed: () {
-              //         if (sliderValues.any((value) => value == 0)) {
-              //           CustomSnackBar.show(context,
-              //               message: 'Please rate all questions',
-              //               color: Colors.red);
-              //           return;
-              //         }
-              //         showDialog(
-              //             context: context,
-              //             builder: (dialogueContext) {
-              //               return Padding(
-              //                 padding: const EdgeInsets.all(8.0),
-              //                 child: SuggestionDialogue(
-              //                   onSubmit: (suggestionText) {
-              //                     uploadFeedback(context, suggestionText);
-              //                   },
-              //                 ),
-              //               );
-              //             });
-              //         // uploadFeedback(context);
-              //       },
-              //       buttonText: 'Submit',
-              //       isNegative: false,
-              //       isColorInverted: true,
-              //     ),
-              //   )
-              // ],
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ButtonWidget(
+                    onPressed: () {
+                      if (sliderValues.any((value) => value == 0)) {
+                        CustomSnackBar.show(context,
+                            message: 'Please rate all questions',
+                            color: Colors.red);
+                        return;
+                      }
+                      showDialog(
+                        context: context,
+                        builder: (dialogueContext) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SuggestionDialogue(
+                              onSubmit: (suggestionText) {
+                                uploadFeedback(context, suggestionText);
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    buttonText: 'Submit',
+                    isNegative: false,
+                    height: 36,
+                  ),
+                ),
+              ],
             ),
             body: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Text(
-                //     widget.feedbackForm.eventName,
-                //     style: const TextStyle(fontSize: 24),
-                //   ),
-                // ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
@@ -294,7 +287,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 },
                                 buttonText: 'Next',
                                 isNegative: false)),
-                      )
+                      ),
                     ],
                   ),
                 ),

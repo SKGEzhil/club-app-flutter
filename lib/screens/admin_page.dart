@@ -14,18 +14,24 @@ class AdminPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Admin Page'),
         ),
-        body: Column(
-          children: [
-            UserListWidget(
-              type: 'admin',
-            ),
-            ButtonWidget(
-                onPressed: () {
-                  showDialog(context: context, builder: (context) => NewClubDialogue());
-                },
-                buttonText: 'Create new club',
-                isNegative: false,)
-          ],
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              UserListWidget(
+                type: 'admin',
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ButtonWidget(
+                    onPressed: () {
+                      showDialog(context: context, builder: (context) => NewClubDialogue());
+                    },
+                    buttonText: 'Create new club',
+                    isNegative: false,),
+              )
+            ],
+          ),
         ));
   }
 }

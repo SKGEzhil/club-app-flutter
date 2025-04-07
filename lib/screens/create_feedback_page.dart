@@ -20,10 +20,12 @@ class CreateFeedbackPage extends StatefulWidget {
 
 class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
   List<Widget> questionList = [];
-
   List<TextEditingController> questionControllers = [];
   final feedbackController = Get.put(FeedbackController());
   final loadingController = Get.put(LoadingController());
+
+  // Custom accent color - yellowish shade
+  final Color accentColor = const Color(0xFFF5C518);
 
   Future<void> submitForm(context) async {
     loadingController.toggleLoading();
@@ -44,128 +46,190 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
     Navigator.of(context).pop();
   }
 
+  Widget _buildQuestionField(TextEditingController controller, int index) {
+    final theme = Theme.of(context);
+    
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.colorScheme.outline.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: accentColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'Question ${index + 1}',
+                    style: TextStyle(
+                      color: accentColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                InkWell(
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      questionList.removeAt(index);
+                      questionControllers[index].dispose();
+                      questionControllers.removeAt(index);
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Icon(
+                      Icons.delete_outline,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: TextFormField(
+              maxLines: 1,
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: 'Enter your question here...',
+                hintStyle: TextStyle(
+                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+              ),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
-            title: const Text('Create Feedback'),
+            title: Text(
+              'Create Feedback',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             actions: [
-              const SizedBox(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ButtonWidget(
-                    onPressed: () {
-                      submitForm(context);
-                    }, buttonText: 'Submit',
-                    isColorInverted: true,
-                    isNegative: false),
-              )
+                  onPressed: () => submitForm(context),
+                  buttonText: 'Submit',
+                  isNegative: false,
+                ),
+              ),
             ],
           ),
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Text(
+                      'Questions',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     ButtonWidget(
-                        onPressed: () {
-                          setState(() {
-                            var questionController = TextEditingController();
-                            questionControllers.add(questionController);
-                            questionList.add(Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.4)),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(8.0, 5, 8, 5),
-                                  child: TextFormField(
-                                    maxLines: 1,
-                                    controller: questionController,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ));
-                          });
-                        },
-                        preceedingIcon: Icons.add,
-                        buttonText: 'Add Question',
-                        isNegative: false),
+                      onPressed: () {
+                        setState(() {
+                          var questionController = TextEditingController();
+                          questionControllers.add(questionController);
+                          questionList.add(_buildQuestionField(questionController, questionList.length));
+                        });
+                      },
+                      preceedingIcon: Icons.add,
+                      buttonText: 'Add Question',
+                      isNegative: false,
+                    ),
                   ],
                 ),
               ),
               Expanded(
                 child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: questionList.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Question ${index + 1}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: InkWell(
-                                      customBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          questionList.removeAt(index);
-                                          questionControllers[index].dispose();
-                                          questionControllers.removeAt(index);
-                                        });
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: Icon(
-                                          size: 20,
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    ),
-                                  )),
-                                ],
-                              ),
-                            ),
-                            questionList[index],
-                          ],
-                        ),
-                      ),
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: questionList[index],
                     );
                   },
                 ),
-              )
+              ),
+              if (questionList.isEmpty)
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.feedback_outlined,
+                          size: 64,
+                          color: theme.colorScheme.onSurface.withOpacity(0.3),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No questions added yet',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Click the "Add Question" button to start',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

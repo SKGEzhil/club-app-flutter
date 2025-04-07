@@ -44,6 +44,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
   var eventDate;
   var organizingClub;
   var bannerUrl;
+  bool _isClubDropdownExpanded = false;
+
+  // Custom accent color - yellowish shade
+  final Color accentColor = const Color(0xFFF5C518); // Yellow accent color
 
   Future<void> createEvent(context) async {
     if (imagePickerController.image == null) {
@@ -103,335 +107,500 @@ class _CreateEventPageState extends State<CreateEventPage> {
     Navigator.pop(context);
   }
 
+  Widget _buildTextField(String label, TextEditingController controller, {int maxLines = 1}) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withOpacity(0.7),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.colorScheme.outline.withOpacity(0.2),
+            ),
+          ),
+          child: TextField(
+            controller: controller,
+            maxLines: maxLines,
+            style: theme.textTheme.bodyLarge,
+            cursorColor: accentColor,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.all(16),
+              hintStyle: TextStyle(
+                color: theme.colorScheme.onSurface.withOpacity(0.5),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateTimeSection() {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Date & Time',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withOpacity(0.7),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.colorScheme.outline.withOpacity(0.2),
+            ),
+          ),
+          child: InkWell(
+            onTap: () async {
+              final date = await showDatePicker(
+                context: context,
+                initialDate: eventDate ?? DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(DateTime.now().year + 2),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: Theme.of(context).colorScheme.copyWith(
+                        primary: accentColor,
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+              if (date != null) {
+                final time = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                  builder: (context, child) {
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: Theme.of(context).colorScheme.copyWith(
+                          primary: accentColor,
+                        ),
+                      ),
+                      child: child!,
+                    );
+                  },
+                );
+                if (time != null) {
+                  setState(() {
+                    eventDate = DateTime(
+                      date.year,
+                      date.month,
+                      date.day,
+                      time.hour,
+                      time.minute,
+                    );
+                  });
+                }
+              }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today,
+                      color: accentColor,
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (eventDate != null) ...[
+                          Text(
+                            DateFormat('EEE, dd MMM').format(eventDate),
+                            style: theme.textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            DateFormat('HH:mm').format(eventDate),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
+                        ] else
+                          Text(
+                            'Select date and time',
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: accentColor.withOpacity(0.7),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpandableClubDropdown() {
+    final theme = Theme.of(context);
+    final isAdmin = profileController.currentUser.value.role == 'admin';
+    final clubs = isAdmin
+        ? clubsController.clubList
+        : (profileController.currentUser.value.clubs ?? []) as List;
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Organizing Club',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withOpacity(0.7),
+          ),
+        ),
+        const SizedBox(height: 8),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _isClubDropdownExpanded 
+                ? accentColor 
+                : theme.colorScheme.outline.withOpacity(0.2),
+            ),
+            boxShadow: _isClubDropdownExpanded
+                ? [
+                    BoxShadow(
+                      color: accentColor.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    )
+                  ]
+                : null,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header - always visible
+              InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  setState(() {
+                    _isClubDropdownExpanded = !_isClubDropdownExpanded;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.group,
+                        color: accentColor,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: organizingClub != null
+                            ? Row(
+                                children: [
+                                  if (organizingClub.imageUrl != null && organizingClub.imageUrl.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 12),
+                                      child: CircleAvatar(
+                                        radius: 14,
+                                        backgroundImage: NetworkImage(organizingClub.imageUrl),
+                                      ),
+                                    ),
+                                  Text(
+                                    organizingClub.name,
+                                    style: theme.textTheme.bodyLarge,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                'Select organizing club',
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                                ),
+                              ),
+                      ),
+                      AnimatedRotation(
+                        turns: _isClubDropdownExpanded ? 0.5 : 0,
+                        duration: const Duration(milliseconds: 300),
+                        child: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: _isClubDropdownExpanded
+                              ? accentColor
+                              : theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              // Expandable list
+              AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                child: Container(
+                  height: _isClubDropdownExpanded ? null : 0,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(),
+                  child: _isClubDropdownExpanded
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Divider(height: 1, color: accentColor.withOpacity(0.2)),
+                            Container(
+                              constraints: BoxConstraints(
+                                maxHeight: MediaQuery.of(context).size.height * 0.3,
+                              ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: clubs.length,
+                                itemBuilder: (context, index) {
+                                  final club = clubs[index];
+                                  final isSelected = organizingClub?.id == club.id;
+                                  
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        organizingClub = club;
+                                        _isClubDropdownExpanded = false;
+                                      });
+                                    },
+                                    child: Container(
+                                      color: isSelected 
+                                          ? accentColor.withOpacity(0.1)
+                                          : null,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 12,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          if (club.imageUrl != null && club.imageUrl.isNotEmpty)
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 16),
+                                              child: CircleAvatar(
+                                                radius: 20,
+                                                backgroundImage: NetworkImage(club.imageUrl),
+                                              ),
+                                            )
+                                          else
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 16),
+                                              child: CircleAvatar(
+                                                radius: 20,
+                                                backgroundColor: accentColor.withOpacity(0.2),
+                                                child: Icon(
+                                                  Icons.groups,
+                                                  color: accentColor,
+                                                ),
+                                              ),
+                                            ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  club.name,
+                                                  style: theme.textTheme.titleMedium,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          if (isSelected)
+                                            Icon(
+                                              Icons.check_circle,
+                                              color: accentColor,
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return PopScope(
       canPop: true,
       onPopInvoked: (bool isPop) {
         eventDate = null;
       },
-      child: Stack(
-        children: [
-              Scaffold(
+      child: GestureDetector(
+        onTap: () {
+          // Close club dropdown when tapping outside
+          if (_isClubDropdownExpanded) {
+            setState(() {
+              _isClubDropdownExpanded = false;
+            });
+          }
+          // Hide keyboard when tapping outside of text fields
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
+            Scaffold(
               appBar: AppBar(
                 title: const Text('Create Event'),
                 actions: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ButtonWidget(
-                        onPressed: () async {
-                          await createEvent(context);
-                        },
-                        buttonText: 'Create',
-                        isColorInverted: true,
-                        isNegative: false,),
+                      onPressed: () async {
+                        await createEvent(context);
+                      },
+                      buttonText: 'Create',
+                      isColorInverted: true,
+                      isNegative: false,
+                    ),
                   )
                 ],
               ),
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Event Name :',
-                          style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 5, 8, 5),
-                          child: TextFormField(
-                            // initialValue: club.name,
-                            controller: eventNameController,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                            style: const TextStyle(
-                              fontSize: 27,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Event Description :',
-                          style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 5, 8, 5),
-                          child: TextFormField(
-                            maxLines: 5,
-                            controller: eventDescriptionController,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Event Location :',
-                          style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.4)),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 5, 8, 5),
-                          child: TextFormField(
-                            maxLines: 1,
-                            controller: eventLocationController,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              const Text('Organizing Club :',
-                                  style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: DropdownMenu(
-                                        onSelected: (value) {
-                                          setState(() {
-                                            organizingClub =
-                                                clubsController.clubList.firstWhere(
-                                                        (club) => club.id == value);
-                                          });
-                                        },
-                                        inputDecorationTheme: InputDecorationTheme(
-                                          fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                                          constraints: const BoxConstraints(
-                                            maxWidth: 180,
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        dropdownMenuEntries: (() {
-                                          final isAdmin = profileController.currentUser.value.role == 'admin';
-                                          final clubs = isAdmin 
-                                              ? clubsController.clubList
-                                              : (profileController.currentUser.value.clubs ?? []) as List;
-                                          
-                                          return clubs.map((club) => DropdownMenuEntry<String>(
-                                            value: club.id,
-                                            label: club.name,
-                                          )).toList();
-                                        })()),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          eventDate != null
-                              ? null
-                              : showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          ).then((date) {
-                            if (date != null) {
-                              showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              ).then((time) {
-                                if (time != null) {
-                                  setState(() {
-                                    eventDate = DateTime(
-                                      date.year,
-                                      date.month,
-                                      date.day,
-                                      time.hour,
-                                      time.minute,
-                                    );
-                                  });
-                                }
-                              });
-                            }
-                          });
-                        },
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                eventDate == null
-                                    ? const Text('Select Event Date',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold))
-                                    : Expanded(
-                                  child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            'Date : ${DateFormat('dd MMM').format(
-                                                eventDate)}',
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                        Text(
-                                            'Time : ${DateFormat.jm().format(
-                                                eventDate)}',
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                      ]),
-                                ),
-                                eventDate == null
-                                    ? const SizedBox(
-                                  width: 0,
-                                )
-                                    : ButtonWidget(
-                                    onPressed: () async {
-                                      final date = await showDatePicker(
-                                          context: context,
-                                          firstDate: DateTime.now(),
-                                          initialDate: DateTime.now(),
-                                          lastDate: DateTime(
-                                              DateTime
-                                                  .now()
-                                                  .year + 2));
-                                      final time = await showTimePicker(
-                                          context: context,
-                                          initialTime: TimeOfDay.now());
-
-                                      setState(() {
-                                        eventDate = DateTime(
-                                            date!.year,
-                                            date.month,
-                                            date.day,
-                                            time!.hour,
-                                            time.minute);
-                                      });
-                                    },
-                                    preceedingIcon: Icons.calendar_month,
-                                    buttonText: 'Change Date',
-                                    isNegative: false,),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GetBuilder<ImagePickerController>(builder: (logic) {
-                        return Align(
-                          alignment: Alignment.center,
-                          child:
-                          imagePickerController.image != null ? const SizedBox(
-                            width: 0,
-                          ) :
-                          ButtonWidget(
-                              onPressed: () async {
-                                imagePickerController.getImage(ImageSource.gallery);
-                              },
-                              buttonText: 'Add banner image',
-                              isNegative: false,),
-                        );
-                      }),
-                      GetBuilder<ImagePickerController>(builder: (logic) {
-                        return Container(
-                          // color: Colors.transparent,
-                          child: imagePickerController.image == null
-                              ? const SizedBox(
-                            width: 0,
-                          )
-                              : Align(
-                            alignment: Alignment.center,
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.file(
-                                      File(imagePickerController.image!
-                                          .path), // Placeholder image URL
-                                      fit: BoxFit.cover,
-                                      // Ensure the image fits within the space
-                                      width: 150,
-                                      height: 150,
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 0.0,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      imagePickerController.resetImage();
-                                    },
-                                    child: const Align(
-                                      alignment: Alignment.topRight,
-                                      child: CircleAvatar(
-                                        radius: 10.0,
-                                        backgroundColor: Colors.redAccent,
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 15.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                      const SizedBox(height: 100),
-                    ],
+              body: Theme(
+                data: Theme.of(context).copyWith(
+                  inputDecorationTheme: InputDecorationTheme(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: accentColor),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
-              )),
-          Obx(() {
-            return Container(
-              child:
-              loadingController.isLoading.value
-                  ?
-              LoadingWidget() : null,
-            );
-          }),
-            ],
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GetBuilder<ImagePickerController>(
+                          builder: (logic) {
+                            return GestureDetector(
+                              onTap: () {
+                                imagePickerController.getImage(ImageSource.gallery);
+                              },
+                              child: Container(
+                                height: 200,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: theme.colorScheme.outline.withOpacity(0.2),
+                                  ),
+                                ),
+                                child: imagePickerController.image != null
+                                    ? Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: Image.file(
+                                              File(imagePickerController.image!.path),
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 8,
+                                            top: 8,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                imagePickerController.resetImage();
+                                              },
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                              ),
+                                              style: IconButton.styleFrom(
+                                                backgroundColor: Colors.black54,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.add_photo_alternate_outlined,
+                                              size: 48,
+                                              color: accentColor.withOpacity(0.7),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Add banner image',
+                                              style: TextStyle(
+                                                color: accentColor.withOpacity(0.9),
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        _buildTextField('Title', eventNameController),
+                        const SizedBox(height: 24),
+                        _buildDateTimeSection(),
+                        const SizedBox(height: 24),
+                        _buildTextField('Location', eventLocationController),
+                        const SizedBox(height: 24),
+                        _buildExpandableClubDropdown(),
+                        const SizedBox(height: 24),
+                        _buildTextField('About Event', eventDescriptionController, maxLines: 5),
+                        const SizedBox(height: 32),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Obx(() {
+              return loadingController.isLoading.value ? LoadingWidget() : const SizedBox();
+            }),
+          ],
+        ),
       ),
     );
   }

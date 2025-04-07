@@ -73,10 +73,11 @@ class CalendarPage extends StatelessWidget {
         icon: Icon(Icons.chevron_left, color: currentColors.oppositeColor, size: 30),
         onPressed: () => Navigator.pop(context),
       ),
+      centerTitle: true,
       title: GestureDetector(
         onTap: Info().handleTap,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'Calendar',

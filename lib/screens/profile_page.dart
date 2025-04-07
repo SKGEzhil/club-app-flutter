@@ -109,27 +109,62 @@ class ProfilePage extends StatelessWidget {
                       )),
                     ),
                     const Divider(height: 1),
-                    ListTile(
-                      leading: Icon(
-                        Icons.help_outline,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      title: Text('Help'),
-                      subtitle: Text('Help center, contact us, privacy policy'),
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onTap: () {
-                        // TODO: Implement help section
-                      },
-                    ),
+                    Obx(() {
+                      final user = profileController.currentUser.value;
+                      return ExpansionTile(
+                        leading: Icon(
+                          Icons.group,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        title: Text('My Clubs'),
+                        subtitle: Text('${user.clubs.length} clubs joined'),
+                        shape: Border.all(color: Colors.transparent),
+                        children: user.clubs.isEmpty
+                            ? [
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    'You haven\'t joined any clubs yet',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor.withOpacity(0.6),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            : user.clubs.map((club) => ListTile(
+                                  title: Text(club.name),
+                                  leading: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: club.imageUrl.isEmpty
+                                          ? Icon(
+                                              Icons.group,
+                                              size: 20,
+                                              color: Theme.of(context).primaryColor,
+                                            )
+                                          : CachedNetworkImage(
+                                              imageUrl: club.imageUrl,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // TODO: Navigate to club page
+                                  },
+                                )).toList(),
+                      );
+                    }),
                     Obx(() {
                       final user = profileController.currentUser.value;
                       if (user.role == 'admin') {
                         return Column(
                           children: [
-                            const Divider(height: 1),
                             ListTile(
                               leading: Icon(
                                 Icons.admin_panel_settings,

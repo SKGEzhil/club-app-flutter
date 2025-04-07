@@ -240,25 +240,17 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                         ),
-                                        dropdownMenuEntries: profileController
-                                            .currentUser.value.role ==
-                                            'admin'
-                                            ? clubsController.clubList.map((club) {
-                                          return DropdownMenuEntry(
-                                              value: club.id, label: club.name);
-                                        }).toList()
-                                            : clubsController.clubList
-                                            .where((club) =>
-                                            club.members.any(
-                                                    (member) =>
-                                                member.id ==
-                                                    profileController
-                                                        .currentUser.value.id))
-                                            .map((club) {
-                                          return DropdownMenuEntry(
-                                              value: club.id,
-                                              label: club.name);
-                                        }).toList()),
+                                        dropdownMenuEntries: (() {
+                                          final isAdmin = profileController.currentUser.value.role == 'admin';
+                                          final clubs = isAdmin 
+                                              ? clubsController.clubList
+                                              : (profileController.currentUser.value.clubs ?? []) as List;
+                                          
+                                          return clubs.map((club) => DropdownMenuEntry<String>(
+                                            value: club.id,
+                                            label: club.name,
+                                          )).toList();
+                                        })()),
                                   ),
                                 ),
                               )

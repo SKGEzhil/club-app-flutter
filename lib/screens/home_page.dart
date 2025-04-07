@@ -105,34 +105,37 @@ class HomePage extends StatelessWidget {
       title: Obx(() {
         return GestureDetector(
           onTap: Info().handleTap,
-          child: Column(
-            children: [
-              Text(bottomNavController.selectedIndex.value == 0
-                  ? 'Events'
-                  : bottomNavController.selectedIndex.value == 1
-                  ? 'Clubs'
-                  : bottomNavController.selectedIndex.value == 2
-                  ? 'Feedback'
-                  : 'Profile',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold
-              ),
-              ),
-              Text(bottomNavController.selectedIndex.value == 0
-                  ? 'Current & Upcoming Events'
-                  : bottomNavController.selectedIndex.value == 1
-                  ? 'All Available Clubs'
-                  : bottomNavController.selectedIndex.value == 2
-                  ? 'Provide your Feedback'
-                  : 'Settings & Profile',
+          child: Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(bottomNavController.selectedIndex.value == 0
+                    ? 'Events'
+                    : bottomNavController.selectedIndex.value == 1
+                    ? 'Clubs'
+                    : bottomNavController.selectedIndex.value == 2
+                    ? 'Feedback'
+                    : 'Profile',
                 style: TextStyle(
-                  fontSize: 15,
-                  color: currentColors.oppositeColor.withOpacity(0.6),
-                  fontWeight: FontWeight.w500
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold
                 ),
-              ),
-            ],
+                ),
+                Text(bottomNavController.selectedIndex.value == 0
+                    ? 'Current & Upcoming Events'
+                    : bottomNavController.selectedIndex.value == 1
+                    ? 'All Available Clubs'
+                    : bottomNavController.selectedIndex.value == 2
+                    ? 'Provide your Feedback'
+                    : 'Settings & Profile',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: currentColors.oppositeColor.withOpacity(0.6),
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }),

@@ -69,7 +69,7 @@ class _ClubListTileState extends State<ClubListTile>
               email: '',
               name: '',
               role: '',
-              photoUrl: '')); // return a default Post
+              photoUrl: '', clubs: [])); // return a default Post
     }
   }
 

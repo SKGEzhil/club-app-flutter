@@ -10,7 +10,7 @@ class AppTheme {
         color: Colors.white.withOpacity(0.15),
         thickness: 1,
       ),
-      dialogTheme: const DialogTheme(
+      dialogTheme: const DialogThemeData(
         // backgroundColor: Colors.black,
         titleTextStyle: TextStyle(
           color: Colors.white,
@@ -45,7 +45,7 @@ class AppTheme {
   static ThemeData get lightTheme{
     return ThemeData(
       primaryColor: const Color.fromRGBO(254, 198, 0, 1),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         // color: Colors.white,
         color: Colors.amber.shade50,
         elevation: 5,
@@ -60,7 +60,7 @@ class AppTheme {
       popupMenuTheme: const PopupMenuThemeData(
         color: Colors.white,
       ),
-      dialogTheme: const DialogTheme(
+      dialogTheme: const DialogThemeData(
         backgroundColor: Colors.white,
         titleTextStyle: TextStyle(
           color: Colors.black,

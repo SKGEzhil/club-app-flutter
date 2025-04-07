@@ -100,15 +100,18 @@ class _BottomNavBarState extends State<BottomNavBar>
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Obx(() {
-                              return DropdownMenu(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      selectedClub.value = clubsController
-                                          .clubList
-                                          .firstWhere(
-                                              (club) => club.id == value)
-                                          .id;
-                                    });
+                              final isAdmin = profileController.currentUser.value.role == 'admin';
+                              final clubs = isAdmin 
+                                  ? clubsController.clubList
+                                  : (profileController.currentUser.value.clubs ?? []) as List;
+                              
+                              return DropdownMenu<String>(
+                                  onSelected: (String? value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        selectedClub.value = value;
+                                      });
+                                    }
                                   },
                                   inputDecorationTheme:
                                   InputDecorationTheme(
@@ -127,29 +130,12 @@ class _BottomNavBarState extends State<BottomNavBar>
                                       BorderRadius.circular(10),
                                     ),
                                   ),
-                                  dropdownMenuEntries: profileController
-                                      .currentUser.value.role ==
-                                      'admin'
-                                      ? clubsController.clubList
-                                      .map((club) {
-                                    return DropdownMenuEntry(
+                                  dropdownMenuEntries: (clubs as List)
+                                      .map((club) => DropdownMenuEntry<String>(
                                         value: club.id,
-                                        label: club.name);
-                                  }).toList()
-                                      : clubsController.clubList
-                                      .where((club) =>
-                                      club.members
-                                          .any((member) =>
-                                      member.id ==
-                                          profileController
-                                              .currentUser
-                                              .value
-                                              .id))
-                                      .map((club) {
-                                    return DropdownMenuEntry(
-                                        value: club.id,
-                                        label: club.name);
-                                  }).toList());
+                                        label: club.name,
+                                      ))
+                                      .toList());
                             }),
                           ),
                           Row(
@@ -330,38 +316,44 @@ class _BottomNavBarState extends State<BottomNavBar>
               child: GetBuilder<BottomNavController>(builder: (logic) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 18, 8, 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      bottonNavItems(currentColors, Icons.home, 0),
-                      bottonNavItems(currentColors, Icons.group, 1),
-                      InkWell(
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        onTap: () {
-                          bottomNavController.isSheetOpen.value =
-                          !bottomNavController.isSheetOpen.value;
+                  child: Obx(() {
+                    // Check if user is admin or has any clubs
+                    bool showAddButton = profileController.currentUser.value.role == 'admin' ||
+                        (profileController.currentUser.value.clubs != null && 
+                         profileController.currentUser.value.clubs!.isNotEmpty);
 
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Container(
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color:
-                              Colors.black.withOpacity(0.7),
+                    return Row(
+                      mainAxisAlignment: showAddButton ? MainAxisAlignment.spaceAround : MainAxisAlignment.spaceEvenly,
+                      children: [
+                        bottonNavItems(currentColors, Icons.home, 0),
+                        bottonNavItems(currentColors, Icons.group, 1),
+                        if (showAddButton)
+                          InkWell(
+                            customBorder: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Icon(Icons.add,
-                                size: 30, color: Colors.white),
+                            onTap: () {
+                              bottomNavController.isSheetOpen.value =
+                              !bottomNavController.isSheetOpen.value;
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: Container(
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Icon(Icons.add,
+                                    size: 30, color: Colors.white),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      bottonNavItems(currentColors, Icons.feedback_outlined, 2),
-                      bottonNavItems(currentColors, Icons.person, 3),
-                    ],
-                  ),
+                        bottonNavItems(currentColors, Icons.feedback_outlined, 2),
+                        bottonNavItems(currentColors, Icons.person, 3),
+                      ],
+                    );
+                  }),
                 );
               }),
             ),
